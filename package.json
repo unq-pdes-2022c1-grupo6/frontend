@@ -42,5 +42,17 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://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@github.com/unq-pdes-2022c1-grupo6/frontend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/unq-pdes-2022c1-grupo6/frontend/issues"
+  },
+  "homepage": "."
 }
