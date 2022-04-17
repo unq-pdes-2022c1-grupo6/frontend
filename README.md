@@ -1,6 +1,4 @@
 # Sistema para la asignación de cupos - Frontend
-## grupo 6
-
 Repositorio del proyecto de la materia Práctica del Desarrollo de Software, Universidad Nacional de Quilmes, 2022.
 
 ## Integrantes
