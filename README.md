@@ -1,4 +1,8 @@
 # Sistema para la asignación de cupos - Frontend
+
+![code grade](https://api.codiga.io/project/32833/status/svg)
+![code quality score](https://api.codiga.io/project/32833/score/svg)
+
 Repositorio del proyecto de la materia Práctica del Desarrollo de Software, Universidad Nacional de Quilmes, 2022.
 
 ## Integrantes
