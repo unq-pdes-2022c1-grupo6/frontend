@@ -15,7 +15,7 @@ const App = () => {
                 {size => (
                     <Box fill>
                         <Header>
-                            <Heading level='3' margin='none'>UNQ</Heading>
+                            <Heading level='3' margin='none'>UNQE</Heading>
                             <Button icon={<Menu/>} onClick={() => setShowSidebar(!showSidebar)}/>
                         </Header>
                         <Box direction='row' flex overflow={{horizontal: 'hidden'}}>
