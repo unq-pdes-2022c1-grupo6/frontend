@@ -27,15 +27,17 @@ const App = () => {
                             <Button icon={<Menu/>} onClick={() => setShowSidebar(!showSidebar)}/>
                         </Header>
                         <Box direction='row' flex overflow={{horizontal: 'hidden'}}>
-                            <Routes>
-                                <Route path="/" element={<Login />} />
-                                <Route path="/registro" element={<Register />} />
-                                <Route path="/solicitud" element={<SubjectsRequest />} />
-                                <Route path="/oferta-academica" element={<Subjects />} />
-                                <Route path="/historial-academico" element={<AcademicRecords />} />
-                                <Route path="/solicitudes" element={<SubjectsRequests/>} />
-                                <Route path="/asignaciones" element={<SubjectsAssignations />} />
-                            </Routes>
+                            <Box flex align='center' justify='center'>
+                                <Routes>
+                                    <Route path="/" element={<Login />} />
+                                    <Route path="/registro" element={<Register />} />
+                                    <Route path="/solicitud" element={<SubjectsRequest />} />
+                                    <Route path="/oferta-academica" element={<Subjects />} />
+                                    <Route path="/historial-academico" element={<AcademicRecords />} />
+                                    <Route path="/solicitudes" element={<SubjectsRequests/>} />
+                                    <Route path="/asignaciones" element={<SubjectsAssignations />} />
+                                </Routes>
+                            </Box>
                             <SideBar {...{showSidebar, setShowSidebar, size}}/>
                         </Box>
                     </Box>

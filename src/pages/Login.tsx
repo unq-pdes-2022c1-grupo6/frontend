@@ -1,5 +1,5 @@
 
 const Login = () =>
-    <h1>Inicio de sesion</h1>;
+    <h1>Inicio de sesión</h1>;
 
 export default Login;
