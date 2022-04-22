@@ -1,92 +1,50 @@
 import React, {useState} from "react";
-import {Box, Button, Collapsible, Heading, Grommet, ResponsiveContext, Layer} from 'grommet';
-import {FormClose, Menu} from 'grommet-icons';
+import {theme} from "./assets/theme";
+import {Box, Button, Heading, Grommet, ResponsiveContext} from 'grommet';
+import {Menu} from 'grommet-icons';
+import {Routes, Route} from "react-router-dom";
+import Header from "./layout/Header";
+import SideBar from "./layout/SideBar";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import SubjectsRequest from "./pages/SubjectsRequest";
+import Subjects from "./pages/Subjects";
+import AcademicRecords from "./pages/AcademicRecords";
+import SubjectsRequests from "./pages/SubjectsRequests";
+import SubjectsAssignations from "./pages/SubjectsAssignations";
 
-const theme = {
-  global: {
-    colors: {
-      brand: '#8a2d3e',
-    },
-    font: {
-      family: 'Roboto',
-      size: '18px',
-      height: '20px',
-    },
-  },
+
+const App = () => {
+    const [showSidebar, setShowSidebar] = useState(false);
+
+    return (
+        <Grommet theme={theme} full>
+            <ResponsiveContext.Consumer>
+                {size => (
+                    <Box fill>
+                        <Header>
+                            <Heading level='3' margin='none'>UNQUE</Heading>
+                            <Button icon={<Menu/>} onClick={() => setShowSidebar(!showSidebar)}/>
+                        </Header>
+                        <Box direction='row' flex overflow={{horizontal: 'hidden'}}>
+                            <Box flex align='center' justify='center'>
+                                <Routes>
+                                    <Route path="/" element={<Login />} />
+                                    <Route path="/registro" element={<Register />} />
+                                    <Route path="/solicitud" element={<SubjectsRequest />} />
+                                    <Route path="/oferta-academica" element={<Subjects />} />
+                                    <Route path="/historial-academico" element={<AcademicRecords />} />
+                                    <Route path="/solicitudes" element={<SubjectsRequests/>} />
+                                    <Route path="/asignaciones" element={<SubjectsAssignations />} />
+                                </Routes>
+                            </Box>
+                            <SideBar {...{showSidebar, setShowSidebar, size}}/>
+                        </Box>
+                    </Box>
+                )}
+            </ResponsiveContext.Consumer>
+        </Grommet>
+    );
 };
-
-const AppBar = (props: any) => (
-    <Box
-        tag='header'
-        direction='row'
-        align='center'
-        justify='between'
-        background='brand'
-        pad={{left: 'medium', right: 'small', vertical: 'small'}}
-        elevation='medium'
-        style={{zIndex: '1'}}
-        {...props}
-    />
-);
-
-
-function App() {
-  const [showSidebar, setShowSidebar] = useState(false);
-
-  return (
-      <Grommet theme={theme} full>
-        <ResponsiveContext.Consumer>
-          {size => (
-              <Box fill>
-                <AppBar>
-                  <Heading level='3' margin='none'>UNQ</Heading>
-                  <Button icon={<Menu/>} onClick={() => setShowSidebar(!showSidebar)}/>
-                </AppBar>
-                <Box direction='row' flex overflow={{horizontal: 'hidden'}}>
-                  <Box flex align='center' justify='center'>
-                    Página de inicio de preinscripción
-                  </Box>
-                  {(!showSidebar || size !== 'small') ? (
-                      <Collapsible direction="horizontal" open={showSidebar}>
-                        <Box
-                            flex
-                            width='medium'
-                            background='light-2'
-                            elevation='small'
-                            align='center'
-                            justify='center'>
-                          menu sidebar
-                        </Box>
-                      </Collapsible>
-                  ) : (<Layer>
-                        <Box
-                            background='light-2'
-                            tag='header'
-                            justify='end'
-                            align='center'
-                            direction='row'
-                        >
-                          <Button
-                              icon={<FormClose/>}
-                              onClick={() => setShowSidebar(false)}
-                          />
-                        </Box>
-                        <Box
-                            fill
-                            background='light-2'
-                            align='center'
-                            justify='center'
-                        >
-                          sidebar
-                        </Box>
-                      </Layer>
-                  )}
-                </Box>
-              </Box>
-          )}
-        </ResponsiveContext.Consumer>
-      </Grommet>
-  );
-}
 
 export default App;
