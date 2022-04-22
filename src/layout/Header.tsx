@@ -1,6 +1,10 @@
 import {Box} from "grommet";
 
-const Header = (props: any) =>
+type Props = {
+    children: React.ReactNode
+};
+
+const Header = ({children}: Props) =>
     <Box
         tag='header'
         direction='row'
@@ -10,7 +14,8 @@ const Header = (props: any) =>
         pad={{left: 'medium', right: 'small', vertical: 'small'}}
         elevation='medium'
         style={{zIndex: '1'}}
-        {...props}
-    />;
+    >
+        {children}
+    </Box>
 
 export default Header

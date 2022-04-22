@@ -1,10 +1,10 @@
 import {Box, Button, Collapsible, Layer} from "grommet";
-import React from "react";
+import {Dispatch} from "react";
 import {FormClose} from "grommet-icons";
 
 type Props = {
     showSidebar: boolean
-    setShowSidebar: any
+    setShowSidebar: Dispatch<boolean>
     size: string
 }
 
