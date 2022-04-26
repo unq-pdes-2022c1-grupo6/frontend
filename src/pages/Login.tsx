@@ -1,5 +1,7 @@
 import {useState} from "react";
 import {Box, Button, Form, FormField} from "grommet";
+import {useMutation} from "react-query";
+import axiosMockInstance from "../utils/mockAxios";
 
 interface FormState {
     username?: string,
@@ -7,6 +9,14 @@ interface FormState {
 }
 
 const Login = () => {
+    const mutation = useMutation((newLogin: FormState) => {
+        return axiosMockInstance.post('/login', newLogin)
+    },{
+        onSuccess: ({data}) => {
+            console.log("login exitoso")
+            console.log(data)
+        }
+    });
     const [form, setForm] = useState<FormState>({
         username: "",
         password: ""
@@ -17,11 +27,10 @@ const Login = () => {
             <Form<FormState>
                 value={form}
                 messages={{required: "Requerido*"}}
-                onReset={() => setForm({})}
                 onChange={(nextForm, _) => {
                     setForm(nextForm)
                 }}
-                onSubmit={({value}) => console.log("onSubmit", value)}
+                onSubmit={({value}) => mutation.mutate(value)}
             >
                 <FormField
                     label="Nombre de usuario"
