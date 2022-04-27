@@ -16,8 +16,9 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [, setToken] = useState<string>("");
 
     useEffect(() => {
-        const user = JSON.parse(localStorage.getItem("user")|| "");
-        if (user !== "") {
+        const item = localStorage.getItem("user");
+        if (item) {
+            const user = JSON.parse(item);
             setLoggedIn(true);
             setRole(user.role);
             setToken(user.accessToken);
