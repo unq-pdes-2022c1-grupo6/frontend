@@ -12,6 +12,7 @@ import Subjects from "./pages/Subjects";
 import AcademicRecords from "./pages/AcademicRecords";
 import SubjectsRequests from "./pages/SubjectsRequests";
 import SubjectsAssignations from "./pages/SubjectsAssignations";
+import PublicLayout from "./components/PublicLayout";
 
 
 const App = () => {
@@ -29,8 +30,10 @@ const App = () => {
                         <Box direction='row' flex overflow={{horizontal: 'hidden'}}>
                             <Box flex align='center' justify='center'>
                                 <Routes>
-                                    <Route path="/" element={<Login />} />
-                                    <Route path="/registro" element={<Register />} />
+                                    <Route element={<PublicLayout />}>
+                                        <Route path="/" element={<Login />} />
+                                        <Route path="/registro" element={<Register />} />
+                                    </Route>
                                     <Route path="/solicitud" element={<SubjectsRequest />} />
                                     <Route path="/oferta-academica" element={<Subjects />} />
                                     <Route path="/historial-academico" element={<AcademicRecords />} />

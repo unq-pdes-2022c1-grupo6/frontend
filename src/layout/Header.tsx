@@ -1,10 +1,8 @@
 import {Box} from "grommet";
+import {ReactNode} from "react";
 
-type Props = {
-    children: React.ReactNode
-};
 
-const Header = ({children}: Props) =>
+const Header = ({ children }: { children: ReactNode }) =>
     <Box
         tag='header'
         direction='row'
