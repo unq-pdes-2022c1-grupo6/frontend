@@ -1,4 +1,4 @@
-import {createContext, useState, ReactNode, useContext} from "react";
+import {createContext, useState, ReactNode, useContext, useEffect} from "react";
 import {User} from "../services/authService";
 
 
@@ -14,6 +14,15 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [logged_in, setLoggedIn] = useState(false);
     const [role, setRole] = useState<string>("");
     const [, setToken] = useState<string>("");
+
+    useEffect(() => {
+        const user = JSON.parse(localStorage.getItem("user")|| "");
+        if (user !== "") {
+            setLoggedIn(true);
+            setRole(user.role);
+            setToken(user.accessToken);
+        }
+    }, [])
 
     const login = (user: User) => {
         localStorage.setItem("user", JSON.stringify(user));
