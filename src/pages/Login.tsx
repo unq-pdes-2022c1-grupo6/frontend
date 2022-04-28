@@ -1,41 +1,35 @@
-import {useState} from "react";
-import {Link} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {Anchor, Box, Button, Form, FormField, Paragraph} from "grommet";
 import {LoginForm, usePostLogin} from "../services/authService";
+import PasswordField from "../components/PasswordField";
+import {minLength} from "../utils/validators";
 
 
 const Login = () => {
+    const navigate = useNavigate();
     const mutation = usePostLogin();
-    const [form, setForm] = useState<LoginForm>({
-        username: "",
-        password: ""
-    });
 
     return <Box fill align="center" justify="center">
         <Box width="medium">
             <Form<LoginForm>
-                value={form}
                 messages={{required: "Requerido*"}}
-                onChange={(nextForm, _) => {
-                    setForm(nextForm)
-                }}
                 onSubmit={({value}) => mutation.mutate(value)}
             >
                 <FormField
                     label="Nombre de usuario"
                     name="username"
+                    validate={[minLength(6)]}
                     required
                 />
-                <FormField
+                <PasswordField
                     label="Contraseña"
+                    validate={[minLength(6)]}
                     name="password"
-                    type="password"
-                    required
                 />
                 <Box gap="medium" margin={{top: "medium"}} align="center">
                     <Button type="submit" label="Ingresar" primary/>
                     <Paragraph alignSelf="center" >
-                        ¿No tienes Cuenta? <Link to="/registro"> <Anchor label="Registrate"/> </Link>
+                        ¿No tenés Cuenta? <Anchor label="Registrate" onClick={() => navigate("/registro")}/>
                     </Paragraph>
                 </Box>
             </Form>

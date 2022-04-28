@@ -1,12 +1,11 @@
-import {Box, Button, Form, FormField, Stack} from "grommet";
-import {Hide, View} from "grommet-icons";
-import {useState} from "react";
+import {Box, Button, Form, FormField} from "grommet";
 import {RegisterForm, usePostRegister} from "../services/authService";
+import PasswordField from "../components/PasswordField";
+import {minLength} from "../utils/validators";
 
 
 const Register = () => {
     const mutation = usePostRegister();
-    const [reveal, setReveal] = useState(false);
 
     return <Box fill align="center" justify="center">
         <Box width="medium">
@@ -22,19 +21,14 @@ const Register = () => {
                 <FormField
                     label="Nombre de usuario"
                     name="username"
+                    validate={[minLength(6)]}
                     required
                 />
-                <Stack anchor="right">
-                    <FormField
-                        label="Contraseña"
-                        name="password"
-                        required type={reveal ? 'text' : 'password'}
-                    />
-                    <Button
-                        icon={reveal ? <View size="medium"/> : <Hide size="medium"/>}
-                        onClick={() => setReveal(!reveal)}
-                    />
-                </Stack>
+                <PasswordField
+                    label="Contraseña"
+                    validate={[minLength(6)]}
+                    name="password"
+                />
                 <Box align="center" margin={{top: "medium"}}>
                     <Button type="submit" label="Registrar" primary/>
                 </Box>
