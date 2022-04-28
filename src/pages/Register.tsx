@@ -1,18 +1,22 @@
 import {Box, Button, Form, FormField, Stack} from "grommet";
 import {Hide, View} from "grommet-icons";
 import {useState} from "react";
+import {RegisterForm, usePostRegister} from "../services/authService";
 
 
-const Registro = () => {
+const Register = () => {
+    const mutation = usePostRegister();
     const [reveal, setReveal] = useState(false);
 
     return <Box fill align="center" justify="center">
         <Box width="medium">
-            <Form messages={{required: "Requerido*"}} onSubmit={({value}) => console.log(value)}>
+            <Form<RegisterForm>
+                messages={{required: "Requerido*"}}
+                onSubmit={({value}) => mutation.mutate(value)}>
                 <FormField
                     label="DNI"
                     name="dni"
-                    validate={{regexp: /^[\d]{1,3}\.?[\d]{3,3}\.?[\d]{3,3}$/, message: "DNI Invalido"}}
+                    validate={{regexp: /^\d{1,3}\.?\d{3}\.?\d{3}$/, message: "DNI Invalido"}}
                     required
                 />
                 <FormField
@@ -39,4 +43,4 @@ const Registro = () => {
     </Box>
 };
 
-export default Registro;
+export default Register;

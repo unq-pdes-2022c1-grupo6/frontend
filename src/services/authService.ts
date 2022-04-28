@@ -7,6 +7,12 @@ export interface User {
     accessToken: string
 }
 
+export interface RegisterForm {
+    dni: string,
+    username: string,
+    password: string,
+}
+
 export interface LoginForm {
     username?: string,
     password?: string
@@ -23,3 +29,16 @@ export const usePostLogin = () => {
         onSuccess: (data) => auth?.login(data)
     });
 };
+
+const postRegister = (newRegister: RegisterForm): Promise<User> => {
+    return  axiosInstance.post('/register', newRegister).then((response) => response.data)
+};
+
+export const usePostRegister = () => {
+    const auth = useAuth();
+
+    return useMutation(postRegister,{
+        onSuccess: (data) => auth?.login(data)
+    });
+};
+
