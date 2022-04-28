@@ -1,6 +1,8 @@
 import {useState} from "react";
-import {Box, Button, Form, FormField} from "grommet";
+import {Link} from "react-router-dom";
+import {Anchor, Box, Button, Form, FormField, Paragraph} from "grommet";
 import {LoginForm, usePostLogin} from "../services/authService";
+
 
 
 const Login = () => {
@@ -31,8 +33,11 @@ const Login = () => {
                     type="password"
                     required
                 />
-                <Box direction="row" justify="between" margin={{top: "medium"}}>
+                <Box gap="medium" margin={{top: "medium"}} align="center">
                     <Button type="submit" label="Ingresar" primary/>
+                    <Paragraph alignSelf="center" >
+                        ¿No tienes Cuenta? <Link to="/registro"> <Anchor label="Registrate"/> </Link>
+                    </Paragraph>
                 </Box>
             </Form>
         </Box>

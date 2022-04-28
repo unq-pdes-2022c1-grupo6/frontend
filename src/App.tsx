@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {theme} from "./assets/theme";
-import {Box, Button, Heading, Grommet, ResponsiveContext} from 'grommet';
+import {Box, Button, Heading, Grommet, ResponsiveContext, Main} from 'grommet';
 import {Menu} from 'grommet-icons';
 import {Routes, Route} from "react-router-dom";
 import Header from "./layout/Header";
@@ -28,7 +28,7 @@ const App = () => {
                             <Button icon={<Menu/>} onClick={() => setShowSidebar(!showSidebar)}/>
                         </Header>
                         <Box direction='row' flex overflow={{horizontal: 'hidden'}}>
-                            <Box flex align='center' justify='center'>
+                            <Main align="center" justify="center">
                                 <Routes>
                                     <Route element={<PublicLayout />}>
                                         <Route path="/" element={<Login />} />
@@ -40,7 +40,7 @@ const App = () => {
                                     <Route path="/solicitudes" element={<SubjectsRequests/>} />
                                     <Route path="/asignaciones" element={<SubjectsAssignations />} />
                                 </Routes>
-                            </Box>
+                            </Main>
                             <SideBar {...{showSidebar, setShowSidebar, size}}/>
                         </Box>
                     </Box>
