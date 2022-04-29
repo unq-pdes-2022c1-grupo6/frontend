@@ -3,14 +3,17 @@ import ReactDOM from 'react-dom';
 import {BrowserRouter} from "react-router-dom";
 import {QueryClient, QueryClientProvider} from 'react-query'
 import App from './App';
+import {AuthProvider} from "./state/auth";
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient();
 
 ReactDOM.render(
     <React.StrictMode>
         <QueryClientProvider client={queryClient}>
             <BrowserRouter>
-                <App/>
+                <AuthProvider>
+                    <App/>
+                </AuthProvider>
             </BrowserRouter>
         </QueryClientProvider>
     </React.StrictMode>,
