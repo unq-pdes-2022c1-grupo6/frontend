@@ -28,6 +28,7 @@ const Register = () => {
                     label="Contraseña"
                     validate={[minLength(6)]}
                     name="password"
+                    required
                 />
                 <Box align="center" margin={{top: "medium"}}>
                     <Button type="submit" label="Registrar" primary/>

@@ -25,6 +25,7 @@ const Login = () => {
                     label="Contraseña"
                     validate={[minLength(6)]}
                     name="password"
+                    required
                 />
                 <Box gap="medium" margin={{top: "medium"}} align="center">
                     <Button type="submit" label="Ingresar" primary/>

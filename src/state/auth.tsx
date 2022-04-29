@@ -5,7 +5,8 @@ import {User} from "../services/authService";
 interface AuthContextType {
     logged_in: boolean;
     role: string;
-    login: (user: User) => void
+    login: (user: User) => void,
+    logout: () => void
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -32,7 +33,14 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         setToken(user.accessToken);
     }
 
-    return <AuthContext.Provider value={{ logged_in, role, login }}>
+    const logout = () => {
+        localStorage.removeItem("user");
+        setLoggedIn(false);
+        setRole("");
+        setToken("");
+    }
+
+    return <AuthContext.Provider value={{ logged_in, role, login, logout }}>
         {children}
     </AuthContext.Provider>;
 

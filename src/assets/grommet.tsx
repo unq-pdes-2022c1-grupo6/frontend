@@ -12,3 +12,15 @@ export const theme = {
         },
     },
 };
+
+export const messages = {
+    format: (props: any) => props,
+    messages: {
+        form: {
+            required: 'Requerido*',
+        },
+        fileInput: {
+            browse: 'Navegar',
+        },
+    },
+};

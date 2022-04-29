@@ -1,7 +1,7 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import {useAuth} from "../state/auth";
 
-const PublicLayout = () => {
+const PublicWrapper = () => {
     const auth = useAuth();
 
     if (auth?.logged_in && auth?.role === "student")
@@ -13,4 +13,4 @@ const PublicLayout = () => {
     return <Outlet />
 };
 
-export default PublicLayout;
+export default PublicWrapper;
