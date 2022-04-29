@@ -1,9 +1,11 @@
 import {Anchor, Heading, Box, Header, Menu, ResponsiveContext, Button, Nav} from 'grommet';
 import {Logout as LogoutIcon} from 'grommet-icons';
 import {useAuth} from "../state/auth";
+import {useNavigate} from "react-router-dom";
 
 export const ResponsiveHeader = () => {
     const auth = useAuth();
+    const navigate = useNavigate();
 
     return (
         <Header
@@ -27,17 +29,17 @@ export const ResponsiveHeader = () => {
                             label="Opciones"
                             items={[
                                 {
-                                    label: 'Historial académico', onClick: () => {
-                                    }
+                                    label: 'Historial académico',
+                                    onClick: () => navigate("/historial-academico")
                                 },
                                 {
-                                    label: 'Oferta académica', onClick: () => {
-                                    }
+                                    label: 'Oferta académica',
+                                    onClick: () => navigate("/oferta-academica")
                                 },
                                 {
-                                    label: 'Solicitudes', onClick: () => {
-                                    }
-                                },
+                                    label: 'Solicitudes',
+                                    onClick: () => navigate("/solicitudes")
+                                }
                             ]}
                         />
                     ) : (

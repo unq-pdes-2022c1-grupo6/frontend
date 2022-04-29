@@ -1,5 +1,5 @@
 import React from "react";
-import {messages, theme} from "./assets/grommet";
+import {theme} from "./assets/theme";
 import {Box, Grommet, Main} from 'grommet';
 import {Routes, Route} from "react-router-dom";
 import Login from "./pages/Login";
@@ -17,7 +17,7 @@ import PrivateWrapper from "./components/PrivateWrapper";
 const App = () => {
 
     return (
-        <Grommet theme={theme} messages={messages} full>
+        <Grommet theme={theme} full>
             <Box fill>
                 <ResponsiveHeader/>
                 <Box direction='row' flex overflow={{horizontal: 'hidden'}}>
