@@ -1,11 +1,19 @@
-import {Anchor, Heading, Box, Header, Menu, ResponsiveContext, Button, Nav} from 'grommet';
+import {Tab, Tabs, Heading, Box, Header, Menu, ResponsiveContext, Button} from 'grommet';
 import {Logout as LogoutIcon} from 'grommet-icons';
 import {useAuth} from "../state/auth";
+import {useState} from "react";
 import {useNavigate} from "react-router-dom";
+import {DIRECTOR_NAV} from "../utils/constants";
 
 export const ResponsiveHeader = () => {
     const auth = useAuth();
+    const [index, setIndex] = useState(0);
     const navigate = useNavigate();
+
+    const onActive = (nextIndex: number) => {
+        setIndex(nextIndex);
+        navigate(DIRECTOR_NAV[nextIndex].to)
+    };
 
     return (
         <Header
@@ -16,38 +24,26 @@ export const ResponsiveHeader = () => {
             <Box direction="row" align="center" gap="medium">
                 <Heading level='3' margin='none'>UNQUE</Heading>
                 {auth?.logged_in &&
-                <Button
-                    icon={<LogoutIcon/>}
-                    hoverIndicator
-                    onClick={() => auth?.logout()}
-                />}
+                    <Button
+                        icon={<LogoutIcon/>}
+                        hoverIndicator
+                        onClick={() => auth?.logout()}
+                    />}
             </Box>
             {auth?.role === "director" && <ResponsiveContext.Consumer>
                 {(responsive) =>
                     responsive === 'small' ? (
                         <Menu
-                            label="Opciones"
-                            items={[
-                                {
-                                    label: 'Historial académico',
-                                    onClick: () => navigate("/historial-academico")
-                                },
-                                {
-                                    label: 'Oferta académica',
-                                    onClick: () => navigate("/oferta-academica")
-                                },
-                                {
-                                    label: 'Solicitudes',
-                                    onClick: () => navigate("/solicitudes")
-                                }
-                            ]}
+                            label="Menu"
+                            items={DIRECTOR_NAV.map(({name, to}) => ({
+                                label: name,
+                                onClick: () => navigate(to)
+                            }))}
                         />
                     ) : (
-                        <Nav direction="row">
-                            <Anchor color="text" href="#" label="Historial académico"/>
-                            <Anchor color="text" href="#" label="Oferta académica"/>
-                            <Anchor color="text" href="#" label="Solicitudes"/>
-                        </Nav>
+                        <Tabs activeIndex={index} onActive={onActive} justify="start">
+                            {DIRECTOR_NAV.map(({name}, index,) => <Tab key={index} title={name}/>)}
+                        </Tabs>
                     )
                 }
             </ResponsiveContext.Consumer>}

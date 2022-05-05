@@ -12,6 +12,12 @@ import SubjectsAssignations from "./pages/SubjectsAssignations";
 import PublicWrapper from "./components/PublicWrapper";
 import ResponsiveHeader from "./layout/ResponsiveHeader";
 import PrivateWrapper from "./components/PrivateWrapper";
+import {
+    ACADEMIC_RECORDS_ROUTE, LOGIN_ROUTE, REGISTER_ROUTE,
+    SUBJECTS_ASSIGNATIONS_ROUTE, SUBJECTS_REQUEST_ROUTE,
+    SUBJECTS_REQUESTS_ROUTE,
+    SUBJECTS_ROUTE
+} from "./utils/constants";
 
 
 const App = () => {
@@ -24,15 +30,15 @@ const App = () => {
                     <Main align="center" justify="center">
                         <Routes>
                             <Route element={<PublicWrapper/>}>
-                                <Route path="/" element={<Login/>}/>
-                                <Route path="/registro" element={<Register/>}/>
+                                <Route path={LOGIN_ROUTE} element={<Login/>}/>
+                                <Route path={REGISTER_ROUTE} element={<Register/>}/>
                             </Route>
                             <Route element={<PrivateWrapper/>}>
-                                <Route path="/solicitud" element={<SubjectsRequest/>}/>
-                                <Route path="/oferta-academica" element={<Subjects/>}/>
-                                <Route path="/historial-academico" element={<AcademicRecords/>}/>
-                                <Route path="/solicitudes" element={<SubjectsRequests/>}/>
-                                <Route path="/asignaciones" element={<SubjectsAssignations/>}/>
+                                <Route path={SUBJECTS_REQUEST_ROUTE} element={<SubjectsRequest/>}/>
+                                <Route path={SUBJECTS_ROUTE} element={<Subjects/>}/>
+                                <Route path={ACADEMIC_RECORDS_ROUTE} element={<AcademicRecords/>}/>
+                                <Route path={SUBJECTS_REQUESTS_ROUTE} element={<SubjectsRequests/>}/>
+                                <Route path={SUBJECTS_ASSIGNATIONS_ROUTE} element={<SubjectsAssignations/>}/>
                             </Route>
                         </Routes>
                     </Main>
