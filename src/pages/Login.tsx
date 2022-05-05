@@ -3,6 +3,7 @@ import {Anchor, Box, Button, Form, FormField, Paragraph} from "grommet";
 import {LoginForm, usePostLogin} from "../services/authService";
 import PasswordField from "../components/PasswordField";
 import {minLength} from "../utils/validators";
+import {REGISTER_ROUTE} from "../utils/constants";
 
 
 const Login = () => {
@@ -30,7 +31,7 @@ const Login = () => {
                 <Box gap="medium" margin={{top: "medium"}} align="center">
                     <Button type="submit" label="Ingresar" primary/>
                     <Paragraph alignSelf="center" >
-                        ¿No tenés Cuenta? <Anchor label="Registrate" onClick={() => navigate("/registro")}/>
+                        ¿No tenés Cuenta? <Anchor label="Registrate" onClick={() => navigate(REGISTER_ROUTE)}/>
                     </Paragraph>
                 </Box>
             </Form>
