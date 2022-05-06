@@ -17,7 +17,14 @@ https://github.com/orgs/unq-pdes-2022c1-grupo6/projects/2/views/1
 
 ## Instalación
 ```
-docker pull ghcr.io/unq-pdes-2022c1-grupo6/frontend:dev
+# login to ghcr.io with Github User & Personal Access Token
+echo GH_PAT | docker login ghcr.io -u GH_USER --password-stdin
+
+# pull image after successful login
+docker pull ghcr.io/unq-pdes-2022c1-grupo6/frontend:main
+
+# run container
+docker run -p 3000:3000 ghcr.io/unq-pdes-2022c1-grupo6/frontend:main
 ```
 
 ## Wiki del proyecto
