@@ -25,6 +25,6 @@ jobs:
     - name: Build the Docker image
       run: |
         docker build . --file Dockerfile --tag pdes-2022c1-grupo6:latest
-        docker run ghcr.io/unq-pdes-2022c1-grupo6/pdes-2022c1-grupo6:latest
-        docker push ghcr.io/unq-pdes-2022c1-grupo6/pdes-2022c1-grupo6:latest
+        docker run ghcr.io/${{ secrets.GHCR_USERNAME }}/pdes-2022c1-grupo6:latest
+        docker push ghcr.io/${{ secrets.GHCR_USERNAME }}/pdes-2022c1-grupo6:latest
     
