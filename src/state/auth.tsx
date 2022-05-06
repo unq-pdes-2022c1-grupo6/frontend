@@ -2,9 +2,10 @@ import {createContext, useState, ReactNode, useContext, useEffect} from "react";
 import {User} from "../services/authService";
 
 
-interface AuthContextType {
+export interface AuthContextType {
     logged_in: boolean;
     role: string;
+    token: string;
     login: (user: User) => void,
     logout: () => void
 }
@@ -14,7 +15,7 @@ const AuthContext = createContext<AuthContextType | null>(null);
 const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [logged_in, setLoggedIn] = useState(false);
     const [role, setRole] = useState<string>("");
-    const [, setToken] = useState<string>("");
+    const [token, setToken] = useState<string>("");
 
     useEffect(() => {
         const item = localStorage.getItem("user");
@@ -40,7 +41,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         setToken("");
     }
 
-    return <AuthContext.Provider value={{ logged_in, role, login, logout }}>
+    return <AuthContext.Provider value={{ logged_in, role, token, login, logout }}>
         {children}
     </AuthContext.Provider>;
 
