@@ -12,6 +12,13 @@ Repositorio del proyecto de la materia Práctica del Desarrollo de Software, Uni
 ## Enunciado
 https://docs.google.com/document/d/14fxcGm_xJCpQPeT6OD43XqEgDk64DZe2cSJG_VLuOOU/edit
 
-
 ## Tareas del proyecto
 https://github.com/orgs/unq-pdes-2022c1-grupo6/projects/2/views/1
+
+## Instalación
+```
+docker pull ghcr.io/unq-pdes-2022c1-grupo6/frontend:dev
+```
+
+## Wiki del proyecto
+https://github.com/unq-pdes-2022c1-grupo6/frontend/wiki
