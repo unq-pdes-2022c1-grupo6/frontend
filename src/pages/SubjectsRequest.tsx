@@ -1,5 +1,6 @@
 
-const SubjectsRequest = () =>
-    <h1>Solicitud a materias</h1>;
+const SubjectsRequest = () => {
+    return
+};
 
 export default SubjectsRequest;

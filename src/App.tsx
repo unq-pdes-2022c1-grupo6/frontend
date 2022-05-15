@@ -26,23 +26,21 @@ const App = () => {
         <Grommet theme={theme} full>
             <Box fill>
                 <ResponsiveHeader/>
-                <Box direction='row' flex overflow={{horizontal: 'hidden'}}>
-                    <Main align="center" justify="center">
-                        <Routes>
-                            <Route element={<PublicWrapper/>}>
-                                <Route path={LOGIN_ROUTE} element={<Login/>}/>
-                                <Route path={REGISTER_ROUTE} element={<Register/>}/>
-                            </Route>
-                            <Route element={<PrivateWrapper/>}>
-                                <Route path={SUBJECTS_REQUEST_ROUTE} element={<SubjectsRequest/>}/>
-                                <Route path={SUBJECTS_ROUTE} element={<Subjects/>}/>
-                                <Route path={ACADEMIC_RECORDS_ROUTE} element={<AcademicRecords/>}/>
-                                <Route path={SUBJECTS_REQUESTS_ROUTE} element={<SubjectsRequests/>}/>
-                                <Route path={SUBJECTS_ASSIGNATIONS_ROUTE} element={<SubjectsAssignations/>}/>
-                            </Route>
-                        </Routes>
-                    </Main>
-                </Box>
+                <Main align="center" justify="center">
+                    <Routes>
+                        <Route element={<PublicWrapper/>}>
+                            <Route path={LOGIN_ROUTE} element={<Login/>}/>
+                            <Route path={REGISTER_ROUTE} element={<Register/>}/>
+                        </Route>
+                        <Route element={<PrivateWrapper/>}>
+                            <Route path={SUBJECTS_REQUEST_ROUTE} element={<SubjectsRequest/>}/>
+                            <Route path={SUBJECTS_ROUTE} element={<Subjects/>}/>
+                            <Route path={ACADEMIC_RECORDS_ROUTE} element={<AcademicRecords/>}/>
+                            <Route path={SUBJECTS_REQUESTS_ROUTE} element={<SubjectsRequests/>}/>
+                            <Route path={SUBJECTS_ASSIGNATIONS_ROUTE} element={<SubjectsAssignations/>}/>
+                        </Route>
+                    </Routes>
+                </Main>
             </Box>
         </Grommet>
     );
