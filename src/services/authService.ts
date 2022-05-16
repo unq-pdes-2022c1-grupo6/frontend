@@ -1,4 +1,4 @@
-import axiosInstance from "../utils/mockAxios";
+import axiosInstance from "../utils/mock-axios";
 import {useMutation} from "react-query";
 import {useAuth} from "../state/auth";
 
