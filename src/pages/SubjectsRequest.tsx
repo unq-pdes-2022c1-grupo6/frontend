@@ -1,56 +1,69 @@
+import {useEffect, useState} from "react";
 import {
     Page, PageContent, Box,
     Form, FormField, Select,
-    Text, Accordion, AccordionPanel,
+    Accordion, AccordionPanel,
     CheckBoxGroup, Button
-} from 'grommet'
+} from 'grommet';
+import toPairs from "lodash/toPairs";
+import keys from "lodash/keys";
+import {courses} from "../utils/fake-data";
+import FormFieldTitle from "../components/FormFieldTitle";
+
+interface Course {
+    id: string,
+    horario: string,
+    materia: string,
+    carrera: string
+}
+
+interface CoursesForm {
+    [subject: string]: Course[]
+}
+
+// Algoritmos (01307) - 0/3 seleccionadas
+// (Presencial) Martes 18:30 a 21:29 - Jueves 18:30 a 21:29
+// ["(Presencial) Martes 18:30 a 21:29 - Jueves 18:30 a 21:29", "(Presencial) Martes 17:30 a 19:29 - Jueves 18:30 a 21:29"
+
 
 const SubjectsRequest = () => {
+    const [career, setCareer] = useState("");
+
+    useEffect(() => {
+        setCareer(getCareers()[0])
+    }, [])
+
+    const getSubjects = () => toPairs(courses[career])
+    const getCareers = () => keys(courses)
 
     return <Page kind="narrow">
         <PageContent>
             <Box align="stretch" justify="center" direction="column" gap="medium">
-                <Text color="accent-1" weight="bold" size="medium">
-                    Carreras
-                </Text>
+                <FormFieldTitle title="Carrera"/>
                 <Form>
                     <FormField>
                         <Select
-                            options={["TPI - Tecnicatura universitaria en programación informática", "LI - Licenciatura en informática"]}
-                            value="TPI - Tecnicatura universitaria en programación informática"/>
+                            value={career}
+                            options={getCareers()}
+                            onChange={({ option }) => setCareer(option)}/>
                     </FormField>
                 </Form>
-                <Form>
-                    <Text color="accent-1" weight="bold" size="medium">
-                        Materias
-                    </Text>
+                <Form<CoursesForm>
+                    onSubmit={({value}) => console.log(value)}>
+                    <FormFieldTitle title="Materias"/>
                     <Box align="stretch" justify="center" gap="medium">
-                        <Accordion>
-                            <AccordionPanel
-                                label="Algoritmos (01307) - 0/3 seleccionadas"
-                            >
-                                <FormField>
-                                    <CheckBoxGroup
-                                        options={["(Presencial) Martes 18:30 a 21:29 - Jueves 18:30 a 21:29", "(Presencial) Martes 17:30 a 19:29 - Jueves 18:30 a 21:29"]}/>
-                                </FormField>
-                            </AccordionPanel>
-                        </Accordion>
-                        <Accordion>
-                            <AccordionPanel label="Algoritmos (01307) - 0/3 seleccionadas">
-                                <FormField>
-                                    <CheckBoxGroup
-                                        options={["(Presencial) Martes 18:30 a 21:29 - Jueves 18:30 a 21:29", "(Presencial) Martes 17:30 a 19:29 - Jueves 18:30 a 21:29"]}/>
-                                </FormField>
-                            </AccordionPanel>
-                        </Accordion>
-                        <Accordion>
-                            <AccordionPanel label="Algoritmos (01307) - 0/3 seleccionadas">
-                                <FormField>
-                                    <CheckBoxGroup
-                                        options={["(Presencial) Martes 18:30 a 21:29 - Jueves 18:30 a 21:29", "(Presencial) Martes 17:30 a 19:29 - Jueves 18:30 a 21:29"]}/>
-                                </FormField>
-                            </AccordionPanel>
-                        </Accordion>
+                        {getSubjects().map(([materia, comisiones], index) =>
+                            <Accordion key={index}>
+                                <AccordionPanel label={materia}>
+                                    <FormField name={materia}>
+                                        <CheckBoxGroup
+                                            name={materia}
+                                            labelKey="horario"
+                                            valueKey="id"
+                                            options={comisiones}/>
+                                    </FormField>
+                                </AccordionPanel>
+                            </Accordion>)}
                     </Box>
                     <Box align="center" justify="center" direction="row" gap="medium" pad="medium">
                         <Button label="Solicitar" type="submit" primary/>

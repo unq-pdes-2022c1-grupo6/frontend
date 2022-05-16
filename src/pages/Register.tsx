@@ -7,7 +7,7 @@ import {minLength} from "../utils/validators";
 const Register = () => {
     const mutation = usePostRegister();
 
-    return <Box fill align="center" justify="center">
+    return <Box align="center" justify="center" margin={{top: "large"}}>
         <Box width="medium">
             <Form<RegisterForm>
                 messages={{required: "Requerido*"}}
