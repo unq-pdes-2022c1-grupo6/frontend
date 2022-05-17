@@ -21,7 +21,7 @@ import {maxSubjects, requiredSubjects} from "../utils/validators";
 // }
 
 interface CoursesForm {
-    [subject: string]: string | string[]
+    [subject: string]: string[]
 }
 
 interface Errors {
@@ -36,6 +36,7 @@ interface Errors {
 const SubjectsRequest = () => {
     const [career, setCareer] = useState("");
     const [errors, setErrors] = useState<Errors>({max: undefined, required: undefined});
+    const [coursesForm, setCoursesForm] = useState<CoursesForm>({});
 
     useEffect(() => {
         setCareer(getCareers()[0])
@@ -48,13 +49,20 @@ const SubjectsRequest = () => {
         return reduce(csf, (acc, cs, _) => cs.length === 0 ? acc : 1 + acc, 0);
     }
 
+    const getTotalCoursesBySubject = (materia: string) => {
+        return coursesForm[materia]? coursesForm[materia].length: 0
+    }
+
     const onSubmit = (csf: CoursesForm) => {
-        const total = totalSubjects(csf);
-        setErrors((prevState) => ({...prevState, max: maxSubjects(6)(total)}));
-        setErrors((prevState) => ({...prevState, required: requiredSubjects(total)}));
-        if (errors.max && errors.required) {
+        if (!errors.max && !errors.required) {
             console.log(csf)
         }
+    };
+
+    const onValidate = () => {
+        const total = totalSubjects(coursesForm);
+        setErrors((prevState) => ({...prevState, max: maxSubjects(6)(total)}));
+        setErrors((prevState) => ({...prevState, required: requiredSubjects(total)}));
     };
 
     return <Page kind="narrow">
@@ -70,12 +78,15 @@ const SubjectsRequest = () => {
                     </FormField>
                 </Form>
                 <Form<CoursesForm>
+                    onValidate={() => onValidate()}
+                    onChange={value => setCoursesForm(value)}
                     onSubmit={({value}) => onSubmit(value)}>
                     <FormFieldTitle title="Materias"/>
                     <Box align="stretch" justify="center" gap="medium">
                         {getSubjects().map(([materia, comisiones], index) =>
                             <Accordion key={index}>
-                                <AccordionPanel label={materia}>
+                                <AccordionPanel
+                                    label={`${materia} - ${getTotalCoursesBySubject(materia)}/${comisiones.length} selecc.`}>
                                     <FormField name={materia}>
                                         <CheckBoxGroup
                                             name={materia}
