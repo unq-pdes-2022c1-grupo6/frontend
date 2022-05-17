@@ -7,20 +7,27 @@ import {
 } from 'grommet';
 import toPairs from "lodash/toPairs";
 import keys from "lodash/keys";
+import reduce from "lodash/reduce";
 import {courses} from "../utils/fake-data";
 import FormFieldTitle from "../components/FormFieldTitle";
+import FormErrorMessage from "../components/FormErrorMessage";
+import {maxSubjects, requiredSubjects} from "../utils/validators";
 
-interface Course {
-    id: string,
-    horario: string,
-    materia: string,
-    carrera: string
-}
+// interface Course {
+//     id: string,
+//     horario: string,
+//     materia: string,
+//     carrera: string
+// }
 
 interface CoursesForm {
-    [subject: string]: Course[]
+    [subject: string]: string | string[]
 }
 
+interface Errors {
+    max: string | undefined,
+    required: string | undefined
+}
 // Algoritmos (01307) - 0/3 seleccionadas
 // (Presencial) Martes 18:30 a 21:29 - Jueves 18:30 a 21:29
 // ["(Presencial) Martes 18:30 a 21:29 - Jueves 18:30 a 21:29", "(Presencial) Martes 17:30 a 19:29 - Jueves 18:30 a 21:29"
@@ -28,6 +35,7 @@ interface CoursesForm {
 
 const SubjectsRequest = () => {
     const [career, setCareer] = useState("");
+    const [errors, setErrors] = useState<Errors>({max: undefined, required: undefined});
 
     useEffect(() => {
         setCareer(getCareers()[0])
@@ -35,6 +43,19 @@ const SubjectsRequest = () => {
 
     const getSubjects = () => toPairs(courses[career])
     const getCareers = () => keys(courses)
+
+    const totalSubjects = (csf: CoursesForm) => {
+        return reduce(csf, (acc, cs, _) => cs.length === 0 ? acc : 1 + acc, 0);
+    }
+
+    const onSubmit = (csf: CoursesForm) => {
+        const total = totalSubjects(csf);
+        setErrors((prevState) => ({...prevState, max: maxSubjects(6)(total)}));
+        setErrors((prevState) => ({...prevState, required: requiredSubjects(total)}));
+        if (errors.max && errors.required) {
+            console.log(csf)
+        }
+    };
 
     return <Page kind="narrow">
         <PageContent>
@@ -49,7 +70,7 @@ const SubjectsRequest = () => {
                     </FormField>
                 </Form>
                 <Form<CoursesForm>
-                    onSubmit={({value}) => console.log(value)}>
+                    onSubmit={({value}) => onSubmit(value)}>
                     <FormFieldTitle title="Materias"/>
                     <Box align="stretch" justify="center" gap="medium">
                         {getSubjects().map(([materia, comisiones], index) =>
@@ -65,6 +86,8 @@ const SubjectsRequest = () => {
                                 </AccordionPanel>
                             </Accordion>)}
                     </Box>
+                    <FormErrorMessage message={errors.max}/>
+                    <FormErrorMessage message={errors.required}/>
                     <Box align="center" justify="center" direction="row" gap="medium" pad="medium">
                         <Button label="Solicitar" type="submit" primary/>
                     </Box>
