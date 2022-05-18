@@ -68,15 +68,12 @@ const SubjectsRequestForm = ({subjects = {}, coursesOptions, onSubmit}: SubjectR
     }
 
     const onSubmit0 = (sf: SubjectsForm) => {
-        if (!errors.max && !errors.required && onSubmit) {
+        const total = totalSubjects(subjectsForm);
+        const newErrors = {required:requiredSubjects(total), max:maxSubjects(5)(total)};
+        setErrors(newErrors);
+        if (!newErrors.max && !newErrors.required && onSubmit) {
             onSubmit(sf);
         }
-    };
-
-    const onValidate = () => {
-        const total = totalSubjects(subjectsForm);
-        setErrors((prevState) => ({...prevState, max: maxSubjects(6)(total)}));
-        setErrors((prevState) => ({...prevState, required: requiredSubjects(total)}));
     };
 
     return <Box align="stretch" justify="center" direction="column" gap="medium">
@@ -91,7 +88,6 @@ const SubjectsRequestForm = ({subjects = {}, coursesOptions, onSubmit}: SubjectR
                 </Form>
                 <Form<SubjectsForm>
                     value={subjectsForm}
-                    onValidate={() => onValidate()}
                     onChange={value => setSubjectsForm(value)}
                     onSubmit={({value}) => onSubmit0(value)}>
                     <FormFieldTitle title="Materias"/>
