@@ -107,4 +107,5 @@ const coursesDTO =
         }
     ]
 
+export const subjectsRequest = {};
 export const courses = mapValues(groupBy(coursesDTO, 'carrera'), materias => groupBy(materias, 'materia'));
