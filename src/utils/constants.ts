@@ -31,3 +31,5 @@ export const DIRECTOR_NAV = [
         name: "Asignaciones"
     }
 ]
+
+export const GET_AVAILABLE_SUBJECTS_URL = "/alumnos/materias/";

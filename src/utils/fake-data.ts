@@ -1,8 +1,4 @@
 
-
-// "TPI - Tecnicatura universitaria en programación informática"
-// "LI - Licenciatura en informática"
-
 export const availableSubjectsDTO = [
     {
         "codigo": "01035",
@@ -46,5 +42,6 @@ export const availableSubjectsDTO = [
     }
 ]
 
+export const DNI = 12345678;
 
 export const subjectsRequest = {};

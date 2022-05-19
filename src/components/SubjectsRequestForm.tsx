@@ -17,7 +17,7 @@ import {AvailableSubjects, RequestForm} from "../services/subjectsRequestService
 
 type SubjectRequestFormProps = {
     requestForm?: RequestForm,
-    availableSubjects: { [career: string]: AvailableSubjects },
+    availableSubjects: { [career: string]: AvailableSubjects } | undefined
     onSubmit?: (sf: RequestForm) => void,
 }
 
@@ -26,7 +26,7 @@ interface Errors {
     required: string | undefined
 }
 
-const SubjectsRequestForm = ({requestForm = {}, availableSubjects, onSubmit}: SubjectRequestFormProps) => {
+const SubjectsRequestForm = ({requestForm = {}, availableSubjects = {}, onSubmit}: SubjectRequestFormProps) => {
     const getCareers = () => keys(availableSubjects)
     const editable = onSubmit !== undefined;
 
