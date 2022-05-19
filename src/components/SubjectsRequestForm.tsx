@@ -1,117 +1,94 @@
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {
     Box, Form, FormField,
     Select, Accordion,
     AccordionPanel,
     CheckBoxGroup,
 } from 'grommet';
-import toPairs from "lodash/toPairs";
+import map from "lodash/map";
 import keys from "lodash/keys";
 import reduce from "lodash/reduce";
 import FormFieldTitle from "./FormFieldTitle";
 import FormErrorMessage from "./FormErrorMessage";
 import {maxSubjects, requiredSubjects} from "../utils/validators";
 import SubmitButton from "./SubmitButton";
+import {AvailableSubjects, RequestForm} from "../services/subjectsRequestService";
 
-export type Course = {
-    id: string,
-    horario: string,
-    materia: string,
-    carrera: string
-}
 
-export interface SubjectsForm {
-    [subject: string]: string[]
+type SubjectRequestFormProps = {
+    requestForm?: RequestForm,
+    availableSubjects: { [career: string]: AvailableSubjects },
+    onSubmit?: (sf: RequestForm) => void,
 }
 
 interface Errors {
     max: string | undefined,
     required: string | undefined
 }
-// Algoritmos (01307) - 0/3 seleccionadas
-// (Presencial) Martes 18:30 a 21:29 - Jueves 18:30 a 21:29
-// ["(Presencial) Martes 18:30 a 21:29 - Jueves 18:30 a 21:29", "(Presencial) Martes 17:30 a 19:29 - Jueves 18:30 a 21:29"
 
-//  formulario datos, boton de submit desaparece, courses cambia, onSubmit diferente
-//
-
-interface CourseOptions {
-    [career: string]: { [subject: string]: Course[] }
-}
-
-type SubjectRequestFormProps = {
-    subjects?: SubjectsForm,
-    coursesOptions: CourseOptions,
-    onSubmit?: (sf: SubjectsForm) => void,
-}
-
-const SubjectsRequestForm = ({subjects = {}, coursesOptions, onSubmit}: SubjectRequestFormProps) => {
+const SubjectsRequestForm = ({requestForm = {}, availableSubjects, onSubmit}: SubjectRequestFormProps) => {
+    const getCareers = () => keys(availableSubjects)
     const editable = onSubmit !== undefined;
-    const [career, setCareer] = useState("");
+
+    const [career, setCareer] = useState(getCareers()[0]);
     const [errors, setErrors] = useState<Errors>({max: undefined, required: undefined});
-    const [subjectsForm, setSubjectsForm] = useState<SubjectsForm>(subjects);
+    const [subjectsForm, setSubjectsForm] = useState<RequestForm>(requestForm);
 
-    useEffect(() => {
-        setCareer(getCareers()[0])
-        // eslint-disable-next-line
-    },[])
+    const getSubjects = () => availableSubjects[career]
 
-    const getSubjects = () => toPairs(coursesOptions[career])
-    const getCareers = () => keys(coursesOptions)
-
-    const totalSubjects = (sf: SubjectsForm) => {
-        return reduce(sf, (acc, cs, _) => cs.length === 0 ? acc : 1 + acc, 0);
+    const totalSubjects = (rf: RequestForm) => {
+        return reduce(rf, (acc, cs, _) => cs.length === 0 ? acc : 1 + acc, 0);
     }
 
     const getTotalCoursesBySubject = (materia: string) => {
-        return subjectsForm[materia]? subjectsForm[materia].length: 0
+        return subjectsForm[materia] ? subjectsForm[materia].length : 0
     }
 
-    const onSubmit0 = (sf: SubjectsForm) => {
-        const total = totalSubjects(subjectsForm);
-        const newErrors = {required:requiredSubjects(total), max:maxSubjects(5)(total)};
+    const onSubmit0 = (rf: RequestForm) => {
+        const total = totalSubjects(rf);
+        const newErrors = {required: requiredSubjects(total), max: maxSubjects(5)(total)};
         setErrors(newErrors);
         if (!newErrors.max && !newErrors.required && onSubmit) {
-            onSubmit(sf);
+            onSubmit(rf);
         }
     };
 
     return <Box align="stretch" justify="center" direction="column" gap="medium">
-                <FormFieldTitle title="Carrera"/>
-                <Form>
-                    <FormField>
-                        <Select
-                            value={career}
-                            options={getCareers()}
-                            onChange={({ option }) => setCareer(option)}/>
-                    </FormField>
-                </Form>
-                <Form<SubjectsForm>
-                    value={subjectsForm}
-                    onChange={value => setSubjectsForm(value)}
-                    onSubmit={({value}) => onSubmit0(value)}>
-                    <FormFieldTitle title="Materias"/>
-                    <Box align="stretch" justify="center" gap="medium">
-                        {getSubjects().map(([materia, comisiones], index) =>
-                            <Accordion key={index}>
-                                <AccordionPanel
-                                    label={`${materia} - ${getTotalCoursesBySubject(materia)}/${comisiones.length} selecc.`}>
-                                    <FormField name={materia}>
-                                        <CheckBoxGroup
-                                            disabled={!editable}
-                                            name={materia}
-                                            labelKey="horario"
-                                            valueKey="id"
-                                            options={comisiones}/>
-                                    </FormField>
-                                </AccordionPanel>
-                            </Accordion>)}
-                    </Box>
-                    <FormErrorMessage message={errors.max}/>
-                    <FormErrorMessage message={errors.required}/>
-                    {editable && <SubmitButton label="Solicitar"/>}
-                </Form>
-            </Box>;
+        <FormFieldTitle title="Carrera"/>
+        <Form>
+            <FormField>
+                <Select
+                    value={career}
+                    options={getCareers()}
+                    onChange={({option}) => setCareer(option)}/>
+            </FormField>
+        </Form>
+        <Form<RequestForm>
+            value={subjectsForm}
+            onChange={value => setSubjectsForm(value)}
+            onSubmit={({value}) => onSubmit0(value)}>
+            <FormFieldTitle title="Materias"/>
+            <Box align="stretch" justify="center" gap="medium">
+                {map(getSubjects(), (courses, subject) =>
+                    <Accordion key={subject}>
+                        <AccordionPanel
+                            label={`${subject} - ${getTotalCoursesBySubject(subject)}/${courses.length} selecc.`}>
+                            <FormField name={subject}>
+                                <CheckBoxGroup
+                                    disabled={!editable}
+                                    name={subject}
+                                    labelKey="description"
+                                    valueKey="id"
+                                    options={courses}/>
+                            </FormField>
+                        </AccordionPanel>
+                    </Accordion>)}
+            </Box>
+            <FormErrorMessage message={errors.max}/>
+            <FormErrorMessage message={errors.required}/>
+            {editable && <SubmitButton label="Solicitar"/>}
+        </Form>
+    </Box>;
 
 };
 

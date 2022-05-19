@@ -1,8 +1,8 @@
 import {Page, PageContent} from "grommet";
 import {useState} from "react";
-import {courses} from "../utils/fake-data";
 import SubjectsRequestForm from "../components/SubjectsRequestForm";
 import SubjectsRequestSuccessful from "../components/SubjectsRequestSuccessful";
+import {availableSubjects} from "../services/subjectsRequestService";
 
 
 const SubjectsRequest = () => {
@@ -13,11 +13,11 @@ const SubjectsRequest = () => {
         <PageContent>
             {subjectsRequest && !successfulRequest &&
                 (<SubjectsRequestForm
-                    subjects={subjectsRequest}
-                    coursesOptions={courses}/>)}
+                    requestForm={subjectsRequest}
+                    availableSubjects={availableSubjects}/>)}
             {!subjectsRequest && !successfulRequest &&
                 (<SubjectsRequestForm
-                    coursesOptions={courses}
+                    availableSubjects={availableSubjects}
                     onSubmit={(srf) => {
                         console.log(srf);
                         setSuccessfulRequest(true)
