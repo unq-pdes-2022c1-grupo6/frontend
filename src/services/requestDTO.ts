@@ -1,30 +1,36 @@
+import {SubjectsType} from "../model/subject";
 
-export interface RequestDTO {
-    id: number,
+
+interface RequestI<SolicitudesType> {
     nombre: string,
     dni: number,
     resumenCursadas: unknown[]
     formulario: {
         id: number,
+        dniAlumno: number,
         estado: string,
         cuatrimestre: {
             id: number
-            anio: string,
+            anio: number,
             semestre: string,
             inicioInscripciones: string,
             finInscripciones: string,
         }
-        solicitudes: {
-            id: number,
-            estado: string,
-            comisionDTO: {
-                id: number,
-                numero: number,
-                materia: string,
-                cuposTotales: number,
-                sobreCuposTotales: number,
-                cuposDisponibles: number
-            }
-        }[]
+        solicitudes: SolicitudesType
     }
 }
+
+export type RequestDTO = RequestI<{
+    id: number,
+    estado: string,
+    comisionDTO: {
+        id: number,
+        numero: number,
+        materia: string,
+        cuposTotales: number,
+        sobreCuposTotales: number,
+        cuposDisponibles: number
+    }
+}[]>
+
+export type RequestType = RequestI<SubjectsType>
