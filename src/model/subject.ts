@@ -28,6 +28,10 @@ export const convertToSelectedCourses = (solicitudes: Subject[]) => {
     }, {});
 }
 
+export const convertSelectedCourses = (selectedCourses: SelectedCourses) => {
+    return reduce(selectedCourses, (acc: number[], sc, _) => ([...(sc.map(parseInt)), ...acc]), []);
+}
+
 export const getFirstCareer = (subjects: Subject[]) => subjects[0].carrera
 
 export const getCareers = (subjects: Subject[]) =>
@@ -35,16 +39,16 @@ export const getCareers = (subjects: Subject[]) =>
         return acc.includes(carrera!) ? acc : [...acc, carrera!]
     }, [])
 
-export const getSubjectsByCareer = (subjects:Subject[], career: string | undefined) => {
-    return subjects.filter(({carrera}) =>  carrera === career);
+export const getSubjectsByCareer = (subjects: Subject[], career: string | undefined) => {
+    return subjects.filter(({carrera}) => carrera === career);
 }
 
-export const mapToId = (courses: Course[]) => courses.map(({id,description}) => {
+export const mapToId = (courses: Course[]) => courses.map(({id, description}) => {
     return ({id: id.toString(), description});
 })
 
 export const getTotalSelectedCourses = (selectedCourses: SelectedCourses, subject: string) => {
-    return selectedCourses && selectedCourses[subject]? selectedCourses[subject].length: 0
+    return selectedCourses && selectedCourses[subject] ? selectedCourses[subject].length : 0
 }
 
 export const getTotalCourses = (subject: Subject) => subject.comisiones.length

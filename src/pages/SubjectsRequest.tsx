@@ -12,7 +12,10 @@ const SubjectsRequest = () => {
     const requestQuery = useRequestQuery(availableSubjectsQuery.data);
 
     const showDetails = () => requestQuery.data && !showRequestCreated;
-    const showForm = () => !requestQuery.data && !showRequestCreated;
+    const showForm = () => {
+        console.log(requestQuery.error);
+        return requestQuery.isError && !showRequestCreated;
+    };
 
     if (availableSubjectsQuery.isLoading || requestQuery.isLoading) {
         return <span> Loading.... </span>
@@ -33,7 +36,7 @@ const SubjectsRequest = () => {
                     showDetails() ?
                         <RequestForm
                             availableSubjects={availableSubjectsQuery.data!}
-                            onFormCreated={() => setShowRequestCreated(true)}/> :
+                            onRequestCreated={() => setShowRequestCreated(true)}/> :
                         <Navigate to="/"/>}/>
                 <Route path="exitosa" element={
                     showRequestCreated ?

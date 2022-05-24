@@ -1,20 +1,25 @@
 import React from 'react';
 import SubjectsRequestForm from "./SubjectsRequestForm";
-import {SelectedCourses, Subject} from "../../services/subjectDTO";
+import {Subject} from "../../services/subjectDTO";
+import {useCreateRequest} from "../../services/studentService";
 
 type RequestFormType = {
     availableSubjects: Subject[],
-    onFormCreated: () => void
+    onRequestCreated: () => void
 }
 
-const RequestForm = ({availableSubjects, onFormCreated} : RequestFormType) => {
+const RequestForm = ({availableSubjects, onRequestCreated} : RequestFormType) => {
+    const mutation  = useCreateRequest(availableSubjects, onRequestCreated);
 
-    const onSubmit = (ss: SelectedCourses) => {
-        console.log(ss);
-        onFormCreated()
+    if (mutation.isLoading) {
+        return <span> Loading.... </span>
     }
 
-    return <SubjectsRequestForm subjectsOptions={availableSubjects} onSubmit={onSubmit}/>
+    if (mutation.isError) {
+        return <span> Error :( </span>
+    }
+
+    return <SubjectsRequestForm subjectsOptions={availableSubjects} onSubmit={mutation.mutate}/>
 };
 
 export default RequestForm;
