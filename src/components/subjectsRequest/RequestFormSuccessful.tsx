@@ -6,7 +6,7 @@ import {
 } from "grommet";
 import {Validate} from "grommet-icons";
 
-const SubjectsRequestSuccessful = ({onClick}: { onClick: () => void }) => {
+const RequestFormSuccessful = ({onClick}: { onClick: () => void }) => {
 
     return <Card background={{"color": "active-background"}}>
         <CardHeader align="center" direction="row" justify="center" gap="medium" pad="small">
@@ -30,4 +30,4 @@ const SubjectsRequestSuccessful = ({onClick}: { onClick: () => void }) => {
     </Card>
 };
 
-export default SubjectsRequestSuccessful;
+export default RequestFormSuccessful;

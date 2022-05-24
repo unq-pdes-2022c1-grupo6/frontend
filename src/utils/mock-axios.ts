@@ -1,7 +1,7 @@
 import axios from 'axios';
 import AxiosMockAdapter from 'axios-mock-adapter';
-import {availableSubjectsDTO, DNI} from "./fake-data";
-import {GET_AVAILABLE_SUBJECTS_URL} from "./constants";
+import {availableSubjectsDTO, DNI, requestDTO} from "./fake-data";
+import {GET_AVAILABLE_SUBJECTS_URL, GET_REQUEST_URL} from "./constants";
 
 const axiosMockInstance = axios.create();
 const axiosLiveInstance = axios.create({
@@ -19,4 +19,7 @@ axiosMockAdapterInstance.onPost("/register").reply(200,
 axiosMockAdapterInstance.onGet(GET_AVAILABLE_SUBJECTS_URL + DNI).reply(200,
     availableSubjectsDTO);
 
-export default process.env.REACT_APP_AXIOS_MOCK? axiosLiveInstance: axiosMockInstance;
+axiosMockAdapterInstance.onGet(GET_REQUEST_URL + DNI).reply(200,
+    requestDTO);
+
+export default process.env.REACT_APP_AXIOS_MOCK? axiosMockInstance: axiosLiveInstance;

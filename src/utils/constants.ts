@@ -2,7 +2,7 @@ export const LOGIN_ROUTE = "/"
 
 export const REGISTER_ROUTE = "/registro"
 
-export const SUBJECTS_REQUEST_ROUTE = "/solicitud"
+export const SUBJECTS_REQUEST_ROUTE = "/solicitud/*"
 
 export const ACADEMIC_RECORDS_ROUTE = "/historial-academico"
 
@@ -33,3 +33,5 @@ export const DIRECTOR_NAV = [
 ]
 
 export const GET_AVAILABLE_SUBJECTS_URL = "/alumnos/materias/";
+export const GET_REQUEST_URL = "/alumnos/";
+export const POST_REQUEST_FORM_URL = "/alumnos/solicitudes/";

@@ -1,37 +1,48 @@
+import React, {useState} from 'react';
+import {Navigate, Route, Routes} from "react-router-dom";
 import {Page, PageContent} from "grommet";
-import {useState} from "react";
-import SubjectsRequestForm from "../components/SubjectsRequestForm";
-import SubjectsRequestSuccessful from "../components/SubjectsRequestSuccessful";
-import {useGetAvailableSubjects} from "../services/subjectsRequestService";
-
+import {useAvailableSubjectsQuery, useRequestQuery} from "../services/studentService";
+import RequestDetails from "../components/subjectsRequest/RequestDetails";
+import RequestForm from "../components/subjectsRequest/RequestForm";
+import RequestFormSuccessful from "../components/subjectsRequest/RequestFormSuccessful";
 
 const SubjectsRequest = () => {
-    const [subjectsRequest] = useState(undefined);
-    const [successfulRequest, setSuccessfulRequest] = useState(false);
-    const availableSubjectsQuery = useGetAvailableSubjects();
+    const [showRequestCreated, setShowRequestCreated] = useState(false);
+    const availableSubjectsQuery = useAvailableSubjectsQuery();
+    const requestQuery = useRequestQuery(availableSubjectsQuery.data);
 
-    if (availableSubjectsQuery.isLoading) {
-        return <span> Loading</span>
+    const showDetails = () => requestQuery.data && !showRequestCreated;
+    const showForm = () => !requestQuery.data && !showRequestCreated;
+
+    if (availableSubjectsQuery.isLoading || requestQuery.isLoading) {
+        return <span> Loading.... </span>
+    }
+
+    if (availableSubjectsQuery.isError || requestQuery.isError) {
+        return <span> Error :( </span>
     }
 
     return <Page kind="narrow">
         <PageContent>
-            {subjectsRequest && !successfulRequest &&
-                (<SubjectsRequestForm
-                    requestForm={subjectsRequest}
-                    availableSubjects={availableSubjectsQuery.data}/>)}
-            {!subjectsRequest && !successfulRequest &&
-                (<SubjectsRequestForm
-                    availableSubjects={availableSubjectsQuery.data}
-                    onSubmit={(srf) => {
-                        console.log(srf);
-                        setSuccessfulRequest(true)
-                    }}/>)}
-            {successfulRequest &&
-                (<SubjectsRequestSuccessful
-                    onClick={() => setSuccessfulRequest(false)}/>)}
+            <Routes>
+                <Route path="/" element={
+                    showForm() ?
+                        <RequestDetails request={requestQuery.data!}/> :
+                        <Navigate to="crear"/>}/>
+                <Route path="crear" element={
+                    showDetails() ?
+                        <RequestForm
+                            availableSubjects={availableSubjectsQuery.data!}
+                            onFormCreated={() => setShowRequestCreated(true)}/> :
+                        <Navigate to="/"/>}/>
+                <Route path="exitosa" element={
+                    showRequestCreated ?
+                        <RequestFormSuccessful onClick={() => setShowRequestCreated(false)}/> :
+                        <></>}/>
+            </Routes>
         </PageContent>
     </Page>;
+
 };
 
 export default SubjectsRequest;

@@ -42,7 +42,7 @@ export const availableSubjectsDTO = [
     }
 ]
 
-export const DNI = 12345678;
+export const DNI = 12345677;
 
 export const requestDTO = {
     "nombre": "Bartolo",
@@ -87,5 +87,3 @@ export const requestDTO = {
     },
     "resumenCursadas": []
 }
-
-export const subjectsRequest = {};

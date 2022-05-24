@@ -12,8 +12,23 @@ export interface CourseDTO {
     horarios: HorarioDTO[]
 }
 
-export interface SubjectDTO {
+export interface SubjectI<CourseType> {
     codigo: string,
     nombre: string,
-    comisiones: CourseDTO[]
+    carrera?: string,
+    comisiones: CourseType[]
+}
+
+export interface Course {
+    id: number,
+    estado?: string,
+    description: string
+}
+
+export type SubjectDTO = SubjectI<CourseDTO>;
+
+export type Subject = SubjectI<Course>
+
+export interface SelectedCourses {
+    [materia: string]: string[];
 }

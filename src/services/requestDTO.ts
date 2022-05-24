@@ -1,4 +1,4 @@
-import {SubjectsType} from "../model/subject";
+import {Subject} from "./subjectDTO";
 
 
 interface RequestI<SolicitudesType> {
@@ -20,7 +20,7 @@ interface RequestI<SolicitudesType> {
     }
 }
 
-export type RequestDTO = RequestI<{
+export interface SolicitudDTO {
     id: number,
     estado: string,
     comisionDTO: {
@@ -31,6 +31,8 @@ export type RequestDTO = RequestI<{
         sobreCuposTotales: number,
         cuposDisponibles: number
     }
-}[]>
+}
 
-export type RequestType = RequestI<SubjectsType>
+export type RequestDTO = RequestI<SolicitudDTO[]>
+
+export type RequestType = RequestI<Subject[]>

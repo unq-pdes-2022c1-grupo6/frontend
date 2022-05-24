@@ -1,9 +1,11 @@
-import {convertRequestDTO} from "../request";
-import {Careers} from "../subject";
 import {availableSubjectsDTO, requestDTO} from "../../utils/fake-data";
+import {convertToRequest} from "../request";
+import {convertSubjectsDTO} from "../subject";
 
-const convertedRequest = {
-    "nombre": "Bartolo", "dni": 12345677, "resumenCursadas": [],
+const expectedRequest = {
+    "nombre": "Bartolo",
+    "dni": 12345677,
+    "resumenCursadas": [],
     "formulario": {
         "id": 1,
         "dniAlumno": 12345677,
@@ -14,26 +16,30 @@ const convertedRequest = {
             "finInscripciones": "2022-06-06T20:00:00",
             "id": 1
         },
-        "solicitudes": {
-            "Bases de Datos": [{
-                "id": "1",
-                "description": "1 - (Presencial) Martes 10:00 a 12:00 - Jueves 10:00 a 12:00 ",
-                "state": "PENDIENTE"
+        "solicitudes": [{
+            "carrera": "TPI - Tecnicatura universitaria en programación informática",
+            "comisiones": [{
+                "estado": "PENDIENTE",
+                "id": 1,
+                "description": "1 - (Presencial) Martes 10:00 a 12:00 - Jueves 10:00 a 12:00 "
             }, {
-                "id": "2",
-                "description": "2 - (Presencial) Lunes 10:00 a 12:00 - Miercoles 10:00 a 12:00 ",
-                "state": "PENDIENTE"
-            }]
-        },
+                "estado": "PENDIENTE",
+                "id": 2,
+                "description": "2 - (Presencial) Lunes 10:00 a 12:00 - Miercoles 10:00 a 12:00 "
+            }],
+            "codigo": "01035",
+            "nombre": "Bases de Datos"
+        }],
         "estado": "ABIERTO"
     }
 }
 
 describe('convertRequestDTO', () => {
 
-    it("devuelve una nueva solicitud con sus solicitudes convertidas en RequestType", () => {
+    it("devuelve una nueva solicitud con sus solicitudes convertidas en una lista de tipo Subject", () => {
+        const res = convertToRequest(convertSubjectsDTO(availableSubjectsDTO), requestDTO);
 
-        expect(convertRequestDTO(new Careers(availableSubjectsDTO), requestDTO)).toStrictEqual(convertedRequest)
+        expect(res).toStrictEqual(expectedRequest)
     });
 
 });

@@ -10,7 +10,7 @@ import AcademicRecords from "./pages/AcademicRecords";
 import SubjectsRequests from "./pages/SubjectsRequests";
 import SubjectsAssignations from "./pages/SubjectsAssignations";
 import PublicWrapper from "./components/PublicWrapper";
-import ResponsiveHeader from "./layout/ResponsiveHeader";
+import ResponsiveHeader from "./components/ResponsiveHeader";
 import {
     ACADEMIC_RECORDS_ROUTE, LOGIN_ROUTE, REGISTER_ROUTE,
     SUBJECTS_ASSIGNATIONS_ROUTE, SUBJECTS_REQUEST_ROUTE,

@@ -1,25 +1,21 @@
-import {convertToSubjects, SubjectsType} from "../subject";
 import {availableSubjectsDTO} from "../../utils/fake-data";
+import {Subject} from "../../services/subjectDTO";
+import {convertSubjectsDTO} from "../subject";
 
-const convertedSubjects: SubjectsType = {
-    'Bases de Datos (01035)': [
-        {
-            id: '1',
-            description: '1 - (Presencial) Martes 10:00 a 12:00 - Jueves 10:00 a 12:00 '
-        },
-        {
-            id: '2',
-            description: '2 - (Presencial) Lunes 10:00 a 12:00 - Miercoles 10:00 a 12:00 '
-        }
-    ]
-};
+const expectedSubjects: Subject[] = [{
+    "carrera": "TPI - Tecnicatura universitaria en programación informática",
+    "comisiones": [
+        {"id": 1, "description": "1 - (Presencial) Martes 10:00 a 12:00 - Jueves 10:00 a 12:00 "},
+        {"id": 2, "description": "2 - (Presencial) Lunes 10:00 a 12:00 - Miercoles 10:00 a 12:00 "}
+    ],
+    "codigo": "01035",
+    "nombre": "Bases de Datos"
+}]
 
+describe('convertSubjectsDTO', () => {
 
-describe('convertToSubjects', () => {
-
-    it("devuelve las materias convertidas en un objeto de tipo SubjectsType", () => {
-
-        expect(convertToSubjects(availableSubjectsDTO)).toStrictEqual(convertedSubjects)
+    it("devuelve las comisiones en una lista de tipo Course", () => {
+        expect(convertSubjectsDTO(availableSubjectsDTO)).toStrictEqual(expectedSubjects)
     });
 
 });
