@@ -13,8 +13,8 @@ export const convertSubjectsDTO = (subjects: SubjectDTO[]): Subject[] => {
 }
 
 const convertToCourses = (comisiones: CourseDTO[]) => comisiones.map(
-    ({id, comision, modalidad, horarios}) =>
-        ({id, description: `${comision} - (${capitalize(modalidad)}) ${convertHorario(horarios)}`}));
+    ({id, modalidad, horarios}) =>
+        ({id, description: `(${capitalize(modalidad)}) ${convertHorario(horarios)}`}));
 
 const convertHorario = (horarios: HorarioDTO[]) => horarios.reduce(
     (acc, {dia, inicio, fin}) =>
@@ -29,7 +29,7 @@ export const convertToSelectedCourses = (solicitudes: Subject[]) => {
 }
 
 export const convertSelectedCourses = (selectedCourses: SelectedCourses) => {
-    return reduce(selectedCourses, (acc: number[], sc, _) => ([...(sc.map(parseInt)), ...acc]), []);
+    return reduce(selectedCourses, (acc: number[], sc, _) => ([...(sc.map(c => parseInt(c))), ...acc]), []);
 }
 
 export const getFirstCareer = (subjects: Subject[]) => subjects[0].carrera

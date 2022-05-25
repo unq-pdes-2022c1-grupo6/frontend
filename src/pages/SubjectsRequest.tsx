@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Navigate, Route, Routes} from "react-router-dom";
+import {Navigate, Route, Routes, useNavigate} from "react-router-dom";
 import {Page, PageContent} from "grommet";
 import {useAvailableSubjectsQuery, useRequestQuery} from "../services/studentService";
 import RequestDetails from "../components/subjectsRequest/RequestDetails";
@@ -7,14 +7,16 @@ import RequestForm from "../components/subjectsRequest/RequestForm";
 import RequestFormSuccessful from "../components/subjectsRequest/RequestFormSuccessful";
 
 const SubjectsRequest = () => {
-    const [showRequestCreated, setShowRequestCreated] = useState(false);
+    const navigate = useNavigate();
     const availableSubjectsQuery = useAvailableSubjectsQuery();
-    const requestQuery = useRequestQuery(availableSubjectsQuery.data);
+    const [showForm, setShowForm] = useState(false);
+    const requestQuery = useRequestQuery(availableSubjectsQuery.data, setShowForm);
 
-    const showDetails = () => requestQuery.data && !showRequestCreated;
-    const showForm = () => {
-        console.log(requestQuery.error);
-        return requestQuery.isError && !showRequestCreated;
+    const showDetails = () => Boolean(requestQuery.data);
+
+    const onRequestCreated = () => {
+        setShowForm(false);
+        navigate("exitosa")
     };
 
     if (availableSubjectsQuery.isLoading || requestQuery.isLoading) {
@@ -28,20 +30,17 @@ const SubjectsRequest = () => {
     return <Page kind="narrow">
         <PageContent>
             <Routes>
-                <Route path="/" element={
-                    showForm() ?
+                <Route index element={
+                    showDetails() ?
                         <RequestDetails request={requestQuery.data!}/> :
                         <Navigate to="crear"/>}/>
                 <Route path="crear" element={
-                    showDetails() ?
+                    showForm ?
                         <RequestForm
                             availableSubjects={availableSubjectsQuery.data!}
-                            onRequestCreated={() => setShowRequestCreated(true)}/> :
-                        <Navigate to="/"/>}/>
-                <Route path="exitosa" element={
-                    showRequestCreated ?
-                        <RequestFormSuccessful onClick={() => setShowRequestCreated(false)}/> :
-                        <></>}/>
+                            onRequestCreated={onRequestCreated}/> :
+                        <Navigate to="/solicitud"/>}/>
+                <Route path="exitosa" element={<RequestFormSuccessful onClick={() => navigate("/solicitud")}/>}/>
             </Routes>
         </PageContent>
     </Page>;

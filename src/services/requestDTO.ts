@@ -9,13 +9,6 @@ interface RequestI<SolicitudesType> {
         id: number,
         dniAlumno: number,
         estado: string,
-        cuatrimestre: {
-            id: number
-            anio: number,
-            semestre: string,
-            inicioInscripciones: string,
-            finInscripciones: string,
-        }
         solicitudes: SolicitudesType
     }
 }
@@ -23,14 +16,8 @@ interface RequestI<SolicitudesType> {
 export interface SolicitudDTO {
     id: number,
     estado: string,
-    comisionDTO: {
-        id: number,
-        numero: number,
-        materia: string,
-        cuposTotales: number,
-        sobreCuposTotales: number,
-        cuposDisponibles: number
-    }
+    comisionId: number,
+    materia?: string
 }
 
 export type RequestDTO = RequestI<SolicitudDTO[]>

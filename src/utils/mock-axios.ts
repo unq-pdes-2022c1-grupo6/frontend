@@ -25,4 +25,4 @@ axiosMockAdapterInstance.onGet(GET_REQUEST_URL + DNI).reply(200,
 axiosMockAdapterInstance.onPost(POST_REQUEST_FORM_URL + DNI).reply(200,
     requestDTO);
 
-export default process.env.REACT_APP_AXIOS_MOCK? axiosMockInstance: axiosLiveInstance;
+export default process.env.REACT_APP_AXIOS_MOCK? axiosLiveInstance: axiosMockInstance;

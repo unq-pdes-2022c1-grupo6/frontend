@@ -8,7 +8,7 @@ import {Validate} from "grommet-icons";
 
 const RequestFormSuccessful = ({onClick}: { onClick: () => void }) => {
 
-    return <Card background={{"color": "active-background"}}>
+    return <Card background={{"color": "active-background"}} align="center">
         <CardHeader align="center" direction="row" justify="center" gap="medium" pad="small">
             <Heading>
                 Solicitud Hecha
@@ -17,11 +17,7 @@ const RequestFormSuccessful = ({onClick}: { onClick: () => void }) => {
         </CardHeader>
         <CardBody pad="small">
             <Paragraph textAlign="start" fill>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer commodo
-                gravida tincidunt. Nunc fringilla blandit tortor, id accumsan nisi
-                dictum quis. Aenean porttitor at mi id semper. Donec mattis bibendum
-                leo, interdum ullamcorper lectus ultrices vel. Fusce nec enim faucibus
-                nunc porta egestas. Fusce dapibus lobortis tincidunt.
+                Solicitud creada exitosamente!
             </Paragraph>
         </CardBody>
         <CardFooter align="center" direction="row" flex={false} justify="center" gap="medium" pad="small">
