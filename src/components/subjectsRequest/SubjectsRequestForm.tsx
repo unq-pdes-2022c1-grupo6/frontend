@@ -12,11 +12,10 @@ import SubmitButton from "../SubmitButton";
 import {
     getCareers,
     getFirstCareer,
-    getSubjectsByCareer, getTotalCourses, getTotalSelectedCourses,
-    mapToId,
-    totalSubjects
+    getSubjectsByCareer, getTotalCourses
 } from "../../model/subject";
 import {SelectedCourses, Subject} from "../../services/subjectDTO";
+import {getTotalSelectedCourses, mapToId, totalSubjects} from "../../model/course";
 
 
 type SubjectRequestFormProps = {

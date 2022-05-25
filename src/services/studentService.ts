@@ -1,15 +1,16 @@
 import {useMutation, useQuery} from "react-query";
-import {DNI} from "../utils/fake-data";
+import isEqual from "lodash/isEqual";
 import axiosInstance from "../utils/mock-axios";
+import {AxiosError} from "axios";
+import {queryClient} from "../index";
 import {GET_AVAILABLE_SUBJECTS_URL, GET_REQUEST_URL, POST_REQUEST_FORM_URL} from "../utils/constants";
+import {DNI} from "../utils/fake-data";
 import {SelectedCourses, Subject, SubjectDTO} from "./subjectDTO";
 import {RequestDTO} from "./requestDTO";
 import {convertToRequest} from "../model/request";
-import {convertSelectedCourses, convertSubjectsDTO} from "../model/subject";
-import {queryClient} from "../index";
-import {AxiosError} from "axios";
-import {Dispatch, SetStateAction} from "react";
-import isEqual from "lodash/isEqual";
+import {convertSubjectsDTO} from "../model/subject";
+import {convertSelectedCourses} from "../model/course";
+
 
 
 const getAvailableSubjects = (dni: number): Promise<SubjectDTO[]> => {
@@ -19,7 +20,6 @@ const getAvailableSubjects = (dni: number): Promise<SubjectDTO[]> => {
             semestre: "S1"
         }
     }).then((response) => response.data)
-        .catch(error => console.log(error));
 };
 
 export const useAvailableSubjectsQuery = () => {
@@ -35,7 +35,6 @@ const postRequest = (selectedCourses: SelectedCourses): Promise<RequestDTO> => {
         .then((response) => {
             return response.data;
         })
-        .catch(error => console.log(error));
 };
 
 export const useCreateRequest = (availableSubjects: Subject[], onRequestCreated: () => void) => {
@@ -47,31 +46,25 @@ export const useCreateRequest = (availableSubjects: Subject[], onRequestCreated:
     });
 }
 
-export const isRequestNotFoundError = (error: AxiosError) => {
-    return isEqual(error.response?.data, {
+export const isRequestNotFoundError = (error: unknown) => {
+    return error instanceof AxiosError && isEqual(error.response?.data, {
         error: 'ExcepcionUNQUE',
         message: 'No se encontró ningun formulario para el cuatrimestre dado'
     });
 }
 
-const getRequest = (dni: number, setShowForm: Dispatch<SetStateAction<boolean>>): Promise<RequestDTO> => {
+const getRequest = (dni: number): Promise<RequestDTO> => {
     return axiosInstance.get(GET_REQUEST_URL + dni, {
         params: {
             anio: 2022,
             semestre: "S1"
         }
     }).then((response) => response.data)
-        .catch(error => {
-            if (isRequestNotFoundError(error)) {
-                setShowForm(true);
-            }
-            console.log(error)
-        });
 };
 
-export const useRequestQuery = (availableSubjects: Subject[] | undefined, setShowForm: Dispatch<SetStateAction<boolean>>) => {
+export const useRequestQuery = (availableSubjects: Subject[] | undefined) => {
     return useQuery(['subjectsRequest', DNI],
-        () => getRequest(DNI, setShowForm), {
+        () => getRequest(DNI), {
             select: (data) => {
                 return typeof availableSubjects === 'undefined'
                     ? undefined

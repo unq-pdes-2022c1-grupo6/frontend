@@ -1,6 +1,5 @@
 import capitalize from "lodash/capitalize";
-import reduce from "lodash/reduce";
-import {Course, CourseDTO, HorarioDTO, SelectedCourses, Subject, SubjectDTO} from "../services/subjectDTO";
+import {CourseDTO, HorarioDTO, SelectedCourses, Subject, SubjectDTO} from "../services/subjectDTO";
 
 export const tpi = "TPI - Tecnicatura universitaria en programación informática";
 //const li = "LI - Licenciatura en informática";
@@ -28,10 +27,6 @@ export const convertToSelectedCourses = (solicitudes: Subject[]) => {
     }, {});
 }
 
-export const convertSelectedCourses = (selectedCourses: SelectedCourses) => {
-    return reduce(selectedCourses, (acc: number[], sc,) => ([...(sc.map(c => parseInt(c))), ...acc]), []);
-}
-
 export const getFirstCareer = (subjects: Subject[]) => subjects[0].carrera
 
 export const getCareers = (subjects: Subject[]) =>
@@ -43,16 +38,4 @@ export const getSubjectsByCareer = (subjects: Subject[], career: string | undefi
     return subjects.filter(({carrera}) => carrera === career);
 }
 
-export const mapToId = (courses: Course[]) => courses.map(({id, description}) => {
-    return ({id: id.toString(), description});
-})
-
-export const getTotalSelectedCourses = (selectedCourses: SelectedCourses, subject: string) => {
-    return selectedCourses && selectedCourses[subject] ? selectedCourses[subject].length : 0
-}
-
 export const getTotalCourses = (subject: Subject) => subject.comisiones.length
-
-export const totalSubjects = (selectedCourses: SelectedCourses) => {
-    return reduce(selectedCourses, (acc, sc,) => sc.length === 0 ? acc : 1 + acc, 0);
-}

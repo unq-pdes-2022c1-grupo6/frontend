@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Navigate, Route, Routes} from "react-router-dom";
 import {Page, PageContent} from "grommet";
-import {useAvailableSubjectsQuery, useRequestQuery} from "../services/studentService";
+import {isRequestNotFoundError, useAvailableSubjectsQuery, useRequestQuery} from "../services/studentService";
 import RequestDetails from "../components/subjectsRequest/RequestDetails";
 import RequestForm from "../components/subjectsRequest/RequestForm";
 import RequestFormSuccessful from "../components/subjectsRequest/RequestFormSuccessful";
@@ -9,20 +9,13 @@ import RequestFormSuccessful from "../components/subjectsRequest/RequestFormSucc
 const SubjectsRequest = () => {
     const [showToast, setShowToast] = useState(false);
     const availableSubjectsQuery = useAvailableSubjectsQuery();
-    const [showForm, setShowForm] = useState(false);
-    const requestQuery = useRequestQuery(availableSubjectsQuery.data, setShowForm);
-
-
-    const onRequestCreated = () => {
-        setShowForm(false);
-        setShowToast(true)
-    };
+    const requestQuery = useRequestQuery(availableSubjectsQuery.data);
 
     if (availableSubjectsQuery.isLoading || requestQuery.isLoading) {
         return <span> Loading.... </span>
     }
 
-    if (availableSubjectsQuery.isError || requestQuery.isError) {
+    if (availableSubjectsQuery.isError || (requestQuery.isError && !isRequestNotFoundError(requestQuery.error))) {
         return <span> Error :( </span>
     }
 
@@ -34,10 +27,10 @@ const SubjectsRequest = () => {
                         <RequestDetails request={requestQuery.data}/> :
                         <Navigate to="crear"/>}/>
                 <Route path="crear" element={
-                    showForm ?
+                    isRequestNotFoundError(requestQuery.error) ?
                         <RequestForm
                             availableSubjects={availableSubjectsQuery.data}
-                            onRequestCreated={onRequestCreated}/> :
+                            onRequestCreated={() => setShowToast(true)}/> :
                         <Navigate to="/solicitud"/>}/>
             </Routes>
             <RequestFormSuccessful setVisible={setShowToast} visible={showToast}/>
