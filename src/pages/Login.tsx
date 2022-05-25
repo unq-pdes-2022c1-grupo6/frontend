@@ -10,7 +10,7 @@ const Login = () => {
     const navigate = useNavigate();
     const mutation = usePostLogin();
 
-    return <Box fill align="center" justify="center">
+    return <Box align="center" justify="center" margin={{top: "large"}}>
         <Box width="medium">
             <Form<LoginForm>
                 messages={{required: "Requerido*"}}

@@ -1,13 +1,14 @@
-import {Box, Button, Form, FormField} from "grommet";
+import {Box, Form, FormField} from "grommet";
 import {RegisterForm, usePostRegister} from "../services/authService";
 import PasswordField from "../components/PasswordField";
 import {minLength} from "../utils/validators";
+import SubmitButton from "../components/SubmitButton";
 
 
 const Register = () => {
     const mutation = usePostRegister();
 
-    return <Box fill align="center" justify="center">
+    return <Box align="center" justify="center" margin={{top: "large"}}>
         <Box width="medium">
             <Form<RegisterForm>
                 messages={{required: "Requerido*"}}
@@ -30,9 +31,7 @@ const Register = () => {
                     name="password"
                     required
                 />
-                <Box align="center" margin={{top: "medium"}}>
-                    <Button type="submit" label="Registrar" primary/>
-                </Box>
+                <SubmitButton label="Registrar"/>
             </Form>
         </Box>
     </Box>
