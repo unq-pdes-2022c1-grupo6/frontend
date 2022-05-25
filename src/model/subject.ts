@@ -29,14 +29,14 @@ export const convertToSelectedCourses = (solicitudes: Subject[]) => {
 }
 
 export const convertSelectedCourses = (selectedCourses: SelectedCourses) => {
-    return reduce(selectedCourses, (acc: number[], sc, _) => ([...(sc.map(c => parseInt(c))), ...acc]), []);
+    return reduce(selectedCourses, (acc: number[], sc,) => ([...(sc.map(c => parseInt(c))), ...acc]), []);
 }
 
 export const getFirstCareer = (subjects: Subject[]) => subjects[0].carrera
 
 export const getCareers = (subjects: Subject[]) =>
     subjects.reduce((acc: string[], {carrera}) => {
-        return acc.includes(carrera!) ? acc : [...acc, carrera!]
+        return carrera && !acc.includes(carrera) ? [...acc, carrera] : acc;
     }, [])
 
 export const getSubjectsByCareer = (subjects: Subject[], career: string | undefined) => {
@@ -54,5 +54,5 @@ export const getTotalSelectedCourses = (selectedCourses: SelectedCourses, subjec
 export const getTotalCourses = (subject: Subject) => subject.comisiones.length
 
 export const totalSubjects = (selectedCourses: SelectedCourses) => {
-    return reduce(selectedCourses, (acc, sc, _) => sc.length === 0 ? acc : 1 + acc, 0);
+    return reduce(selectedCourses, (acc, sc,) => sc.length === 0 ? acc : 1 + acc, 0);
 }

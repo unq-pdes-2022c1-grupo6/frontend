@@ -41,9 +41,8 @@ const postRequest = (selectedCourses: SelectedCourses): Promise<RequestDTO> => {
 export const useCreateRequest = (availableSubjects: Subject[], onRequestCreated: () => void) => {
     return useMutation(postRequest, {
         onSuccess: () => {
-            queryClient.invalidateQueries(['subjectsRequest', DNI]).then(() => {
-                onRequestCreated()
-            });
+            onRequestCreated();
+            queryClient.invalidateQueries(['subjectsRequest', DNI]);
         }
     });
 }

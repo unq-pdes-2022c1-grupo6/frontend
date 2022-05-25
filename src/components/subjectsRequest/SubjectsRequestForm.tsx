@@ -33,6 +33,7 @@ interface Errors {
 const SubjectsRequestForm = ({selectedCourses = {}, subjectsOptions, onSubmit}: SubjectRequestFormProps) => {
     const editable = Boolean(onSubmit);
 
+    const [activeIndex, setActiveIndex] = useState([0]);
     const [career, setCareer] = useState(getFirstCareer(subjectsOptions));
     const [errors, setErrors] = useState<Errors>({max: undefined, required: undefined});
     const [selectedCourses0, setSelectedCourses0] = useState<SelectedCourses>(selectedCourses);
@@ -67,9 +68,13 @@ const SubjectsRequestForm = ({selectedCourses = {}, subjectsOptions, onSubmit}: 
             onSubmit={({value}) => onSubmit0(value)}>
             <FormFieldTitle title="Materias"/>
             <Box align="stretch" justify="center" gap="medium">
-                {getSubjectsByCareer(subjectsOptions, career).map(subject =>
-                    <Accordion key={subject.nombre}>
+                <Accordion
+                    activeIndex={activeIndex}
+                    onActive={(newActiveIndex) => setActiveIndex(newActiveIndex)}
+                    multiple>
+                    {getSubjectsByCareer(subjectsOptions, career).map((subject, index) =>
                         <AccordionPanel
+                            key={index}
                             label={subjectLabel(subject)}>
                             <FormField name={subject.nombre}>
                                 <CheckBoxGroup
@@ -79,8 +84,8 @@ const SubjectsRequestForm = ({selectedCourses = {}, subjectsOptions, onSubmit}: 
                                     valueKey="id"
                                     options={mapToId(subject.comisiones)}/>
                             </FormField>
-                        </AccordionPanel>
-                    </Accordion>)}
+                        </AccordionPanel>)}
+                </Accordion>
             </Box>
             <FormErrorMessage message={errors.max}/>
             <FormErrorMessage message={errors.required}/>

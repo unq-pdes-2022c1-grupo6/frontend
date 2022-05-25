@@ -15,8 +15,10 @@ export const convertToRequest = (availableSubjects: Subject[], requestDTO: Reque
     const solicitudesWithMateria = requestDTO.formulario.solicitudes.map(s => ({...s, materia: "Bases de Datos"}))
     const groupedByMateria = groupBy(solicitudesWithMateria, "materia");
     const solicitudes = map(groupedByMateria, (comisiones, materia) => {
+        // eslint-disable-next-line
         const subject : Subject = getSubject(availableSubjects, materia)!;
         const courses = comisiones.map((c) => {
+            // eslint-disable-next-line
             const course = getCourse(subject, c.comisionId)!;
             return {estado: c.estado,  ...course}
         });

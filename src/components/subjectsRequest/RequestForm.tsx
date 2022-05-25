@@ -4,12 +4,12 @@ import {Subject} from "../../services/subjectDTO";
 import {useCreateRequest} from "../../services/studentService";
 
 type RequestFormType = {
-    availableSubjects: Subject[],
+    availableSubjects: Subject[] | undefined,
     onRequestCreated: () => void
 }
 
-const RequestForm = ({availableSubjects, onRequestCreated} : RequestFormType) => {
-    const mutation  = useCreateRequest(availableSubjects, onRequestCreated);
+const RequestForm = ({availableSubjects = [], onRequestCreated}: RequestFormType) => {
+    const mutation = useCreateRequest(availableSubjects, onRequestCreated);
 
     if (mutation.isLoading) {
         return <span> Loading.... </span>
