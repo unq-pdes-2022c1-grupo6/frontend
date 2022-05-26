@@ -1,6 +1,5 @@
-import {availableSubjectsDTO, requestDTO} from "../../utils/fake-data";
+import {requestDTO} from "../../utils/fake-data";
 import {convertToRequest} from "../request";
-import {convertSubjectsDTO} from "../subject";
 
 const expectedRequest = {
     "nombre": "Bartolo",
@@ -20,7 +19,6 @@ const expectedRequest = {
                 "id": 2,
                 "description": "(Presencial) Lunes 10:00 a 12:00 - Miercoles 10:00 a 12:00 "
             }],
-            "codigo": "01035",
             "nombre": "Bases de Datos"
         }],
         "estado": "ABIERTO"
@@ -30,7 +28,7 @@ const expectedRequest = {
 describe('convertRequestDTO', () => {
 
     it("devuelve una nueva solicitud con sus solicitudes convertidas en una lista de tipo Subject", () => {
-        const res = convertToRequest(convertSubjectsDTO(availableSubjectsDTO), requestDTO);
+        const res = convertToRequest(requestDTO);
 
         expect(res).toStrictEqual(expectedRequest)
     });

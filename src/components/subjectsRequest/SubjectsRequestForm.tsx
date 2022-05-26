@@ -39,7 +39,7 @@ const SubjectsRequestForm = ({selectedCourses = {}, subjectsOptions, onSubmit}: 
 
     const subjectLabel = (subject: Subject) => {
         const selectedInfo = editable ? ` ${getTotalSelectedCourses(selectedCourses0, subject.nombre)}/` : "";
-        return `${subject.nombre} (${subject.codigo}) - ${selectedInfo}${getTotalCourses(subject)} selecc.`
+        return `${subject.nombre} - ${selectedInfo}${getTotalCourses(subject)} selecc.`
     }
 
     const onSubmit0 = (ss: SelectedCourses) => {

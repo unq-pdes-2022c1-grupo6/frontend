@@ -54,14 +54,46 @@ export const requestDTO = {
             {
                 "id": 1,
                 "estado": "PENDIENTE",
-                "comisionId": 1,
-                "materia": "Bases de Datos",
+                "comision": {
+                    "id": 1,
+                    "numero": 1,
+                    "materia": "Bases de Datos",
+                    "modalidad": "PRESENCIAL",
+                    "horarios": [
+                        {
+                            "dia": "MARTES",
+                            "inicio": "10:00",
+                            "fin": "12:00"
+                        },
+                        {
+                            "dia": "JUEVES",
+                            "inicio": "10:00",
+                            "fin": "12:00"
+                        }
+                    ]
+                }
             },
             {
                 "id": 2,
                 "estado": "PENDIENTE",
-                "comisionId": 2,
-                "materia": "Bases de Datos"
+                "comision": {
+                    "id": 2,
+                    "numero": 2,
+                    "materia": "Bases de Datos",
+                    "modalidad": "PRESENCIAL",
+                    "horarios": [
+                        {
+                            "dia": "LUNES",
+                            "inicio": "10:00",
+                            "fin": "12:00"
+                        },
+                        {
+                            "dia": "MIERCOLES",
+                            "inicio": "10:00",
+                            "fin": "12:00"
+                        }
+                    ]
+                }
             }
         ],
         "estado": "ABIERTO"

@@ -14,12 +14,8 @@ import {convertSelectedCourses} from "../model/course";
 
 
 const getAvailableSubjects = (dni: number): Promise<SubjectDTO[]> => {
-    return axiosInstance.get(GET_AVAILABLE_SUBJECTS_URL + dni, {
-        params: {
-            anio: 2022,
-            semestre: "S1"
-        }
-    }).then((response) => response.data)
+    return axiosInstance.get(GET_AVAILABLE_SUBJECTS_URL + dni)
+        .then((response) => response.data)
 };
 
 export const useAvailableSubjectsQuery = () => {
@@ -48,30 +44,21 @@ export const useCreateRequest = (availableSubjects: Subject[], onRequestCreated:
 
 export const isRequestNotFoundError = (error: unknown) => {
     return error instanceof AxiosError && isEqual(error.response?.data, {
-        error: 'ExcepcionUNQUE',
-        message: 'No se encontró ningun formulario para el cuatrimestre dado'
+        error: "ExcepcionUNQUE",
+        message: "No se encontró ningun formulario para el cuatrimestre dado"
     });
 }
 
 const getRequest = (dni: number): Promise<RequestDTO> => {
-    return axiosInstance.get(GET_REQUEST_URL + dni, {
-        params: {
-            anio: 2022,
-            semestre: "S1"
-        }
-    }).then((response) => response.data)
+    return axiosInstance.get(GET_REQUEST_URL + dni)
+        .then((response) => response.data)
 };
 
-export const useRequestQuery = (availableSubjects: Subject[] | undefined) => {
+export const useRequestQuery = () => {
     return useQuery(['subjectsRequest', DNI],
         () => getRequest(DNI), {
-            select: (data) => {
-                return typeof availableSubjects === 'undefined'
-                    ? undefined
-                    : convertToRequest(availableSubjects, data);
-            },
+            select: convertToRequest,
             retry: 2,
-            enabled: Boolean(availableSubjects)
         });
 };
 
