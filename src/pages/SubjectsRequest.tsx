@@ -8,8 +8,9 @@ import RequestFormSuccessful from "../components/subjectsRequest/RequestFormSucc
 
 const SubjectsRequest = () => {
     const [showToast, setShowToast] = useState(false);
+    const requestQuery = useRequestQuery();
     const availableSubjectsQuery = useAvailableSubjectsQuery();
-    const requestQuery = useRequestQuery(availableSubjectsQuery.data);
+
 
     if (availableSubjectsQuery.isLoading || requestQuery.isLoading) {
         return <span> Loading.... </span>

@@ -7,13 +7,16 @@ export interface HorarioDTO {
 
 export interface CourseDTO {
     id: number,
-    comision: number,
+    estado?: string,
+    numero?: number,
+    comision?: number,
     modalidad: string,
+    materia?: string,
     horarios: HorarioDTO[]
 }
 
 export interface SubjectI<CourseType> {
-    codigo: string,
+    codigo?: string,
     nombre: string,
     carrera?: string,
     comisiones: CourseType[]
