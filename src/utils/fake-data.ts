@@ -42,7 +42,7 @@ export const availableSubjectsDTO = [
     }
 ]
 
-export const DNI = 12345678;
+export const DNI = 12345681;
 
 export const requestDTO = {
     "nombre": "Bartolo",
@@ -180,7 +180,7 @@ export const requestDTO2 = {
                 "comision": {
                     "id": 3,
                     "numero": 1,
-                    "materia": "Matematica I",
+                    "materia": "Matemática I",
                     "modalidad": "PRESENCIAL",
                     "horarios": [
                         {

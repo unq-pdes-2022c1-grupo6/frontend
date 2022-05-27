@@ -51,7 +51,7 @@ const SubjectsRequestForm = ({selectedCourses = {}, subjectsOptions, onSubmit}: 
         }
     };
 
-    return <Box align="stretch" justify="center" direction="column" gap="medium">
+    return <Box align="stretch" justify="center" direction="column" margin={{bottom: "large"}}>
         <FormFieldTitle title="Carrera"/>
         <Form>
             <FormField>
