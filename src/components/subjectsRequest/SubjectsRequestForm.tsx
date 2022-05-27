@@ -3,7 +3,7 @@ import {
     Box, Form, FormField,
     Select, Accordion,
     AccordionPanel,
-    CheckBoxGroup,
+    CheckBoxGroup, Heading, Text,
 } from 'grommet';
 import FormFieldTitle from "../FormFieldTitle";
 import FormErrorMessage from "../FormErrorMessage";
@@ -22,6 +22,8 @@ type SubjectRequestFormProps = {
     selectedCourses?: SelectedCourses,
     subjectsOptions: Subject[],
     onSubmit?: (ss: SelectedCourses) => void,
+    heading: string,
+    studentInfo?: string,
 }
 
 interface Errors {
@@ -29,7 +31,7 @@ interface Errors {
     required: string | undefined
 }
 
-const SubjectsRequestForm = ({selectedCourses = {}, subjectsOptions, onSubmit}: SubjectRequestFormProps) => {
+const SubjectsRequestForm = ({selectedCourses = {}, subjectsOptions, onSubmit, heading, studentInfo= ""}: SubjectRequestFormProps) => {
     const editable = Boolean(onSubmit);
 
     const [activeIndex, setActiveIndex] = useState([0]);
@@ -52,6 +54,10 @@ const SubjectsRequestForm = ({selectedCourses = {}, subjectsOptions, onSubmit}: 
     };
 
     return <Box align="stretch" justify="center" direction="column" margin={{bottom: "large"}}>
+        <Box align="center" justify="start" direction="row-responsive" gap="medium">
+            <Heading level="2">{heading}</Heading>
+            <Text size="large">{studentInfo}</Text>
+        </Box>
         <FormFieldTitle title="Carrera"/>
         <Form>
             <FormField>

@@ -19,7 +19,10 @@ const RequestForm = ({availableSubjects = [], onRequestCreated}: RequestFormType
         return <span> Error :( </span>
     }
 
-    return <SubjectsRequestForm subjectsOptions={availableSubjects} onSubmit={mutation.mutate}/>
+    return <SubjectsRequestForm
+        subjectsOptions={availableSubjects}
+        onSubmit={mutation.mutate}
+        heading="Solicitud - Crear"/>
 };
 
 export default RequestForm;

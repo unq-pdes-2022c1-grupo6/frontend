@@ -8,6 +8,8 @@ const RequestDetails = ({request}: { request: RequestType }) => {
     return <SubjectsRequestForm
         selectedCourses={convertToSelectedCourses(request.formulario.solicitudes)}
         subjectsOptions={request.formulario.solicitudes}
+        heading="Solicitud"
+        studentInfo={`Nombre: ${request.nombre} DNI: ${request.dni}`}
     />
 }
 
