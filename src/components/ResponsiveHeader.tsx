@@ -18,11 +18,11 @@ export const ResponsiveHeader = () => {
     return (
         <Header
             background="brand"
-            pad={{left: 'medium', right: 'medium'}}
-            height="xsmall"
+            pad={{horizontal:'medium'}}
+            margin={{bottom: "medium" }}
         >
             <Box direction="row" align="center" gap="medium">
-                <Heading level='3' margin='none'>UNQUE</Heading>
+                <Heading level='3'>UNQUE</Heading>
                 {auth?.logged_in &&
                     <Button
                         icon={<LogoutIcon/>}

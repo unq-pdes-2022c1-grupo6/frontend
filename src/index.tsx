@@ -1,13 +1,21 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 import {BrowserRouter} from "react-router-dom";
 import {QueryClient, QueryClientProvider} from 'react-query'
 import App from './App';
 import {AuthProvider} from "./state/auth";
 
-const queryClient = new QueryClient();
+export const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            refetchOnWindowFocus: false,
+        },
+    },
+});
 
-ReactDOM.render(
+const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
+
+root.render(
     <React.StrictMode>
         <QueryClientProvider client={queryClient}>
             <BrowserRouter>
@@ -16,7 +24,6 @@ ReactDOM.render(
                 </AuthProvider>
             </BrowserRouter>
         </QueryClientProvider>
-    </React.StrictMode>,
-    document.getElementById('root')
+    </React.StrictMode>
 );
 
