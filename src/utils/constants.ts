@@ -12,6 +12,7 @@ export const SUBJECTS_ROUTE = "/oferta-academica"
 
 export const SUBJECTS_ASSIGNATIONS_ROUTE = "/asignaciones"
 
+export const STUDENT_DETAILS_ROUTE = "/alumnos"
 
 export const DIRECTOR_NAV = [
     {

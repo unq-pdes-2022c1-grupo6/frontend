@@ -12,11 +12,12 @@ import SubjectsAssignations from "./pages/SubjectsAssignations";
 import PublicWrapper from "./components/PublicWrapper";
 import ResponsiveHeader from "./components/ResponsiveHeader";
 import {
-    ACADEMIC_RECORDS_ROUTE, LOGIN_ROUTE, REGISTER_ROUTE,
+    ACADEMIC_RECORDS_ROUTE, LOGIN_ROUTE, REGISTER_ROUTE, STUDENT_DETAILS_ROUTE,
     SUBJECTS_ASSIGNATIONS_ROUTE, SUBJECTS_REQUEST_ROUTE,
     SUBJECTS_REQUESTS_ROUTE,
     SUBJECTS_ROUTE
 } from "./utils/constants";
+import StudentDetails from "./pages/StudentDetails";
 
 
 const App = () => {
@@ -34,6 +35,7 @@ const App = () => {
                     <Route path={ACADEMIC_RECORDS_ROUTE} element={<AcademicRecords/>}/>
                     <Route path={SUBJECTS_REQUESTS_ROUTE} element={<SubjectsRequests/>}/>
                     <Route path={SUBJECTS_ASSIGNATIONS_ROUTE} element={<SubjectsAssignations/>}/>
+                    <Route path={STUDENT_DETAILS_ROUTE} element={<StudentDetails/>}/>
                 </Routes>
         </Grommet>
     );
