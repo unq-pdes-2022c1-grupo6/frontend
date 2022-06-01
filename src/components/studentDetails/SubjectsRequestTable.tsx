@@ -1,74 +1,76 @@
-import React, {useEffect, useState} from 'react';
-import {DataTable} from "grommet";
+import React, {useState} from 'react';
+import {DataTable, Text} from "grommet";
 import SubjectStatusText from "./SubjectStatusText";
 import SubjectActionButtons from "./SubjectActionButtons";
 import CourseActionRadio from "./CourseActionRadio";
 
-interface Course {
+export interface Course {
     id: string,
     materia: string,
     comision?: string,
     sd: number,
     st: number,
-    estado?: string,
+    estado: string,
 }
 
 type SubjectsRequestTableProps = {
-    request: Course[][],
-    onUpdateRequest: () => void
+    onUpdateRequest: () => void,
+    data: { subject: Course, courses: Course[] }[],
+    subjects: string[]
 }
 
-const convertToRequestTable = (request: Course[][]) => {
-    return request.reduce((acc: { data: Course[], expandable: string[] }, cr) => {
-        const course = cr.reduce((acc: Course, c) => {
-            const estado = c.estado === "Aprobado" || (c.estado === "Rechazado" && acc.estado !== "Aprobado") ?
-                c.estado : acc.estado;
-            const comision = c.estado === "Aprobado" ? c.comision : undefined;
-            return {estado, comision, id: c.materia, materia: c.materia, st: acc.st + c.st, sd: acc.sd + c.sd};
-        }, {id: "", materia: "", st: 0, sd: 0});
-        return {data: [course, ...cr, ...acc.data], expandable: [course.materia, ...acc.expandable]}
-    }, {data: [], expandable: []})
+const getRows = (data: { subject: Course, courses: Course[] }[], expanded: string[] = []) => {
+    return data.flatMap(({subject, courses}) => {
+        return expanded.includes(subject.id) ?
+            [subject, ...courses] :
+            [subject];
+    });
 }
 
-const SubjectsRequestTable = ({request, onUpdateRequest}: SubjectsRequestTableProps) => {
-    const [data, setData] = useState<Course[]>([]);
-    const [expandable, setExpandable] = useState<string[]>([]);
+const SubjectsRequestTable = ({data, subjects, onUpdateRequest}
+                                  : SubjectsRequestTableProps) => {
+        const [expand, setExpand] = useState<string[]>(['(TPI) Algoritmos']);
+        const [data0, setData0] = useState(() => getRows(data, ['(TPI) Algoritmos']));
 
-    useEffect(() => {
-        const {data, expandable} = convertToRequestTable(request);
-        setData(data);
-        setExpandable(expandable);
-    })
-
-    return <DataTable
-        primaryKey="id"
-        data={data}
-        groupBy={{
-            expandable,
-            expand: [],
-            onExpand: () => {},
-            select: {},
-            onSelect: () => {},
-            property: 'materia',
-        }}
-        columns={[
-            {property: "materia", header: "Materia", primary: true},
-            {property: "comision", header: "Comisión"},
-            {property: "sd", header: "Cupo Disp."},
-            {property: "st", header: "Cupo Total"},
-            {
-                property: "estado", header: "Estado", render: (row: Course) =>
-                    row.id === row.materia ? <SubjectStatusText state={row.estado}/> : undefined
-            },
-            {
-                property: "acciones", header: "Acciones", render: (row: Course) => {
-                    return row.id === row.materia ?
-                        <SubjectActionButtons onUpdateRequest={onUpdateRequest} state={row.estado}/> :
-                        <CourseActionRadio onUpdateRequest={onUpdateRequest} state={row.estado}/>
+        return <DataTable
+            size="medium"
+            pad="xxsmall"
+            replace
+            primaryKey="id"
+            data={data0}
+            onUpdate={(opts) => {
+                setExpand(opts.expanded || []);
+                setData0(getRows(data, opts.expanded));
+            }}
+            groupBy={{
+                property: "materia",
+                expand,
+                onExpand: setExpand,
+                expandable: subjects,
+                select: {},
+                onSelect: () => {}}}
+            columns={[
+                {property: "materia", header: "Materia", size: "small", render: (row) =>
+                        <Text  weight={row.id === row.materia? "bold" : "normal"}>
+                            {row.materia}
+                        </Text>},
+                {property: "comision", header: "Comisión", size: "small"},
+                {property: "sd", header: "Cupo Disp.", size: 'xsmall', align: 'end'},
+                {property: "st", header: "Cupo Total", size: 'xsmall', align: 'end'},
+                {
+                    property: "estado", header: "Estado", align: 'center', size: 'xsmall', render: (row: Course) =>
+                        row.id === row.materia ? <SubjectStatusText state={row.estado}/> : null
+                },
+                {
+                    property: "acciones", header: "Acciones", size: 'small', align: 'center', render: (row: Course) => {
+                        return row.id === row.materia ?
+                            <SubjectActionButtons onUpdateRequest={onUpdateRequest} state={row.estado}/> :
+                            <CourseActionRadio onUpdateRequest={onUpdateRequest} state={row.estado}/>
+                    }
                 }
-            }
-        ]}
-    />
-};
+            ]}
+        />
+    }
+;
 
 export default SubjectsRequestTable;

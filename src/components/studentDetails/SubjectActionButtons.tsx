@@ -1,4 +1,5 @@
 import {Box, Button, Text} from 'grommet';
+import {CourseState} from "../../model/course";
 
 export type ActionsType = {
     onUpdateRequest: () => void,
@@ -12,7 +13,7 @@ const SubjectActionButtons = ({onUpdateRequest, state}: ActionsType) => {
                 Deshacer
             </Text>
         </Button>}
-        {(state !== "Rechazado") && <Button plain hoverIndicator onClick={() => onUpdateRequest}>
+        {(state !== CourseState.RECHAZADO) && <Button plain hoverIndicator onClick={() => onUpdateRequest}>
             <Text color="brand">
                 Rechazar
             </Text>

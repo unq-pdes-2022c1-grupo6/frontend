@@ -2,11 +2,12 @@ import {useState} from "react";
 import {Box, Button, RadioButton} from "grommet";
 import {Checkmark, Close} from "grommet-icons";
 import {ActionsType} from "./SubjectActionButtons";
+import {CourseState} from "../../model/course";
 
 const CourseActionRadio = ({state}: ActionsType) => {
     const [selected, setSelected] = useState("");
 
-    return state !== "Aprobada" ? <Box align="center" justify="center" direction="row" gap="small">
+    return state !== CourseState.APROBADO ? <Box align="center" justify="center" direction="row" gap="small">
         <RadioButton
             name="radio"
             value="selected"
