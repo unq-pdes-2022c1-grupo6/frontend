@@ -8,7 +8,7 @@ export type ActionsType = {
 
 const SubjectActionButtons = ({onUpdateRequest, state}: ActionsType) => {
     return <Box align="center" justify="center" direction="row" gap="small">
-        {state && <Button plain hoverIndicator onClick={() => onUpdateRequest}>
+        {state !== CourseState.PENDIENTE && <Button plain hoverIndicator onClick={() => onUpdateRequest}>
             <Text color="brand">
                 Deshacer
             </Text>

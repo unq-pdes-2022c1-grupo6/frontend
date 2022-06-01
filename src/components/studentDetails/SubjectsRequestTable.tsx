@@ -29,11 +29,11 @@ const getRows = (data: { subject: Course, courses: Course[] }[], expanded: strin
 
 const SubjectsRequestTable = ({data, subjects, onUpdateRequest}
                                   : SubjectsRequestTableProps) => {
-        const [expand, setExpand] = useState<string[]>(['(TPI) Algoritmos']);
-        const [data0, setData0] = useState(() => getRows(data, ['(TPI) Algoritmos']));
+        const [expand, setExpand] = useState<string[]>(subjects);
+        const [data0, setData0] = useState(() => getRows(data, subjects));
+        const [selectedCourses, setSelectedCourses] = useState<{ [materia: string]: string | undefined }>({});
 
         return <DataTable
-            size="medium"
             pad="xxsmall"
             replace
             primaryKey="id"
@@ -48,12 +48,16 @@ const SubjectsRequestTable = ({data, subjects, onUpdateRequest}
                 onExpand: setExpand,
                 expandable: subjects,
                 select: {},
-                onSelect: () => {}}}
+                onSelect: () => {
+                }
+            }}
             columns={[
-                {property: "materia", header: "Materia", size: "small", render: (row) =>
-                        <Text  weight={row.id === row.materia? "bold" : "normal"}>
+                {
+                    property: "materia", header: "Materia", size: "small", render: (row) =>
+                        <Text weight={row.id === row.materia ? "bold" : "normal"}>
                             {row.materia}
-                        </Text>},
+                        </Text>
+                },
                 {property: "comision", header: "Comisión", size: "small"},
                 {property: "sd", header: "Cupo Disp.", size: 'xsmall', align: 'end'},
                 {property: "st", header: "Cupo Total", size: 'xsmall', align: 'end'},
@@ -65,7 +69,15 @@ const SubjectsRequestTable = ({data, subjects, onUpdateRequest}
                     property: "acciones", header: "Acciones", size: 'small', align: 'center', render: (row: Course) => {
                         return row.id === row.materia ?
                             <SubjectActionButtons onUpdateRequest={onUpdateRequest} state={row.estado}/> :
-                            <CourseActionRadio onUpdateRequest={onUpdateRequest} state={row.estado}/>
+                            <CourseActionRadio
+                                checked={selectedCourses[row.materia] === row.id}
+                                onChange={(v) => setSelectedCourses((prevState) => ({
+                                    ...prevState,
+                                    [row.materia]: v
+                                }))}
+                                value={row.id}
+                                onUpdateRequest={onUpdateRequest}
+                                state={row.estado}/>
                     }
                 }
             ]}
