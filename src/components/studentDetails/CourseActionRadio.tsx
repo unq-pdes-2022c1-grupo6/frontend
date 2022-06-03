@@ -3,7 +3,7 @@ import {Checkmark, Close} from "grommet-icons";
 import {ActionsType} from "./SubjectActionButtons";
 import {CourseState} from "../../model/course";
 
-interface CourseActionRadioI extends ActionsType{
+interface CourseActionRadioI extends ActionsType {
     value: string,
     checked: boolean,
     onChange: (value: string | undefined) => void

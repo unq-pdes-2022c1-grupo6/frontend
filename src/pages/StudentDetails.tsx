@@ -4,6 +4,7 @@ import StudentInfoDetails from "../components/studentDetails/StudentInfoDetails"
 import SubjectsRequestTable, {Course} from "../components/studentDetails/SubjectsRequestTable";
 import {CourseState} from "../model/course";
 import map from "lodash/map";
+import TextAreaForm from "../components/TextAreaForm";
 
 const student = {
     nombre: "Nombre Apellido",
@@ -68,6 +69,30 @@ const comisiones = [
     }]
 ];
 
+// const records = [
+//     {
+//         "nombreMateria": "Lectura y Escritura Académica",
+//         "codigoMateria": "80000",
+//         "estado": "APROBADO",
+//         "fechaDeCarga": "2022-06-03",
+//         "cantidadDeVecesCursada": 1
+//     },
+//     {
+//         "nombreMateria": "Elementos de Programación y Lógica",
+//         "codigoMateria": "80005",
+//         "estado": "APROBADO",
+//         "fechaDeCarga": "2022-06-03",
+//         "cantidadDeVecesCursada": 1
+//     },
+//     {
+//         "nombreMateria": "Matemática",
+//         "codigoMateria": "8003N",
+//         "estado": "APROBADO",
+//         "fechaDeCarga": "2022-06-03",
+//         "cantidadDeVecesCursada": 1
+//     }
+// ]
+
 
 // Si el nuevo estado es aprobado o, es rechazado pero el acumulado no es aprobado, devuelvo el nuevo estado
 // Sino devuelvo el estado acumulado
@@ -98,6 +123,9 @@ const convertToTableData = (request: Course[][]) => {
     });
 }
 
+
+const observations = ` 8Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`
+
 const StudentDetails = () => {
     const data = convertToTableData(comisiones);
     const subjects: string[] = map(data, "subject.materia");
@@ -114,6 +142,12 @@ const StudentDetails = () => {
                 data={data}
                 subjects={subjects}
                 onUpdateRequest={onUpdateRequest}/>
+        </PageContent>
+        <PageContent>
+            <TextAreaForm
+                label="Observaciones"
+                value={observations}
+                onSubmit={onUpdateRequest}/>
         </PageContent>
     </Page>
 

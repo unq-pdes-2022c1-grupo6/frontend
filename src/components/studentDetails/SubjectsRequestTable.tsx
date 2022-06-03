@@ -29,7 +29,7 @@ const getRows = (data: { subject: Course, courses: Course[] }[], expanded: strin
 
 const SubjectsRequestTable = ({data, subjects, onUpdateRequest}
                                   : SubjectsRequestTableProps) => {
-        const [expand, setExpand] = useState<string[]>(subjects);
+        const [expand, setExpand] = useState(subjects);
         const [data0, setData0] = useState(() => getRows(data, subjects));
         const [selectedCourses, setSelectedCourses] = useState<{ [materia: string]: string | undefined }>({});
 

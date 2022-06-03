@@ -7,7 +7,7 @@ export const theme = {
         },
         font: {
             family: 'Roboto',
-            size: '16px',
+            size: '14px',
             height: '18px',
         },
     },
