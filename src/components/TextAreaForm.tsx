@@ -13,7 +13,7 @@ const TextAreaForm = ({label, value = "", onSubmit}: TextAreaFormType) => {
     return <Box width="large">
         <Box align="center" direction="row-responsive" gap="small">
             <Heading level="3">{label}</Heading>
-            <Button size="small" label="Cambiar" primary onClick={() => onSubmit()} />
+            <Button size="small" label="Aceptar" primary onClick={() => onSubmit()} />
             <Button size="small" label="Cancelar" onClick={() => setTextArea(value)} />
         </Box>
         <TextArea

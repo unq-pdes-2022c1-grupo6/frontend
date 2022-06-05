@@ -1,15 +1,17 @@
 import {Text} from "grommet";
 import {CourseState} from "../../model/course";
 
-const SubjectStatusText = ({state}: { state: string }) => {
+
+const ThreeStatesText = ([status1, status2]: [string,string]) =>
+    ({state}: { state: string }) => {
 
     const getColor = () => {
         let color;
         switch (state) {
-            case CourseState.APROBADO:
+            case status1:
                 color = "status-ok";
                 break;
-            case CourseState.RECHAZADO:
+            case status2:
                 color = "status-critical";
                 break;
             default:
@@ -25,4 +27,5 @@ const SubjectStatusText = ({state}: { state: string }) => {
 
 };
 
-export default SubjectStatusText;
+export const RequestStatusText = ThreeStatesText([CourseState.APROBADO, CourseState.RECHAZADO]);
+export const StatusText = ThreeStatesText(["APROBADO", "DESAPROBADO"]);

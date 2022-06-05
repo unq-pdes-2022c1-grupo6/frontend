@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import {DataTable, Text} from "grommet";
-import SubjectStatusText from "./SubjectStatusText";
 import SubjectActionButtons from "./SubjectActionButtons";
 import CourseActionRadio from "./CourseActionRadio";
+import {RequestStatusText} from "./SubjectStatusText";
 
 export interface Course {
     id: string,
@@ -63,7 +63,7 @@ const SubjectsRequestTable = ({data, subjects, onUpdateRequest}
                 {property: "st", header: "Cupo Total", size: 'xsmall', align: 'end'},
                 {
                     property: "estado", header: "Estado", align: 'center', size: 'xsmall', render: (row: Course) =>
-                        row.id === row.materia ? <SubjectStatusText state={row.estado}/> : null
+                        row.id === row.materia ? <RequestStatusText state={row.estado}/> : null
                 },
                 {
                     property: "acciones", header: "Acciones", size: 'small', align: 'center', render: (row: Course) => {

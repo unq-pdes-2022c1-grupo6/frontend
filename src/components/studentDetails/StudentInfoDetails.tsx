@@ -3,23 +3,23 @@ import {NameValueList, NameValuePair} from "grommet";
 type StudentInfoDetailsProps = {
     information: {
         nombre: string,
+        legajo: number,
+        email: string,
         dni: number,
         carrera: string,
-        coeficiente: string,
-        materiasHechas: string
     }
 }
 
-const StudentInfoDetails = ({information: {nombre, dni, carrera, coeficiente, materiasHechas}}
+const StudentInfoDetails = ({information: {nombre, legajo, email, dni, carrera}}
                                 : StudentInfoDetailsProps) => {
 
     return <NameValueList layout="grid" valueProps={{"width": "small"}} nameProps={{"width": "small"}}
                           pairProps={{"direction": "column"}}>
-        <NameValuePair name="Nombre y Apellido">{nombre}</NameValuePair>
         <NameValuePair name="DNI">{dni}</NameValuePair>
+        <NameValuePair name="Legajo">{legajo}</NameValuePair>
+        <NameValuePair name="Email">{email}</NameValuePair>
+        <NameValuePair name="Nombre y Apellido">{nombre}</NameValuePair>
         <NameValuePair name="Carrera/s">{carrera}</NameValuePair>
-        <NameValuePair name="Coeficiente">{coeficiente}</NameValuePair>
-        <NameValuePair name="Materias Hechas">{materiasHechas}</NameValuePair>
     </NameValueList>
 };
 
