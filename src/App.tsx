@@ -14,10 +14,11 @@ import ResponsiveHeader from "./components/ResponsiveHeader";
 import {
     ACADEMIC_RECORDS_ROUTE, LOGIN_ROUTE, REGISTER_ROUTE, STUDENT_DETAILS_ROUTE,
     SUBJECTS_ASSIGNATIONS_ROUTE, SUBJECTS_REQUEST_ROUTE,
-    SUBJECTS_REQUESTS_ROUTE,
+    SUBJECTS_REQUESTS_ROUTE, SUBJECTS_REQUESTS_STUDENTS_ROUTE,
     SUBJECTS_ROUTE
 } from "./utils/constants";
 import StudentDetails from "./pages/StudentDetails";
+import StudentsSubjectsRequest from "./pages/StudentsSubjectsRequest";
 
 
 const App = () => {
@@ -36,6 +37,7 @@ const App = () => {
                     <Route path={SUBJECTS_REQUESTS_ROUTE} element={<SubjectsRequests/>}/>
                     <Route path={SUBJECTS_ASSIGNATIONS_ROUTE} element={<SubjectsAssignations/>}/>
                     <Route path={STUDENT_DETAILS_ROUTE} element={<StudentDetails/>}/>
+                    <Route path={SUBJECTS_REQUESTS_STUDENTS_ROUTE} element={<StudentsSubjectsRequest/>}/>
                 </Routes>
         </Grommet>
     );

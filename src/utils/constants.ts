@@ -8,6 +8,8 @@ export const ACADEMIC_RECORDS_ROUTE = "/historial-academico"
 
 export const SUBJECTS_REQUESTS_ROUTE = "/solicitudes"
 
+export const SUBJECTS_REQUESTS_STUDENTS_ROUTE = "/solicitudes/alumnos"
+
 export const SUBJECTS_ROUTE = "/oferta-academica"
 
 export const SUBJECTS_ASSIGNATIONS_ROUTE = "/asignaciones"
