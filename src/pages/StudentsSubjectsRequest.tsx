@@ -1,7 +1,14 @@
 import React, {useState} from 'react';
 import {Page, PageContent} from "grommet";
+import get from "lodash/get";
 import set from "lodash/set";
-import unset from "lodash/unset";
+import RequestsSearchBar from "../components/subjectsRequests/RequestsSearchBar";
+import {requests} from "../utils/fake-data";
+import {CareerRadioGroup, StatusRequestRadioGroup} from "../components/subjectsRequests/FilterRadioGroup";
+import SubjectsRequestsTable from "../components/subjectsRequests/SubjectsRequestsTable";
+
+
+
 
 interface SearchI {
     filter: {
@@ -11,8 +18,7 @@ interface SearchI {
     };
     pagination: {
         total?: number,
-        firstIndex?: number,
-        lastIndex?: number,
+        step?: number,
         page?: number
     };
     sort: { key?: string, order?: string }
@@ -26,9 +32,8 @@ class Search implements SearchI {
     };
     pagination: {
         total?: number,
-        firstIndex?: number,
-        lastIndex?: number,
-        page?: number
+        page?: number,
+        step?: number,
     };
     sort: { key?: string, order?: string }
 
@@ -37,23 +42,20 @@ class Search implements SearchI {
             this.filter = search.filter;
             this.pagination = search.pagination;
             this.sort = search.sort
-        }
-        else {
+        } else {
             this.filter = {};
             this.pagination = {};
             this.sort = {}
         }
     }
 
-    setSearch(key: string, value: string) {
-        const newSearch: SearchI = {...this};
-        set(newSearch, key, value);
-        return new Search(newSearch);
+    isValueChanged(key: string, value?: string | number) {
+        return get(this, key) === value
     }
 
-    unsetSearch(key: string) {
+    setSearch(key: string, value?: string | number) {
         const newSearch: SearchI = {...this};
-        unset(newSearch, key);
+        set(newSearch, key, value);
         return new Search(newSearch);
     }
 }
@@ -62,24 +64,31 @@ class Search implements SearchI {
 const StudentsSubjectsRequest = () => {
     const [search, setSearch] = useState(new Search());
 
-    const onSearch = (key: string, value: string) =>
-        setSearch(prevSearch => prevSearch.setSearch(key, value))
+    const onSearch = (key: string, value?: string | number) => {
+        if (search.isValueChanged(key, value)) {
+            setSearch(prevSearch => prevSearch.setSearch(key, value))
+        }
+    }
 
-    const onCancel = (key: string) =>
-        setSearch(prevSearch => prevSearch.unsetSearch(key))
-
-    return <Page kind="wide" pad="large" gap="medium" align="center">
-        <PageContent>
-            {/*<RequestsSearchBar
+    return <Page kind="wide" pad="large" gap="large" align="center">
+        <PageContent direction="row-responsive" gap="large">
+            <RequestsSearchBar
+                searchTerm={search.filter.general}
                 onSearch={(searchTerm: string) => onSearch("filter.general", searchTerm)}
-                onCancel={() => onCancel("general")}/>*/}
+                onCancel={() => onSearch("filter.general")}/>
+            <StatusRequestRadioGroup
+                value={search.filter.status}
+                onChange={(status: string) => onSearch("filter.status", status)}
+                onCancel={() => onSearch("filter.status")}/>
+            <CareerRadioGroup
+                value={search.filter.career}
+                onChange={(career: string) => onSearch("filter.career", career)}
+                onCancel={() => onSearch("filter.career")}/>
         </PageContent>
         <PageContent>
-            {/*<StudentsSubjectsRequestsTable
+            <SubjectsRequestsTable
                 requests={requests}
-                onSearch={onSearch}
-                onCancel={onCancel}
-            />*/}
+            />
         </PageContent>
     </Page>
 };

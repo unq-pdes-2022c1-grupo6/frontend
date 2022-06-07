@@ -7,8 +7,8 @@ export const theme = {
         },
         font: {
             family: 'Roboto',
-            size: '14px',
-            height: '18px',
+            size: '16px',
+            height: '20px',
         },
     },
 };
