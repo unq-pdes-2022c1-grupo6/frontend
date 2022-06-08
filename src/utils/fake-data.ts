@@ -250,3 +250,47 @@ export const requestDTO2 = {
     },
     "resumenCursadas": []
 }
+
+
+export const requests = [
+    {
+        "dni": 59731607,
+        "legajo": 73466,
+        "nyap": "Stacey Hawkins",
+        "carrera": "SIMULTANEO",
+        "comisionesSol": 3,
+        "materiasSol": 1
+    },
+    {
+        "dni": 31416564,
+        "legajo": 80937,
+        "nyap": "Gonzalez Barlow",
+        "carrera": "SIMULTANEO",
+        "comisionesSol": 8,
+        "materiasSol": 3
+    },
+    {
+        "dni": 47671977,
+        "legajo": 68615,
+        "nyap": "Eleanor Coleman",
+        "carrera": "TPI",
+        "comisionesSol": 9,
+        "materiasSol": 1
+    },
+    {
+        "dni": 37596504,
+        "legajo": 30261,
+        "nyap": "Barbra Lindsey",
+        "carrera": "LI",
+        "comisionesSol": 8,
+        "materiasSol": 1
+    },
+    {
+        "dni": 34935860,
+        "legajo": 33501,
+        "nyap": "Reba Camacho",
+        "carrera": "SIMULTANEO",
+        "comisionesSol": 6,
+        "materiasSol": 2
+    }
+]
