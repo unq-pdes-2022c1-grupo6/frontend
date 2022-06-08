@@ -8,8 +8,13 @@ type RequestsSearchBarPropTypes = {
     onCancel: () => void
 }
 
-const RequestsSearchBar = ({searchTerm = "", onSearch, onCancel}: RequestsSearchBarPropTypes) => {
+const RequestsSearchBar = ({searchTerm = "", onSearch, onCancel: onCancel0}: RequestsSearchBarPropTypes) => {
     const [value, setValue] = useState(searchTerm);
+
+    const onCancel = () => {
+        setValue("");
+        onCancel0();
+    }
 
     return <Box width="medium" >
         <Stack anchor="right">

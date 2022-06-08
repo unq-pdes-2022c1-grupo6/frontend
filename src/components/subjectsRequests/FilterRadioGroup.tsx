@@ -7,7 +7,7 @@ type StatusRequestRadioGroupProps = {
     onCancel: () => void
 }
 
-const FilterRadioGroup = (options: string[]) =>
+const FilterRadioGroup = (name: string, options: string[]) =>
     ({value, onChange: onChange0, onCancel}: StatusRequestRadioGroupProps) => {
 
         const onChange = (val: string) => {
@@ -17,7 +17,7 @@ const FilterRadioGroup = (options: string[]) =>
         const getValue = () => value ? value : options[0]
 
         return <RadioButtonGroup
-            name="radio"
+            name={name}
             value={getValue()}
             options={options}
             onChange={(event) => onChange(event.target.value)}
@@ -25,5 +25,5 @@ const FilterRadioGroup = (options: string[]) =>
         />
     };
 
-export const StatusRequestRadioGroup = FilterRadioGroup(["Todos", "Pendientes", "Asignados"]);
-export const CareerRadioGroup = FilterRadioGroup(["Todos", "TPI", "LI", "Simultaneo"]);
+export const StatusRequestRadioGroup = FilterRadioGroup("statusRadio", ["Todos", "Pendientes", "Asignados"]);
+export const CareerRadioGroup = FilterRadioGroup("careerRadio", ["Todas", "TPI", "LI", "Simultaneo"]);
