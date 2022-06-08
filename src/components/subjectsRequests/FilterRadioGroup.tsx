@@ -8,6 +8,7 @@ type StatusRequestRadioGroupProps = {
 }
 
 const FilterRadioGroup = (name: string, options: string[]) =>
+    // eslint-disable-next-line
     ({value, onChange: onChange0, onCancel}: StatusRequestRadioGroupProps) => {
 
         const onChange = (val: string) => {

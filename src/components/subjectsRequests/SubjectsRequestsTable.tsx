@@ -1,14 +1,6 @@
 import {Box, DataTable, Pagination} from "grommet";
-import {PaginationI, SortI} from "../../pages/StudentsSubjectsRequest";
-
-interface StudentRow {
-    dni: number,
-    legajo: number,
-    nyap: string,
-    carrera: string,
-    comisionesSol: number,
-    materiasSol: number
-}
+import {PaginationI, SortI} from "../../model/search";
+import {StudentRow} from "../../model/student";
 
 type SubjectsRequestsTableProps = {
     requests: StudentRow[],
