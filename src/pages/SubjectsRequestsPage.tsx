@@ -1,12 +1,18 @@
-import {useSearchParams} from "react-router-dom";
+import {useNavigate, useSearchParams} from "react-router-dom";
 import SubjectsRequests from "../components/subjectsRequests/SubjectsRequests";
 import {requestedSubjects, requestingStudents} from "../utils/fake-data";
+import {RequestingStudentRow} from "../model/student";
+import {RequestedSubjectRow} from "../model/subject";
 
 const SubjectsRequestsPage = () => {
     const [searchParams] = useSearchParams();
+    const navigate = useNavigate();
 
     return searchParams.get("agrupar-por") === "alumnos"?
-        <SubjectsRequests
+        <SubjectsRequests<RequestingStudentRow>
+            onClickRow={(datum) => {
+                navigate(`/alumnos/${datum.dni}/solicitud`)
+            }}
             searchPlaceholder="Buscar por DNI, Legajo o Nombre.."
             data={requestingStudents}
             columns={[
@@ -18,9 +24,11 @@ const SubjectsRequestsPage = () => {
                 {property: "materiasSol", header: "Materias Solic.", size: 'xsmall', align: "end", sortable: true}
             ]}
         />:
-        <SubjectsRequests
+        <SubjectsRequests<RequestedSubjectRow>
             searchPlaceholder="Buscar por Nombre o Codigo.."
             data={requestedSubjects}
+            // eslint-disable-next-line
+            onClickRow={() => {}}
             columns={[
                 {property: "materia", header: "Materia", size: 'xsmall', primary: true, sortable: true},
                 {property: "codigo", header: "Codigo", size: 'xsmall', sortable: false},
