@@ -25,7 +25,17 @@ export const DIRECTOR_NAV = [
     },
     {
         to: SUBJECTS_REQUESTS_ROUTE,
-        name: "Solicitudes"
+        name: "Solicitudes",
+        menu: [
+            {
+                name: "Ver por Materias",
+                to: "?agrupar-por=materias"
+            },
+            {
+                name: "Ver por Alumnos",
+                to: "?agrupar-por=alumnos"
+            }
+        ]
     },
     {
         to: SUBJECTS_ASSIGNATIONS_ROUTE,
@@ -36,3 +46,5 @@ export const DIRECTOR_NAV = [
 export const GET_AVAILABLE_SUBJECTS_URL = "/alumnos/materias/";
 export const GET_REQUEST_URL = "/alumnos/";
 export const POST_REQUEST_FORM_URL = "/alumnos/solicitudes/";
+
+

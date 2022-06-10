@@ -1,6 +1,6 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import {useAuth} from "../state/auth";
-import {SUBJECTS_REQUEST_ROUTE, SUBJECTS_REQUESTS_ROUTE} from "../utils/constants";
+import {SUBJECTS_REQUEST_ROUTE, SUBJECTS_REQUESTS_ROUTE} from "../utils/routes";
 
 const PublicWrapper = () => {
     const auth = useAuth();

@@ -1,13 +1,8 @@
-import {Box, ColumnConfig, DataTable, Pagination} from "grommet";
+import {Box, DataTable, DataTableProps, Pagination} from "grommet";
 import {PaginationI, SortI} from "../../model/search";
-import {RequestingStudentRow} from "../../model/student";
-import {RequestedSubjectRow} from "../../model/subject";
 
 type SubjectsRequestsTableProps = {
-    tableProps: {
-        data: (RequestingStudentRow| RequestedSubjectRow)[],
-        columns: ColumnConfig<(RequestingStudentRow| RequestedSubjectRow)>[]
-    },
+    tableProps: DataTableProps,
     sortProps: {
         sort: SortI,
         onSort: (key: string, order: "asc" | "desc") => void

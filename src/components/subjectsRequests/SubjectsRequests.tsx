@@ -4,16 +4,15 @@ import {ColumnConfig, Page, PageContent} from "grommet";
 import RequestsSearchBar from "./RequestsSearchBar";
 import {CareerRadioGroup, StatusRequestRadioGroup} from "./FilterRadioGroup";
 import SubjectsRequestsTable from "./SubjectsRequestsTable";
-import {RequestingStudentRow} from "../../model/student";
-import { RequestedSubjectRow } from "../../model/subject";
 
-type SubjectsRequestsProps = {
+type SubjectsRequestsProps<RowType> = {
     searchPlaceholder: string,
-    data: (RequestingStudentRow| RequestedSubjectRow)[],
-    columns: ColumnConfig<(RequestingStudentRow| RequestedSubjectRow)>[]
+    onClickRow: (datum: RowType) => void,
+    data: RowType[],
+    columns: ColumnConfig<(RowType)>[]
 }
 
-const SubjectsRequests = ({searchPlaceholder, data, columns}: SubjectsRequestsProps) => {
+const SubjectsRequests = <RowType,>({searchPlaceholder, data, columns, onClickRow}: SubjectsRequestsProps<RowType>) => {
     const [search, setSearch] = useState(new Search());
 
     const onSearch = (key: string, value?: SearchField) => {
@@ -42,7 +41,8 @@ const SubjectsRequests = ({searchPlaceholder, data, columns}: SubjectsRequestsPr
             <SubjectsRequestsTable
                 tableProps={{
                     data: data,
-                    columns: columns
+                    columns: columns,
+                    onClickRow: (event) => onClickRow(event.datum)
                 }}
                 sortProps={{
                     sort: search.sort,

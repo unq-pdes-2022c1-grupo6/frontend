@@ -3,7 +3,7 @@ import {Anchor, Box, Button, Form, FormField, Paragraph} from "grommet";
 import {LoginForm, usePostLogin} from "../services/authService";
 import PasswordField from "../components/PasswordField";
 import {minLength} from "../utils/validators";
-import {REGISTER_ROUTE} from "../utils/constants";
+import {REGISTER_ROUTE} from "../utils/routes";
 
 
 const Login = () => {

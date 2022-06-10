@@ -16,7 +16,7 @@ import {
     SUBJECTS_ASSIGNATIONS_ROUTE, SUBJECTS_REQUEST_ROUTE,
     SUBJECTS_REQUESTS_ROUTE,
     SUBJECTS_ROUTE
-} from "./utils/constants";
+} from "./utils/routes";
 import StudentDetails from "./pages/StudentDetails";
 
 
