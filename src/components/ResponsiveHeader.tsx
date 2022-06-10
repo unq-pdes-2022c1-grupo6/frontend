@@ -2,7 +2,7 @@ import {Heading, Box, Header, Menu, ResponsiveContext, Button, Anchor, Nav} from
 import {Logout as LogoutIcon} from 'grommet-icons';
 import {useAuth} from "../state/auth";
 import {useNavigate} from "react-router-dom";
-import {DIRECTOR_NAV} from "../utils/routes";
+import {DIRECTOR_NAV, LOGIN_ROUTE} from "../utils/routes";
 
 export const ResponsiveHeader = () => {
     const auth = useAuth();
@@ -20,7 +20,10 @@ export const ResponsiveHeader = () => {
                     <Button
                         icon={<LogoutIcon/>}
                         hoverIndicator
-                        onClick={() => auth?.logout()}
+                        onClick={() => {
+                            auth?.logout();
+                            navigate(LOGIN_ROUTE)
+                        }}
                     />}
             </Box>
             {auth?.role === "director" && <ResponsiveContext.Consumer>

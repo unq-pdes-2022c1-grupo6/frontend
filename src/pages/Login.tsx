@@ -19,7 +19,7 @@ const Login = () => {
                 <FormField
                     label="Nombre de usuario"
                     name="username"
-                    validate={[minLength(6)]}
+                    validate={[minLength(5)]}
                     required
                 />
                 <PasswordField
