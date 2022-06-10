@@ -3,7 +3,7 @@ import SubjectsRequests from "../components/subjectsRequests/SubjectsRequests";
 import {requestedSubjects, requestingStudents} from "../utils/fake-data";
 
 const SubjectsRequestsPage = () => {
-    let [searchParams] = useSearchParams();
+    const [searchParams] = useSearchParams();
 
     return searchParams.get("agrupar-por") === "alumnos"?
         <SubjectsRequests
