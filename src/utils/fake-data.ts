@@ -298,66 +298,66 @@ export const requestingStudents = [
 
 export const requestedSubjects = [
     {
-        "materia": "IPLAX",
-        "codigo": 51274,
-        "comisiones": 41872,
-        "carrera": "SIMULTANEO",
-        "cupoDisp": 6,
-        "cupoTotal": 12,
-        "demanda": 5
-    },
-    {
-        "materia": "DAISU",
-        "codigo": 34020,
-        "comisiones": 44672,
+        "materia": "COSMETEX",
+        "codigo": 39420,
+        "comisiones": 2,
         "carrera": "LI",
         "cupoDisp": 7,
-        "cupoTotal": 13,
-        "demanda": 16
+        "cupoTotal": 9,
+        "demanda": 10
     },
     {
-        "materia": "QUILITY",
-        "codigo": 63173,
-        "comisiones": 39613,
+        "materia": "SUPREMIA",
+        "codigo": 54994,
+        "comisiones": 3,
         "carrera": "TPI",
-        "cupoDisp": 7,
-        "cupoTotal": 12,
-        "demanda": 20
-    },
-    {
-        "materia": "GEOSTELE",
-        "codigo": 49342,
-        "comisiones": 31511,
-        "carrera": "TPI",
-        "cupoDisp": 7,
-        "cupoTotal": 14,
-        "demanda": 12
-    },
-    {
-        "materia": "FARMAGE",
-        "codigo": 62358,
-        "comisiones": 53564,
-        "carrera": "SIMULTANEO",
-        "cupoDisp": 6,
-        "cupoTotal": 12,
+        "cupoDisp": 9,
+        "cupoTotal": 11,
         "demanda": 7
     },
     {
-        "materia": "BESTO",
-        "codigo": 44155,
-        "comisiones": 50444,
-        "carrera": "LI",
-        "cupoDisp": 8,
-        "cupoTotal": 15,
-        "demanda": 15
+        "materia": "REALMO",
+        "codigo": 68465,
+        "comisiones": 4,
+        "carrera": "SIMULTANEO",
+        "cupoDisp": 6,
+        "cupoTotal": 14,
+        "demanda": 20
     },
     {
-        "materia": "ISOTRACK",
-        "codigo": 68065,
-        "comisiones": 63801,
+        "materia": "IPLAX",
+        "codigo": 36298,
+        "comisiones": 4,
+        "carrera": "SIMULTANEO",
+        "cupoDisp": 6,
+        "cupoTotal": 9,
+        "demanda": 13
+    },
+    {
+        "materia": "KYAGURU",
+        "codigo": 31910,
+        "comisiones": 2,
         "carrera": "LI",
+        "cupoDisp": 7,
+        "cupoTotal": 11,
+        "demanda": 20
+    },
+    {
+        "materia": "HELIXO",
+        "codigo": 51675,
+        "comisiones": 1,
+        "carrera": "LI",
+        "cupoDisp": 9,
+        "cupoTotal": 12,
+        "demanda": 14
+    },
+    {
+        "materia": "SLOFAST",
+        "codigo": 56516,
+        "comisiones": 1,
+        "carrera": "TPI",
         "cupoDisp": 8,
-        "cupoTotal": 10,
-        "demanda": 1
+        "cupoTotal": 12,
+        "demanda": 9
     }
 ]

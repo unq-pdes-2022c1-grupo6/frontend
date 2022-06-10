@@ -22,11 +22,11 @@ const SubjectsRequestsPage = () => {
             searchPlaceholder="Buscar por Nombre o Codigo.."
             data={requestedSubjects}
             columns={[
-                {property: "materia", header: "DNI", size: 'xsmall', primary: true, sortable: true},
-                {property: "codigo", header: "Legajo", size: 'xsmall', sortable: false},
+                {property: "materia", header: "Materia", size: 'xsmall', primary: true, sortable: true},
+                {property: "codigo", header: "Codigo", size: 'xsmall', sortable: false},
                 {property: "carrera", header: "Carrera", size: 'small', sortable: false},
                 {property: "comisiones", header: "Comisiones", size: 'small', align: "end", sortable: true},
-                {property: "cupoDisp", header: "Cupo Disp", size: 'xsmall', align: "end", sortable: true},
+                {property: "cupoDisp", header: "Cupo Disp.", size: 'xsmall', align: "end", sortable: true},
                 {property: "cupoTotal", header: "Cupo Total", size: 'xsmall', align: "end", sortable: true},
                 {property: "demanda", header: "Demanda", size: 'xsmall', align: "end", sortable: true}
             ]}/>
