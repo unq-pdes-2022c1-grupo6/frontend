@@ -1,9 +1,13 @@
-import {Box, DataTable, Pagination} from "grommet";
+import {Box, ColumnConfig, DataTable, Pagination} from "grommet";
 import {PaginationI, SortI} from "../../model/search";
-import {StudentRow} from "../../model/student";
+import {RequestingStudentRow} from "../../model/student";
+import {RequestedSubjectRow} from "../../model/subject";
 
 type SubjectsRequestsTableProps = {
-    requests: StudentRow[],
+    tableProps: {
+        data: (RequestingStudentRow| RequestedSubjectRow)[],
+        columns: ColumnConfig<(RequestingStudentRow| RequestedSubjectRow)>[]
+    },
     sortProps: {
         sort: SortI,
         onSort: (key: string, order: "asc" | "desc") => void
@@ -14,25 +18,17 @@ type SubjectsRequestsTableProps = {
     }
 }
 
-const SubjectsRequestsTable = ({requests, sortProps, paginationProps}: SubjectsRequestsTableProps) => {
+const SubjectsRequestsTable = ({tableProps, sortProps, paginationProps}: SubjectsRequestsTableProps) => {
 
     return <Box>
         <DataTable
-            data={requests}
+            {...tableProps}
             sort={{
                 direction: sortProps.sort.order,
                 property: sortProps.sort.key,
                 external: true
             }}
             onSort={sort => sortProps.onSort(sort.property, sort.direction)}
-            columns={[
-                {property: "dni", header: "DNI", size: 'xsmall', primary: true, sortable: false},
-                {property: "legajo", header: "Legajo", size: 'xsmall', sortable: false},
-                {property: "nyap", header: "Nombre y Apellido", size: 'small', sortable: true},
-                {property: "carrera", header: "Carrera", size: 'small', sortable: false},
-                {property: "comisionesSol", header: "Comisiones Solic.", size: 'small', align: "end", sortable: true},
-                {property: "materiasSol", header: "Materias Solic.", size: 'xsmall', align: "end", sortable: true}
-            ]}
         />
         <Box align="end">
             <Pagination {...paginationProps.pagination}

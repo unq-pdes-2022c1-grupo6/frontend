@@ -4,6 +4,15 @@ import {CourseDTO, HorarioDTO, SelectedCourses, Subject, SubjectDTO} from "../se
 export const tpi = "TPI - Tecnicatura universitaria en programación informática";
 //const li = "LI - Licenciatura en informática";
 
+export interface RequestedSubjectRow {
+    materia: string,
+    codigo: number,
+    carrera: string,
+    comisiones: number,
+    cupoDisp: number,
+    cupoTotal: number,
+    demanda: number
+}
 
 export const convertSubjectsDTO = (subjects: SubjectDTO[]): Subject[] => {
     return subjects.map(({comisiones, ...rest}) => {

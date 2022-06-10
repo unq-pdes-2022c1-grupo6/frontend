@@ -1,13 +1,19 @@
-import React, {useState} from 'react';
-import {Page, PageContent} from "grommet";
-import RequestsSearchBar from "../components/subjectsRequests/RequestsSearchBar";
-import {requests} from "../utils/fake-data";
-import {CareerRadioGroup, StatusRequestRadioGroup} from "../components/subjectsRequests/FilterRadioGroup";
-import SubjectsRequestsTable from "../components/subjectsRequests/SubjectsRequestsTable";
-import {Search, SearchField} from "../model/search";
+import React, {useState} from "react";
+import {Search, SearchField} from "../../model/search";
+import {ColumnConfig, Page, PageContent} from "grommet";
+import RequestsSearchBar from "./RequestsSearchBar";
+import {CareerRadioGroup, StatusRequestRadioGroup} from "./FilterRadioGroup";
+import SubjectsRequestsTable from "./SubjectsRequestsTable";
+import {RequestingStudentRow} from "../../model/student";
+import { RequestedSubjectRow } from "../../model/subject";
 
+type SubjectsRequestsProps = {
+    searchPlaceholder: string,
+    data: (RequestingStudentRow| RequestedSubjectRow)[],
+    columns: ColumnConfig<(RequestingStudentRow| RequestedSubjectRow)>[]
+}
 
-const StudentsSubjectsRequest = () => {
+const SubjectsRequests = ({searchPlaceholder, data, columns}: SubjectsRequestsProps) => {
     const [search, setSearch] = useState(new Search());
 
     const onSearch = (key: string, value?: SearchField) => {
@@ -19,6 +25,7 @@ const StudentsSubjectsRequest = () => {
     return <Page kind="wide" pad="large" gap="large" align="center">
         <PageContent direction="row-responsive" gap="large">
             <RequestsSearchBar
+                placeholder={searchPlaceholder}
                 searchTerm={search.filter.general}
                 onSearch={(searchTerm: string) => onSearch("filter.general", searchTerm)}
                 onCancel={() => onSearch("filter.general")}/>
@@ -33,7 +40,10 @@ const StudentsSubjectsRequest = () => {
         </PageContent>
         <PageContent>
             <SubjectsRequestsTable
-                requests={requests}
+                tableProps={{
+                    data: data,
+                    columns: columns
+                }}
                 sortProps={{
                     sort: search.sort,
                     onSort: (key: string, order: "asc" | "desc") => onSearch("sort", {key, order}),
@@ -47,4 +57,4 @@ const StudentsSubjectsRequest = () => {
     </Page>
 };
 
-export default StudentsSubjectsRequest;
+export default SubjectsRequests;

@@ -252,7 +252,7 @@ export const requestDTO2 = {
 }
 
 
-export const requests = [
+export const requestingStudents = [
     {
         "dni": 59731607,
         "legajo": 73466,
@@ -292,5 +292,72 @@ export const requests = [
         "carrera": "SIMULTANEO",
         "comisionesSol": 6,
         "materiasSol": 2
+    }
+]
+
+
+export const requestedSubjects = [
+    {
+        "materia": "IPLAX",
+        "codigo": 51274,
+        "comisiones": 41872,
+        "carrera": "SIMULTANEO",
+        "cupoDisp": 6,
+        "cupoTotal": 12,
+        "demanda": 5
+    },
+    {
+        "materia": "DAISU",
+        "codigo": 34020,
+        "comisiones": 44672,
+        "carrera": "LI",
+        "cupoDisp": 7,
+        "cupoTotal": 13,
+        "demanda": 16
+    },
+    {
+        "materia": "QUILITY",
+        "codigo": 63173,
+        "comisiones": 39613,
+        "carrera": "TPI",
+        "cupoDisp": 7,
+        "cupoTotal": 12,
+        "demanda": 20
+    },
+    {
+        "materia": "GEOSTELE",
+        "codigo": 49342,
+        "comisiones": 31511,
+        "carrera": "TPI",
+        "cupoDisp": 7,
+        "cupoTotal": 14,
+        "demanda": 12
+    },
+    {
+        "materia": "FARMAGE",
+        "codigo": 62358,
+        "comisiones": 53564,
+        "carrera": "SIMULTANEO",
+        "cupoDisp": 6,
+        "cupoTotal": 12,
+        "demanda": 7
+    },
+    {
+        "materia": "BESTO",
+        "codigo": 44155,
+        "comisiones": 50444,
+        "carrera": "LI",
+        "cupoDisp": 8,
+        "cupoTotal": 15,
+        "demanda": 15
+    },
+    {
+        "materia": "ISOTRACK",
+        "codigo": 68065,
+        "comisiones": 63801,
+        "carrera": "LI",
+        "cupoDisp": 8,
+        "cupoTotal": 10,
+        "demanda": 1
     }
 ]
