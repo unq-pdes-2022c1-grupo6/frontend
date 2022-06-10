@@ -46,7 +46,7 @@ export const ResponsiveHeader = () => {
                                                 }}
                                         })}
                                     />:
-                                    <Anchor color="text" label={name} onClick={()=> navigate(to)} />
+                                    <Anchor key={index} color="text" label={name} onClick={()=> navigate(to)} />
                             })}
                         </Nav>
                     )

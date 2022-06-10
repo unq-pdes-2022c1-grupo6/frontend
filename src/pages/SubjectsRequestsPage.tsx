@@ -27,6 +27,7 @@ const SubjectsRequestsPage = () => {
         <SubjectsRequests<RequestedSubjectRow>
             searchPlaceholder="Buscar por Nombre o Codigo.."
             data={requestedSubjects}
+            // eslint-disable-next-line
             onClickRow={() => {}}
             columns={[
                 {property: "materia", header: "Materia", size: 'xsmall', primary: true, sortable: true},
