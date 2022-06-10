@@ -1,5 +1,5 @@
 
-export interface StudentRow {
+export interface RequestingStudentRow {
     dni: number,
     legajo: number,
     nyap: string,

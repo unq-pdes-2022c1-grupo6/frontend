@@ -34,7 +34,7 @@ export class Search implements SearchI {
     pagination: PaginationI;
     sort: SortI
 
-    constructor(search?: SearchI) {
+    constructor(search?: SearchI, sortDirection?: string) {
         if (search) {
             this.filter = search.filter;
             this.pagination = search.pagination;
@@ -42,7 +42,7 @@ export class Search implements SearchI {
         } else {
             this.filter = {};
             this.sort = {
-                key:"nyap",
+                key:sortDirection || "nyap",
                 order: "desc"
             }
             this.pagination = {
