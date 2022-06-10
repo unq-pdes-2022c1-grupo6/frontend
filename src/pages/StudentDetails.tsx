@@ -20,7 +20,7 @@ const comisiones = [
     [
         {
             id: "1",
-            materia: 'TPI-Algoritmos',
+            materia: 'Algoritmos',
             comision: '(Presencial) Lunes 18:00 a 22:00',
             sd: 3,
             st: 5,
@@ -28,7 +28,7 @@ const comisiones = [
         },
         {
             id: "2",
-            materia: 'TPI-Algoritmos',
+            materia: 'Algoritmos',
             comision: '(Presencial) Martes 18:00 a 22:00',
             sd: 4,
             st: 5,
@@ -36,7 +36,7 @@ const comisiones = [
         },
         {
             id: "3",
-            materia: 'TPI-Algoritmos',
+            materia: 'Algoritmos',
             comision: '(Presencial) Miercoles 18:00 a 22:00',
             sd: 3,
             st: 5,
@@ -46,28 +46,28 @@ const comisiones = [
     [
         {
             id: "5",
-            materia: 'LI-Bases de Datos',
+            materia: 'Bases de Datos',
             comision: '(Presencial) Lunes 18:00 a 22:00',
             sd: 0,
             st: 5,
-            estado: 'PENDIENTE',
+            estado: 'APROBADO',
         },
         {
             id: "7",
-            materia: 'LI-Bases de Datos',
+            materia: 'Bases de Datos',
             comision: '(Presencial) Martes 18:00 a 22:00',
             sd: 2,
             st: 5,
-            estado: 'PENDIENTE',
+            estado: 'RECHAZADO',
         }
     ],
     [{
         id: "8",
-        materia: 'LI-Aspectos Legales',
+        materia: 'Aspectos Legales',
         comision: '(Presencial) Lunes 18:00 a 22:00',
         sd: 5,
         st: 5,
-        estado: 'PENDIENTE',
+        estado: 'RECHAZADO',
     }]
 ];
 
