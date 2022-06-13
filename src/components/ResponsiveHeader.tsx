@@ -1,19 +1,12 @@
-import {Tab, Tabs, Heading, Box, Header, Menu, ResponsiveContext, Button} from 'grommet';
+import {Heading, Box, Header, Menu, ResponsiveContext, Button, Anchor, Nav} from 'grommet';
 import {Logout as LogoutIcon} from 'grommet-icons';
 import {useAuth} from "../state/auth";
-import {useState} from "react";
 import {useNavigate} from "react-router-dom";
-import {DIRECTOR_NAV} from "../utils/constants";
+import {DIRECTOR_NAV, LOGIN_ROUTE} from "../utils/routes";
 
 export const ResponsiveHeader = () => {
     const auth = useAuth();
-    const [index, setIndex] = useState(0);
     const navigate = useNavigate();
-
-    const onActive = (nextIndex: number) => {
-        setIndex(nextIndex);
-        navigate(DIRECTOR_NAV[nextIndex].to)
-    };
 
     return (
         <Header
@@ -27,7 +20,10 @@ export const ResponsiveHeader = () => {
                     <Button
                         icon={<LogoutIcon/>}
                         hoverIndicator
-                        onClick={() => auth?.logout()}
+                        onClick={() => {
+                            auth?.logout();
+                            navigate(LOGIN_ROUTE)
+                        }}
                     />}
             </Box>
             {auth?.role === "director" && <ResponsiveContext.Consumer>
@@ -41,9 +37,21 @@ export const ResponsiveHeader = () => {
                             }))}
                         />
                     ) : (
-                        <Tabs activeIndex={index} onActive={onActive} justify="start">
-                            {DIRECTOR_NAV.map(({name}, index,) => <Tab key={index} title={name}/>)}
-                        </Tabs>
+                        <Nav direction="row" align="center">
+                            {DIRECTOR_NAV.map(({menu, name, to}, index) => {
+                                return menu?
+                                    <Menu key={index} label={name}
+                                        items={menu.map(options =>  {
+                                            return {
+                                                label: options.name,
+                                                onClick: () => {
+                                                    navigate(to + options.to)
+                                                }}
+                                        })}
+                                    />:
+                                    <Anchor key={index} color="text" label={name} onClick={()=> navigate(to)} />
+                            })}
+                        </Nav>
                     )
                 }
             </ResponsiveContext.Consumer>}

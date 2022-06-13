@@ -7,16 +7,17 @@ import Register from "./pages/Register";
 import Subjects from "./pages/Subjects";
 import SubjectsRequest from "./pages/SubjectsRequest";
 import AcademicRecords from "./pages/AcademicRecords";
-import SubjectsRequests from "./pages/SubjectsRequests";
+import SubjectsRequestsPage from "./pages/SubjectsRequestsPage";
 import SubjectsAssignations from "./pages/SubjectsAssignations";
 import PublicWrapper from "./components/PublicWrapper";
 import ResponsiveHeader from "./components/ResponsiveHeader";
 import {
-    ACADEMIC_RECORDS_ROUTE, LOGIN_ROUTE, REGISTER_ROUTE,
+    ACADEMIC_RECORDS_ROUTE, LOGIN_ROUTE, REGISTER_ROUTE, STUDENT_REQUEST_ROUTE,
     SUBJECTS_ASSIGNATIONS_ROUTE, SUBJECTS_REQUEST_ROUTE,
     SUBJECTS_REQUESTS_ROUTE,
     SUBJECTS_ROUTE
-} from "./utils/constants";
+} from "./utils/routes";
+import StudentDetails from "./pages/StudentDetails";
 
 
 const App = () => {
@@ -32,8 +33,9 @@ const App = () => {
                     <Route path={SUBJECTS_REQUEST_ROUTE} element={<SubjectsRequest/>}/>
                     <Route path={SUBJECTS_ROUTE} element={<Subjects/>}/>
                     <Route path={ACADEMIC_RECORDS_ROUTE} element={<AcademicRecords/>}/>
-                    <Route path={SUBJECTS_REQUESTS_ROUTE} element={<SubjectsRequests/>}/>
+                    <Route path={SUBJECTS_REQUESTS_ROUTE} element={<SubjectsRequestsPage/>}/>
                     <Route path={SUBJECTS_ASSIGNATIONS_ROUTE} element={<SubjectsAssignations/>}/>
+                    <Route path={STUDENT_REQUEST_ROUTE} element={<StudentDetails/>}/>
                 </Routes>
         </Grommet>
     );

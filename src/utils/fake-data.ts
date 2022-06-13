@@ -250,3 +250,114 @@ export const requestDTO2 = {
     },
     "resumenCursadas": []
 }
+
+
+export const requestingStudents = [
+    {
+        "dni": 59731607,
+        "legajo": 73466,
+        "nyap": "Stacey Hawkins",
+        "carrera": "SIMULTANEO",
+        "comisionesSol": 3,
+        "materiasSol": 1
+    },
+    {
+        "dni": 31416564,
+        "legajo": 80937,
+        "nyap": "Gonzalez Barlow",
+        "carrera": "SIMULTANEO",
+        "comisionesSol": 8,
+        "materiasSol": 3
+    },
+    {
+        "dni": 47671977,
+        "legajo": 68615,
+        "nyap": "Eleanor Coleman",
+        "carrera": "TPI",
+        "comisionesSol": 9,
+        "materiasSol": 1
+    },
+    {
+        "dni": 37596504,
+        "legajo": 30261,
+        "nyap": "Barbra Lindsey",
+        "carrera": "LI",
+        "comisionesSol": 8,
+        "materiasSol": 1
+    },
+    {
+        "dni": 34935860,
+        "legajo": 33501,
+        "nyap": "Reba Camacho",
+        "carrera": "SIMULTANEO",
+        "comisionesSol": 6,
+        "materiasSol": 2
+    }
+]
+
+
+export const requestedSubjects = [
+    {
+        "materia": "COSMETEX",
+        "codigo": 39420,
+        "comisiones": 2,
+        "carrera": "LI",
+        "cupoDisp": 7,
+        "cupoTotal": 9,
+        "demanda": 10
+    },
+    {
+        "materia": "SUPREMIA",
+        "codigo": 54994,
+        "comisiones": 3,
+        "carrera": "TPI",
+        "cupoDisp": 9,
+        "cupoTotal": 11,
+        "demanda": 7
+    },
+    {
+        "materia": "REALMO",
+        "codigo": 68465,
+        "comisiones": 4,
+        "carrera": "SIMULTANEO",
+        "cupoDisp": 6,
+        "cupoTotal": 14,
+        "demanda": 20
+    },
+    {
+        "materia": "IPLAX",
+        "codigo": 36298,
+        "comisiones": 4,
+        "carrera": "SIMULTANEO",
+        "cupoDisp": 6,
+        "cupoTotal": 9,
+        "demanda": 13
+    },
+    {
+        "materia": "KYAGURU",
+        "codigo": 31910,
+        "comisiones": 2,
+        "carrera": "LI",
+        "cupoDisp": 7,
+        "cupoTotal": 11,
+        "demanda": 20
+    },
+    {
+        "materia": "HELIXO",
+        "codigo": 51675,
+        "comisiones": 1,
+        "carrera": "LI",
+        "cupoDisp": 9,
+        "cupoTotal": 12,
+        "demanda": 14
+    },
+    {
+        "materia": "SLOFAST",
+        "codigo": 56516,
+        "comisiones": 1,
+        "carrera": "TPI",
+        "cupoDisp": 8,
+        "cupoTotal": 12,
+        "demanda": 9
+    }
+]

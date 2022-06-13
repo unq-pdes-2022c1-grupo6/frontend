@@ -13,3 +13,9 @@ export const mapToId = (courses: Course[]) => courses.map(({id, description}) =>
 export const totalSubjects = (selectedCourses: SelectedCourses) => {
     return reduce(selectedCourses, (acc, sc,) => sc.length === 0 ? acc : 1 + acc, 0);
 }
+
+export enum CourseState {
+    PENDIENTE = "PENDIENTE",
+    APROBADO = "APROBADO",
+    RECHAZADO = "RECHAZADO",
+}
