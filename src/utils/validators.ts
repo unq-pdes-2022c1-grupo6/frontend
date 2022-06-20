@@ -15,3 +15,6 @@ export const requiredSubjects = (total: number) => {
     return total === 0 ? "No ha solicitado ninguna comisión!" : undefined;
 };
 
+export const validateDNI = {regexp: /^\d{1,3}\.?\d{3}\.?\d{3}$/, message: "DNI Invalido"};
+
+export const validateNumber = {regexp: /^\d+$/, message: "Codigo Invalido"};

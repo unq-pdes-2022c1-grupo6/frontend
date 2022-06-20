@@ -1,6 +1,8 @@
 export const LOGIN_ROUTE = "/"
 
-export const REGISTER_ROUTE = "/registro"
+export const REGISTER_ROUTE = "registrar"
+
+export const CONFIRM_ROUTE = "confirmar"
 
 export const SUBJECTS_REQUEST_ROUTE = "/solicitud/*"
 

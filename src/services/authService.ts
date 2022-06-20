@@ -1,44 +1,58 @@
 import axiosInstance from "../utils/mock-axios";
 import {useMutation} from "react-query";
 import {useAuth} from "../state/auth";
+import {AxiosResponseHeaders} from "axios";
+
+export interface StudentAccount {
+    dni: string,
+    contrasenia: string
+}
+
+export interface ConfirmationInfo {
+    dni: string,
+    codigo: string
+}
 
 export interface User {
     role: string;
     accessToken: string
 }
 
-export interface RegisterForm {
-    dni: string,
-    username: string,
-    password: string,
-}
-
-export interface LoginForm {
-    username?: string,
-    password?: string
-}
-
-const postLogin = (newLogin: LoginForm): Promise<User> => {
-    return  axiosInstance.post('/login', newLogin).then((response) => response.data)
+const postLoginStudent = (newLogin: StudentAccount): Promise<AxiosResponseHeaders> => {
+    const data = {...newLogin, dni: parseInt(newLogin.dni)};
+    return  axiosInstance.post('/auth/alumno/login', data).then((response) => response.headers)
 };
 
-export const usePostLogin = () => {
+export const useLoginStudent = (dni: string) => {
     const auth = useAuth();
 
-    return useMutation(postLogin,{
-        onSuccess: (data) => auth?.login(data)
+    return useMutation(postLoginStudent,{
+        onSuccess: (response) => console.log(response)
     });
 };
 
-const postRegister = (newRegister: RegisterForm): Promise<User> => {
-    return  axiosInstance.post('/register', newRegister).then((response) => response.data)
+const postRegister = (newRegister: StudentAccount): Promise<void> => {
+    const data = {...newRegister,
+        dni: parseInt(newRegister.dni),
+        confirmacionContrasenia: newRegister.contrasenia};
+    return  axiosInstance.post('/auth/alumno/registrar', data).then((response) => response.data)
 };
 
-export const usePostRegister = () => {
+export const useRegisterStudent = (newRegister: StudentAccount) => {
     const auth = useAuth();
 
     return useMutation(postRegister,{
-        onSuccess: (data) => auth?.login(data)
+        onSuccess: (response) => console.log(response)
     });
 };
 
+const postConfirmation = (confirmation: ConfirmationInfo): Promise<void> => {
+    const body = {codigo: parseInt(confirmation.codigo), dni: parseInt(confirmation.dni)}
+    return  axiosInstance.post('/auth/alumno/confirmar', body).then((response) => response.data)
+};
+
+export const useConfirm = () => {
+    return useMutation(postConfirmation,{
+        onSuccess: (response) => console.log(response)
+    });
+};
