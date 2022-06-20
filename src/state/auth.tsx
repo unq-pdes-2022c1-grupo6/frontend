@@ -1,47 +1,17 @@
-import {createContext, useState, ReactNode, useContext, useEffect} from "react";
-import {User} from "../services/authService";
+import {createContext, useState, ReactNode, useContext} from "react";
 
 
 export interface AuthContextType {
-    logged_in: boolean;
-    role: string;
-    token: string;
-    login: (user: User) => void,
-    logout: () => void
+    student: string | undefined,
+    setStudent: (dni: string) => void
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
 const AuthProvider = ({ children }: { children: ReactNode }) => {
-    const [logged_in, setLoggedIn] = useState(false);
-    const [role, setRole] = useState<string>("");
-    const [token, setToken] = useState<string>("");
+    const [student, setStudent] = useState("");
 
-    useEffect(() => {
-        const item = localStorage.getItem("user");
-        if (item) {
-            const user = JSON.parse(item);
-            setLoggedIn(true);
-            setRole(user.role);
-            setToken(user.accessToken);
-        }
-    }, [])
-
-    const login = (user: User) => {
-        localStorage.setItem("user", JSON.stringify(user));
-        setLoggedIn(true);
-        setRole(user.role);
-        setToken(user.accessToken);
-    }
-
-    const logout = () => {
-        localStorage.removeItem("user");
-        setLoggedIn(false);
-        setRole("");
-        setToken("");
-    }
-
-    return <AuthContext.Provider value={{ logged_in, role, token, login, logout }}>
+    return <AuthContext.Provider value={{ student, setStudent }}>
         {children}
     </AuthContext.Provider>;
 

@@ -1,7 +1,9 @@
 import axiosInstance from "../utils/mock-axios";
 import {useMutation} from "react-query";
-import {useAuth} from "../state/auth";
 import {AxiosResponseHeaders} from "axios";
+import {useNavigate} from "react-router-dom";
+import {CONFIRM_ROUTE, LOGIN_ROUTE} from "../utils/routes";
+import {useAuth} from "../state/auth";
 
 export interface StudentAccount {
     dni: string,
@@ -27,22 +29,30 @@ export const useLoginStudent = (dni: string) => {
     const auth = useAuth();
 
     return useMutation(postLoginStudent,{
-        onSuccess: (response) => console.log(response)
+        onSuccess: (response) => {
+            console.log(response);
+            auth?.setStudent(dni);
+        }
     });
 };
 
-const postRegister = (newRegister: StudentAccount): Promise<void> => {
+const postRegister = (newRegister: StudentAccount): Promise<number> => {
     const data = {...newRegister,
         dni: parseInt(newRegister.dni),
         confirmacionContrasenia: newRegister.contrasenia};
     return  axiosInstance.post('/auth/alumno/registrar', data).then((response) => response.data)
 };
 
-export const useRegisterStudent = (newRegister: StudentAccount) => {
+export const useRegisterStudent = (dni: string) => {
     const auth = useAuth();
+    const navigate = useNavigate();
 
     return useMutation(postRegister,{
-        onSuccess: (response) => console.log(response)
+        onSuccess: (response) => {
+            auth?.setStudent(dni);
+            navigate(CONFIRM_ROUTE);
+            console.log(response);
+        }
     });
 };
 
@@ -52,7 +62,12 @@ const postConfirmation = (confirmation: ConfirmationInfo): Promise<void> => {
 };
 
 export const useConfirm = () => {
+    const navigate = useNavigate();
+
     return useMutation(postConfirmation,{
-        onSuccess: (response) => console.log(response)
+        onSuccess: (response) => {
+            console.log(response);
+            navigate(LOGIN_ROUTE);
+        }
     });
 };

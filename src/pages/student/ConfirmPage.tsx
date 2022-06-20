@@ -3,10 +3,12 @@ import {validateDNI, validateNumber} from "../../utils/validators";
 import LoadingButton from "../../components/LoadingButton";
 import {useState} from "react";
 import {ConfirmationInfo, useConfirm} from "../../services/authService";
+import {useAuth} from "../../state/auth";
 
 const ConfirmPage = () => {
+    const auth = useAuth();
     const [confirmForm, setConfirmForm] = useState({
-        dni: "",
+        dni: auth?.student || "",
         codigo: ""
     })
     const confirm = useConfirm();

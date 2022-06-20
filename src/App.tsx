@@ -11,10 +11,12 @@ const App = () => {
         <Grommet theme={theme} full>
             <Box>
                 <ResponsiveHeader/>
-                <Outlet/>
+                <Box height="medium">
+                    <Outlet/>
+                </Box>
                 <Footer background="light-4" justify="center" margin={{top: "large"}} pad="medium">
                     <Text textAlign="center" size="small">
-                        © 2022 UNQUE Sistema de manejo de sobrecupos
+                        © 2022 UNQUE - Sistema de manejo de sobrecupos
                     </Text>
                 </Footer>
             </Box>

@@ -6,10 +6,12 @@ import {useNavigate} from "react-router-dom";
 import {StudentAccount, useLoginStudent} from "../../services/authService";
 import {useState} from "react";
 import LoadingButton from "../../components/LoadingButton";
+import {useAuth} from "../../state/auth";
 
 const LoginStudentPage = () => {
+    const auth = useAuth();
     const [studentAccount, setStudentAccount] = useState({
-        dni: "",
+        dni: auth?.student || "",
         contrasenia: ""
     })
     const navigate = useNavigate();

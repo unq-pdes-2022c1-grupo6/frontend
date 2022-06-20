@@ -10,7 +10,7 @@ const RegisterPage = () => {
         dni: "",
         contrasenia: ""
     })
-    const registerStudent = useRegisterStudent(studentAccount);
+    const registerStudent = useRegisterStudent(studentAccount.dni);
 
     return <Box align="center" justify="center" margin={{top: "large"}}>
         <Box width="medium">
@@ -27,7 +27,7 @@ const RegisterPage = () => {
                     required
                 />
                 <PasswordField
-                    label="Contraseña"
+                    label="Nueva Contraseña"
                     validate={[minLength(6)]}
                     name="contrasenia"
                     required
