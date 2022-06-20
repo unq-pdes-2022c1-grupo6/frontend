@@ -15,11 +15,6 @@ export interface ConfirmationInfo {
     codigo: string
 }
 
-export interface User {
-    role: string;
-    accessToken: string
-}
-
 const postLoginStudent = (newLogin: StudentAccount): Promise<AxiosResponseHeaders> => {
     const data = {...newLogin, dni: parseInt(newLogin.dni)};
     return  axiosInstance.post('/auth/alumno/login', data).then((response) => response.headers)
@@ -30,7 +25,7 @@ export const useLoginStudent = (dni: string) => {
 
     return useMutation(postLoginStudent,{
         onSuccess: (response) => {
-            console.log(response);
+            console.log(JSON.stringify(response));
             auth?.setStudent(dni);
         }
     });
@@ -50,8 +45,8 @@ export const useRegisterStudent = (dni: string) => {
     return useMutation(postRegister,{
         onSuccess: (response) => {
             auth?.setStudent(dni);
-            navigate(CONFIRM_ROUTE);
-            console.log(response);
+            navigate("/" + CONFIRM_ROUTE);
+            console.log(JSON.stringify(response));
         }
     });
 };
@@ -66,7 +61,7 @@ export const useConfirm = () => {
 
     return useMutation(postConfirmation,{
         onSuccess: (response) => {
-            console.log(response);
+            console.log(JSON.stringify(response));
             navigate(LOGIN_ROUTE);
         }
     });

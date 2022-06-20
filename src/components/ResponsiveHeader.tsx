@@ -13,7 +13,6 @@ export const ResponsiveHeader = () => {
         <Header
             background="brand"
             pad={{horizontal: 'medium'}}
-            margin={{bottom: "medium"}}
         >
             <Box direction="row" align="center" gap="medium">
                 <Heading level='3'>UNQUE</Heading>
@@ -29,6 +28,7 @@ export const ResponsiveHeader = () => {
             <Box justify="end" direction="row" gap="medium">
                 {getStudentNav(auth?.student).map(({name, to}) => {
                     return <Anchor
+                        key={name}
                         color="text"
                         label={name}
                         disabled={location.pathname + location.search === "/" + to}

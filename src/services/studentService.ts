@@ -1,8 +1,7 @@
-import {useMutation, useQuery} from "react-query";
+import {useMutation, useQuery, useQueryClient} from "react-query";
 import isEqual from "lodash/isEqual";
 import axiosInstance from "../utils/mock-axios";
 import {AxiosError} from "axios";
-import {queryClient} from "../index";
 import {GET_AVAILABLE_SUBJECTS_URL, GET_REQUEST_URL, POST_REQUEST_FORM_URL} from "../utils/routes";
 import {DNI} from "../utils/fake-data";
 import {SelectedCourses, Subject, SubjectDTO} from "./subjectDTO";
@@ -34,6 +33,8 @@ const postRequest = (selectedCourses: SelectedCourses): Promise<RequestDTO> => {
 };
 
 export const useCreateRequest = (availableSubjects: Subject[], onRequestCreated: () => void) => {
+    const queryClient = useQueryClient();
+
     return useMutation(postRequest, {
         onSuccess: () => {
             onRequestCreated();

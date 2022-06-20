@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import {BrowserRouter, Route, Routes} from "react-router-dom";
-import {QueryClient, QueryClientProvider} from 'react-query'
 import App from './App';
 import {
     ACADEMIC_RECORDS_ROUTE, CONFIRM_ROUTE,
@@ -20,20 +19,11 @@ import LoginStudentPage from "./pages/student/LoginStudentPage";
 import RegisterPage from "./pages/student/RegisterPage";
 import ConfirmPage from "./pages/student/ConfirmPage";
 
-export const queryClient = new QueryClient({
-    defaultOptions: {
-        queries: {
-            refetchOnWindowFocus: false,
-        },
-    },
-});
-
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
 root.render(
     <React.StrictMode>
-        <QueryClientProvider client={queryClient}>
-            <BrowserRouter>
+        <BrowserRouter>
                     <Routes>
                         <Route path="/" element={<App/>}>
                             <Route index element={<LoginStudentPage/>}/>
@@ -48,7 +38,6 @@ root.render(
                         </Route>
                     </Routes>
             </BrowserRouter>
-        </QueryClientProvider>
     </React.StrictMode>
 );
 

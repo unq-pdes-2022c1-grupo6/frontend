@@ -64,7 +64,7 @@ export const getStudentNav = (student: string | undefined) => {
         ] :
         [
             {
-                to: LOGIN_ROUTE,
+                to: "",
                 name: "Inicio Sesión"
             },
             {

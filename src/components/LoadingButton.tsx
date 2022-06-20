@@ -9,11 +9,11 @@ const LoadingButton = ({loading, label, ...props}: LoadingButtonProps) => {
     return <Button
         {...props}
         label={loading ?
-            <Box align="center" direction="row" gap="small" pad="small">
-                <Spinner/>
+            <Box align="center" direction="row" gap="small" pad="none">
+                <Spinner color="white" size="small"/>
                 <Text>Cargando...</Text>
             </Box>
-            :label}
+            : label}
     />
 };
 
