@@ -10,10 +10,10 @@ import {useAuth} from "../../state/auth";
 
 const LoginStudentPage = () => {
     const auth = useAuth();
-    const [studentAccount, setStudentAccount] = useState({
+    const [studentAccount, setStudentAccount] = useState(() => ({
         dni: auth?.student || "",
         contrasenia: ""
-    })
+    }))
     const navigate = useNavigate();
     const login = useLoginStudent(studentAccount.dni);
 

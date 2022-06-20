@@ -1,8 +1,8 @@
-import axiosInstance from "../utils/mock-axios";
+import axiosInstance from "../utils/axios-instance";
 import {useMutation} from "react-query";
 import {AxiosResponseHeaders} from "axios";
 import {useNavigate} from "react-router-dom";
-import {CONFIRM_ROUTE, LOGIN_ROUTE} from "../utils/routes";
+import {CONFIRM_ROUTE, HOME_ROUTE, LOGIN_ROUTE} from "../utils/routes";
 import {useAuth} from "../state/auth";
 
 export interface StudentAccount {
@@ -22,11 +22,12 @@ const postLoginStudent = (newLogin: StudentAccount): Promise<AxiosResponseHeader
 
 export const useLoginStudent = (dni: string) => {
     const auth = useAuth();
+    const navigate = useNavigate();
 
     return useMutation(postLoginStudent,{
-        onSuccess: (response) => {
-            console.log(JSON.stringify(response));
-            auth?.setStudent(dni);
+        onSuccess: (headers) => {
+            auth?.loginStudent(dni, headers);
+            navigate("/" + HOME_ROUTE)
         }
     });
 };
@@ -60,8 +61,7 @@ export const useConfirm = () => {
     const navigate = useNavigate();
 
     return useMutation(postConfirmation,{
-        onSuccess: (response) => {
-            console.log(JSON.stringify(response));
+        onSuccess: () => {
             navigate(LOGIN_ROUTE);
         }
     });

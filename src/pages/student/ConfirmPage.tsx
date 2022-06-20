@@ -7,10 +7,10 @@ import {useAuth} from "../../state/auth";
 
 const ConfirmPage = () => {
     const auth = useAuth();
-    const [confirmForm, setConfirmForm] = useState({
+    const [confirmForm, setConfirmForm] = useState(() => ({
         dni: auth?.student || "",
         codigo: ""
-    })
+    }))
     const confirm = useConfirm();
 
     return <Box align="center" justify="center" margin={{top: "large"}}>

@@ -1,6 +1,6 @@
 import {useMutation, useQuery, useQueryClient} from "react-query";
 import isEqual from "lodash/isEqual";
-import axiosInstance from "../utils/mock-axios";
+import axiosInstance from "../utils/axios-instance";
 import {AxiosError} from "axios";
 import {GET_AVAILABLE_SUBJECTS_URL, GET_REQUEST_URL, POST_REQUEST_FORM_URL} from "../utils/routes";
 import {DNI} from "../utils/fake-data";

@@ -16,11 +16,12 @@ export const ResponsiveHeader = () => {
         >
             <Box direction="row" align="center" gap="medium">
                 <Heading level='3'>UNQUE</Heading>
-                {auth?.student &&
+                {auth?.isStudentLogged &&
                     <Button
                         icon={<LogoutIcon/>}
                         hoverIndicator
                         onClick={() => {
+                            auth?.logout()
                             navigate(LOGIN_ROUTE)
                         }}
                     />}
