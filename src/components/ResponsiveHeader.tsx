@@ -25,6 +25,8 @@ export const ResponsiveHeader = () => {
                             navigate(LOGIN_ROUTE)
                         }}
                     />}
+                {auth?.isStudentLogged &&
+                    <Heading level="5"> DNI {auth?.student}</Heading>}
             </Box>
             <Box justify="end" direction="row" gap="medium">
                 {getStudentNav(auth?.student).map(({name, to}) => {

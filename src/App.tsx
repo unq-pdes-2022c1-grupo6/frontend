@@ -5,7 +5,7 @@ import {Outlet} from "react-router-dom";
 import ResponsiveHeader from "./components/ResponsiveHeader";
 import {MutationCache, QueryCache, QueryClient, QueryClientProvider} from 'react-query'
 import {AxiosError} from "axios";
-import Error4xxNotification from "./components/Error4xxNotification";
+import Error400Notification from "./components/Error400Notification";
 import {AuthProvider} from "./state/auth";
 
 
@@ -15,7 +15,7 @@ const App = () => {
     const onError = (error: unknown) => {
         if (error instanceof AxiosError) {
             if (error.response &&
-                error.response.status >= 400 && error.response.status < 500 &&
+                error.response.status === 400 &&
                 error.response.data) {
                 const {error: err, message} = error.response.data;
                 setNotification(`${err} : ${message}`)
@@ -43,7 +43,7 @@ const App = () => {
                 <Box>
                     <ResponsiveHeader/>
                     {notification &&
-                        <Error4xxNotification
+                        <Error400Notification
                             notification={notification}
                             onCloseNotification={() => setNotification("")}
                         />}

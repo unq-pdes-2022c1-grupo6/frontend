@@ -5,7 +5,7 @@ type Error4xxNotificationProps = {
     onCloseNotification: () => void
 }
 
-const Error4xxNotification = ({notification, onCloseNotification}: Error4xxNotificationProps) => {
+const Error400Notification = ({notification, onCloseNotification}: Error4xxNotificationProps) => {
 
     return <Notification
         status="critical"
@@ -16,4 +16,4 @@ const Error4xxNotification = ({notification, onCloseNotification}: Error4xxNotif
 
 };
 
-export default Error4xxNotification;
+export default Error400Notification;
