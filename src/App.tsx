@@ -1,43 +1,65 @@
-import React from "react";
+import React, {useState} from "react";
 import {theme} from "./assets/theme";
-import {Grommet} from 'grommet';
-import {Routes, Route} from "react-router-dom";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import Subjects from "./pages/Subjects";
-import SubjectsRequest from "./pages/SubjectsRequest";
-import AcademicRecords from "./pages/AcademicRecords";
-import SubjectsRequestsPage from "./pages/SubjectsRequestsPage";
-import SubjectsAssignations from "./pages/SubjectsAssignations";
-import PublicWrapper from "./components/PublicWrapper";
+import {Box, Footer, Grommet, Text} from 'grommet';
+import {Outlet} from "react-router-dom";
 import ResponsiveHeader from "./components/ResponsiveHeader";
-import {
-    ACADEMIC_RECORDS_ROUTE, LOGIN_ROUTE, REGISTER_ROUTE, STUDENT_REQUEST_ROUTE,
-    SUBJECTS_ASSIGNATIONS_ROUTE, SUBJECTS_REQUEST_ROUTE,
-    SUBJECTS_REQUESTS_ROUTE,
-    SUBJECTS_ROUTE
-} from "./utils/routes";
-import StudentDetails from "./pages/StudentDetails";
+import {MutationCache, QueryCache, QueryClient, QueryClientProvider} from 'react-query'
+import {AxiosError} from "axios";
+import Error400Notification from "./components/Error400Notification";
+import {AuthProvider} from "./state/auth";
 
 
 const App = () => {
+    const [notification, setNotification] = useState("");
+
+    const onError = (error: unknown) => {
+        if (error instanceof AxiosError) {
+            if (error.response &&
+                error.response.status === 400 &&
+                error.response.data) {
+                const {error: err, message} = error.response.data;
+                setNotification(`${err} : ${message}`)
+            }
+        }
+    }
+
+    const queryClient = new QueryClient({
+        defaultOptions: {
+            queries: {
+                refetchOnWindowFocus: false,
+            },
+        },
+        queryCache: new QueryCache({
+            onError: (error) => onError(error)
+        }),
+        mutationCache: new MutationCache({
+            onError: (error) => onError(error)
+        }),
+    })
 
     return (
-        <Grommet theme={theme} full>
-            <ResponsiveHeader/>
-                <Routes>
-                    <Route element={<PublicWrapper/>}>
-                        <Route path={LOGIN_ROUTE} element={<Login/>}/>
-                        <Route path={REGISTER_ROUTE} element={<Register/>}/>
-                    </Route>
-                    <Route path={SUBJECTS_REQUEST_ROUTE} element={<SubjectsRequest/>}/>
-                    <Route path={SUBJECTS_ROUTE} element={<Subjects/>}/>
-                    <Route path={ACADEMIC_RECORDS_ROUTE} element={<AcademicRecords/>}/>
-                    <Route path={SUBJECTS_REQUESTS_ROUTE} element={<SubjectsRequestsPage/>}/>
-                    <Route path={SUBJECTS_ASSIGNATIONS_ROUTE} element={<SubjectsAssignations/>}/>
-                    <Route path={STUDENT_REQUEST_ROUTE} element={<StudentDetails/>}/>
-                </Routes>
-        </Grommet>
+        <AuthProvider>
+            <Grommet theme={theme} full>
+                <Box>
+                    <ResponsiveHeader/>
+                    {notification &&
+                        <Error400Notification
+                            notification={notification}
+                            onCloseNotification={() => setNotification("")}
+                        />}
+                    <Box height="medium">
+                        <QueryClientProvider client={queryClient}>
+                            <Outlet/>
+                        </QueryClientProvider>
+                    </Box>
+                    <Footer background="light-4" justify="center" margin={{top: "xlarge"}} pad="medium">
+                        <Text textAlign="center" size="small">
+                            © 2022 UNQUE - Sistema de manejo de sobrecupos
+                        </Text>
+                    </Footer>
+                </Box>
+            </Grommet>
+        </AuthProvider>
     );
 };
 

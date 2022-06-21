@@ -8,6 +8,21 @@ const axiosLiveInstance = axios.create({
     baseURL: process.env.REACT_APP_API_URL,
 });
 
+axiosLiveInstance.interceptors.request.use(request => {
+    //console.log(request);
+    const login = JSON.parse(localStorage.getItem('login') || "null");
+    const isStudentPrivateRoute = request?.url?.startsWith("/alumno");
+    //console.log(login);
+    //console.log(isStudentPrivateRoute);
+    if (isStudentPrivateRoute && login?.token) {
+        request.headers = {
+            ...request.headers,
+            'Authorization': login.token
+        }
+    }
+    return request;
+});
+
 const axiosMockAdapterInstance= new AxiosMockAdapter(axiosMockInstance, { delayResponse: 0 });
 
 axiosMockAdapterInstance.onPost("/login").reply(200,
@@ -25,4 +40,4 @@ axiosMockAdapterInstance.onGet(GET_REQUEST_URL + DNI).reply(200,
 axiosMockAdapterInstance.onPost(POST_REQUEST_FORM_URL + DNI).reply(200,
     requestDTO2);
 
-export default process.env.REACT_APP_AXIOS_MOCK? axiosMockInstance: axiosLiveInstance;
+export default process.env.REACT_APP_AXIOS_MOCK? axiosLiveInstance: axiosMockInstance;

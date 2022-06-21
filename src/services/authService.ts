@@ -1,44 +1,67 @@
-import axiosInstance from "../utils/mock-axios";
+import axiosInstance from "../utils/axios-instance";
 import {useMutation} from "react-query";
+import {AxiosResponseHeaders} from "axios";
+import {useNavigate} from "react-router-dom";
+import {CONFIRM_ROUTE, HOME_ROUTE, LOGIN_ROUTE} from "../utils/routes";
 import {useAuth} from "../state/auth";
 
-export interface User {
-    role: string;
-    accessToken: string
-}
-
-export interface RegisterForm {
+export interface StudentAccount {
     dni: string,
-    username: string,
-    password: string,
+    contrasenia: string
 }
 
-export interface LoginForm {
-    username?: string,
-    password?: string
+export interface ConfirmationInfo {
+    dni: string,
+    codigo: string
 }
 
-const postLogin = (newLogin: LoginForm): Promise<User> => {
-    return  axiosInstance.post('/login', newLogin).then((response) => response.data)
+const postLoginStudent = (newLogin: StudentAccount): Promise<AxiosResponseHeaders> => {
+    const data = {...newLogin, dni: parseInt(newLogin.dni)};
+    return  axiosInstance.post('/auth/alumno/login', data).then((response) => response.headers)
 };
 
-export const usePostLogin = () => {
+export const useLoginStudent = (dni: string) => {
     const auth = useAuth();
+    const navigate = useNavigate();
 
-    return useMutation(postLogin,{
-        onSuccess: (data) => auth?.login(data)
+    return useMutation(postLoginStudent,{
+        onSuccess: (headers) => {
+            auth?.loginStudent(dni, headers);
+            navigate("/" + HOME_ROUTE)
+        }
     });
 };
 
-const postRegister = (newRegister: RegisterForm): Promise<User> => {
-    return  axiosInstance.post('/register', newRegister).then((response) => response.data)
+const postRegister = (newRegister: StudentAccount): Promise<void> => {
+    const data = {...newRegister,
+        dni: parseInt(newRegister.dni),
+        confirmacionContrasenia: newRegister.contrasenia};
+    return  axiosInstance.post('/auth/alumno/registrar', data).then((response) => response.data)
 };
 
-export const usePostRegister = () => {
+export const useRegisterStudent = (dni: string) => {
     const auth = useAuth();
+    const navigate = useNavigate();
 
     return useMutation(postRegister,{
-        onSuccess: (data) => auth?.login(data)
+        onSuccess: () => {
+            auth?.setStudent(dni);
+            navigate("/" + CONFIRM_ROUTE);
+        }
     });
 };
 
+const postConfirmation = (confirmation: ConfirmationInfo): Promise<void> => {
+    const body = {codigo: parseInt(confirmation.codigo), dni: parseInt(confirmation.dni)}
+    return  axiosInstance.post('/auth/alumno/confirmar', body).then((response) => response.data)
+};
+
+export const useConfirm = () => {
+    const navigate = useNavigate();
+
+    return useMutation(postConfirmation,{
+        onSuccess: () => {
+            navigate(LOGIN_ROUTE);
+        }
+    });
+};

@@ -1,47 +1,37 @@
-import {createContext, useState, ReactNode, useContext, useEffect} from "react";
-import {User} from "../services/authService";
+import {createContext, useState, ReactNode, useContext} from "react";
+import {AxiosResponseHeaders} from "axios";
 
 
 export interface AuthContextType {
-    logged_in: boolean;
-    role: string;
-    token: string;
-    login: (user: User) => void,
+    student: string | undefined,
+    setStudent: (dni: string) => void,
+    isStudentLogged: boolean,
+    loginStudent: (dni: string, headers: AxiosResponseHeaders) => void,
     logout: () => void
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
 const AuthProvider = ({ children }: { children: ReactNode }) => {
-    const [logged_in, setLoggedIn] = useState(false);
-    const [role, setRole] = useState<string>("");
-    const [token, setToken] = useState<string>("");
+    const [student, setStudent] = useState("");
+    const [isStudentLogged, setIsStudentLogged] = useState(false);
 
-    useEffect(() => {
-        const item = localStorage.getItem("user");
-        if (item) {
-            const user = JSON.parse(item);
-            setLoggedIn(true);
-            setRole(user.role);
-            setToken(user.accessToken);
+    const loginStudent = (dni: string, headers: AxiosResponseHeaders) => {
+        setStudent(dni);
+        const token = headers.authorization;
+        const rol = headers.rol;
+        if (token && rol) {
+            localStorage.setItem("login", JSON.stringify({token, rol}));
+            setIsStudentLogged(true);
         }
-    }, [])
-
-    const login = (user: User) => {
-        localStorage.setItem("user", JSON.stringify(user));
-        setLoggedIn(true);
-        setRole(user.role);
-        setToken(user.accessToken);
     }
 
     const logout = () => {
-        localStorage.removeItem("user");
-        setLoggedIn(false);
-        setRole("");
-        setToken("");
+        localStorage.clear();
+        setIsStudentLogged(false);
     }
 
-    return <AuthContext.Provider value={{ logged_in, role, token, login, logout }}>
+    return <AuthContext.Provider value={{ student, setStudent, isStudentLogged, loginStudent, logout }}>
         {children}
     </AuthContext.Provider>;
 

@@ -1,60 +1,43 @@
-import {Heading, Box, Header, Menu, ResponsiveContext, Button, Anchor, Nav} from 'grommet';
+import {Heading, Box, Header, Button, Anchor} from 'grommet';
 import {Logout as LogoutIcon} from 'grommet-icons';
 import {useAuth} from "../state/auth";
-import {useNavigate} from "react-router-dom";
-import {DIRECTOR_NAV, LOGIN_ROUTE} from "../utils/routes";
+import {useLocation, useNavigate} from "react-router-dom";
+import {getStudentNav, LOGIN_ROUTE} from "../utils/routes";
 
 export const ResponsiveHeader = () => {
     const auth = useAuth();
     const navigate = useNavigate();
+    const location = useLocation();
 
     return (
         <Header
             background="brand"
-            pad={{horizontal:'medium'}}
-            margin={{bottom: "medium" }}
+            pad={{horizontal: 'medium'}}
         >
             <Box direction="row" align="center" gap="medium">
                 <Heading level='3'>UNQUE</Heading>
-                {auth?.logged_in &&
+                {auth?.isStudentLogged &&
                     <Button
                         icon={<LogoutIcon/>}
                         hoverIndicator
                         onClick={() => {
-                            auth?.logout();
+                            auth?.logout()
                             navigate(LOGIN_ROUTE)
                         }}
                     />}
+                {auth?.isStudentLogged &&
+                    <Heading level="5"> DNI {auth?.student}</Heading>}
             </Box>
-            {auth?.role === "director" && <ResponsiveContext.Consumer>
-                {(responsive) =>
-                    responsive === 'small' ? (
-                        <Menu
-                            label="Menu"
-                            items={DIRECTOR_NAV.map(({name, to}) => ({
-                                label: name,
-                                onClick: () => navigate(to)
-                            }))}
-                        />
-                    ) : (
-                        <Nav direction="row" align="center">
-                            {DIRECTOR_NAV.map(({menu, name, to}, index) => {
-                                return menu?
-                                    <Menu key={index} label={name}
-                                        items={menu.map(options =>  {
-                                            return {
-                                                label: options.name,
-                                                onClick: () => {
-                                                    navigate(to + options.to)
-                                                }}
-                                        })}
-                                    />:
-                                    <Anchor key={index} color="text" label={name} onClick={()=> navigate(to)} />
-                            })}
-                        </Nav>
-                    )
-                }
-            </ResponsiveContext.Consumer>}
+            <Box justify="end" direction="row" gap="medium">
+                {getStudentNav(auth?.student).map(({name, to}) => {
+                    return <Anchor
+                        key={name}
+                        color="text"
+                        label={name}
+                        disabled={location.pathname + location.search === "/" + to}
+                        onClick={() => navigate(to)}/>
+                })}
+            </Box>
         </Header>
     );
 };

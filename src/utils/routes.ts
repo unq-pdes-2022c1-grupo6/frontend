@@ -1,6 +1,12 @@
 export const LOGIN_ROUTE = "/"
 
-export const REGISTER_ROUTE = "/registro"
+export const REGISTER_ROUTE = "registrar"
+
+export const CONFIRM_ROUTE = "confirmar"
+
+export const HOME_ROUTE = "home"
+
+export const REQUEST_ROUTE = "solicitud"
 
 export const SUBJECTS_REQUEST_ROUTE = "/solicitud/*"
 
@@ -42,6 +48,35 @@ export const DIRECTOR_NAV = [
         name: "Asignaciones"
     }
 ]
+
+
+export const getStudentNav = (student: string | undefined) => {
+    return student ?
+        [
+            {
+                to: HOME_ROUTE,
+                name: "Home"
+            },
+            {
+                to: REQUEST_ROUTE,
+                name: "Mi solicitud"
+            },
+        ] :
+        [
+            {
+                to: "",
+                name: "Inicio Sesión"
+            },
+            {
+                to: REGISTER_ROUTE,
+                name: "Registrar"
+            },
+            {
+                to: CONFIRM_ROUTE,
+                name: "Confirmar cuenta"
+            },
+        ]
+}
 
 export const GET_AVAILABLE_SUBJECTS_URL = "/alumnos/materias/";
 export const GET_REQUEST_URL = "/alumnos/";
