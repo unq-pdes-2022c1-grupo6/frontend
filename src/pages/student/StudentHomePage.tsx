@@ -1,9 +1,12 @@
 import {useCurrentSemesterQuery} from "../../services/semesterService";
-import {Text, Box, Page, PageContent, Spinner} from "grommet";
+import {Text, Box, Page, PageContent, Spinner, Button} from "grommet";
 import {PageHeader} from "grommet/components";
+import LoadingButton from "../../components/LoadingButton";
+import {isRequestNotFounded, useRequestQuery} from "../../services/requestService";
 
 const StudentHomePage = () => {
     const currentSemesterQuery = useCurrentSemesterQuery();
+    const requestQuery = useRequestQuery();
 
     if (currentSemesterQuery.isLoading) {
         return <Box align="center" direction="row" gap="small" pad="small">
@@ -36,11 +39,29 @@ const StudentHomePage = () => {
         return subtitle;
     }
 
+    const getActions = () => {
+        let actions = <></>
+        if (requestQuery.isLoading) {
+            actions = <LoadingButton loading={requestQuery.isLoading} primary />
+        }
+        if (isRequestNotFounded(requestQuery.error)) {
+            actions = <Button label="Crear Solicitud" primary />
+        }
+        if (requestQuery.data) {
+            actions = <Box direction="row" gap="small" align="center">
+                <Button label="Ver Solicitud" primary />
+                <Button label="Editar Solicitud" />
+            </Box>
+        }
+        return actions
+    }
+
     return <Page kind="narrow">
         <PageContent>
             <PageHeader
                 title={getTitle()}
                 subtitle={getSubtitle()}
+                actions={getActions()}
                 responsive
             />
         </PageContent>

@@ -32,7 +32,7 @@ export const useLoginStudent = (dni: string) => {
     });
 };
 
-const postRegister = (newRegister: StudentAccount): Promise<number> => {
+const postRegister = (newRegister: StudentAccount): Promise<void> => {
     const data = {...newRegister,
         dni: parseInt(newRegister.dni),
         confirmacionContrasenia: newRegister.contrasenia};
@@ -44,10 +44,9 @@ export const useRegisterStudent = (dni: string) => {
     const navigate = useNavigate();
 
     return useMutation(postRegister,{
-        onSuccess: (response) => {
+        onSuccess: () => {
             auth?.setStudent(dni);
             navigate("/" + CONFIRM_ROUTE);
-            console.log(JSON.stringify(response));
         }
     });
 };
