@@ -8,6 +8,10 @@ export const HOME_ROUTE = "home"
 
 export const REQUEST_ROUTE = "solicitud"
 
+export const CREATE_REQUEST_ROUTE = "solicitud/crear"
+
+export const EDIT_REQUEST_ROUTE = "solicitud/editar"
+
 export const SUBJECTS_REQUEST_ROUTE = "/solicitud/*"
 
 export const ACADEMIC_RECORDS_ROUTE = "/historial-academico"

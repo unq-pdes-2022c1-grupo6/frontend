@@ -17,7 +17,7 @@ export interface CourseDTO {
     id: number,
     numero: number,
     materia: string,
-    modalidad: string,
+    modalidad: "PRESENCIAL" | "VIRTUAL" | "SEMIPRESENCIAL",
     sobrecuposTotales: number,
     sobrecuposDisponibles: number,
     horarios: HourDTO[]

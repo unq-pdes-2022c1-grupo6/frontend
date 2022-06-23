@@ -9,12 +9,14 @@ const getRequest = (): Promise<RequestDTO> => {
     return axiosInstance.get("/alumno/formulario").then((response) => response.data)
 }
 
-export const useRequestQuery = () => {
+export const useRequestQuery = (isStudentLogged: boolean | undefined) => {
     return useQuery(["request"],
-        () => getRequest())
+        () => getRequest(),
+        {enabled: isStudentLogged}
+    )
 }
 
-export const isRequestNotFounded = (error: unknown) => {
+export const isRequestNotFound = (error: unknown) => {
     return error instanceof AxiosError && isEqual(error.response?.data, {
         error: "ExcepcionUNQUE",
         message: "No se encontró ningun formulario para el cuatrimestre dado"

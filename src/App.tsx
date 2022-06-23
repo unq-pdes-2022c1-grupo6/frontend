@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {theme} from "./assets/theme";
-import {Box, Footer, Grommet, Text} from 'grommet';
+import {Main, Grommet} from 'grommet';
 import {Outlet} from "react-router-dom";
 import ResponsiveHeader from "./components/ResponsiveHeader";
 import {MutationCache, QueryCache, QueryClient, QueryClientProvider} from 'react-query'
@@ -40,24 +40,19 @@ const App = () => {
     return (
         <AuthProvider>
             <Grommet theme={theme} full>
-                <Box>
+                <Main gap="large">
                     <ResponsiveHeader/>
                     {notification &&
                         <Error400Notification
                             notification={notification}
                             onCloseNotification={() => setNotification("")}
                         />}
-                    <Box height="medium">
+                    <Main>
                         <QueryClientProvider client={queryClient}>
                             <Outlet/>
                         </QueryClientProvider>
-                    </Box>
-                    <Footer background="light-4" justify="center" margin={{top: "xlarge"}} pad="medium">
-                        <Text textAlign="center" size="small">
-                            © 2022 UNQUE - Sistema de manejo de sobrecupos
-                        </Text>
-                    </Footer>
-                </Box>
+                    </Main>
+                </Main>
             </Grommet>
         </AuthProvider>
     );
