@@ -1,134 +1,23 @@
 import {useState} from "react";
-import {Accordion, AccordionPanel, Box, CheckBoxGroup, CheckBoxProps, Page, PageContent, Text} from "grommet";
-import {formatSubjectCourse} from "../services/dtos/subjectDTO";
+import {Accordion, AccordionPanel, Box, Button, CheckBoxGroup, CheckBoxProps, Page, PageContent, Text} from "grommet";
+import {formatSubjectCourse, SubjectDTO} from "../services/dtos/subjectDTO";
+import {RequestFormType} from "../services/requestService";
+import LoadingButton from "./LoadingButton";
 
-const materias = [
-    {
-        "codigo": "90000",
-        "nombre": "Inglés 1",
-        "comisiones": [
-            {
-                "id": 8,
-                "comision": 1,
-                "modalidad": "PRESENCIAL",
-                "horarios": [
-                    {
-                        "dia": "MIERCOLES",
-                        "inicio": "14:00",
-                        "fin": "18:00"
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        "codigo": "01035",
-        "nombre": "Bases de Datos",
-        "comisiones": [
-            {
-                "id": 1,
-                "comision": 1,
-                "modalidad": "PRESENCIAL",
-                "horarios": [
-                    {
-                        "dia": "MARTES",
-                        "inicio": "10:00",
-                        "fin": "12:00"
-                    },
-                    {
-                        "dia": "JUEVES",
-                        "inicio": "10:00",
-                        "fin": "12:00"
-                    }
-                ]
-            },
-            {
-                "id": 2,
-                "comision": 2,
-                "modalidad": "PRESENCIAL",
-                "horarios": [
-                    {
-                        "dia": "LUNES",
-                        "inicio": "10:00",
-                        "fin": "12:00"
-                    },
-                    {
-                        "dia": "MIERCOLES",
-                        "inicio": "10:00",
-                        "fin": "12:00"
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        "codigo": "00487",
-        "nombre": "Introducción a la Programación",
-        "comisiones": [
-            {
-                "id": 5,
-                "comision": 1,
-                "modalidad": "PRESENCIAL",
-                "horarios": [
-                    {
-                        "dia": "MARTES",
-                        "inicio": "18:00",
-                        "fin": "20:00"
-                    },
-                    {
-                        "dia": "JUEVES",
-                        "inicio": "18:00",
-                        "fin": "22:00"
-                    }
-                ]
-            },
-            {
-                "id": 6,
-                "comision": 2,
-                "modalidad": "PRESENCIAL",
-                "horarios": [
-                    {
-                        "dia": "LUNES",
-                        "inicio": "09:00",
-                        "fin": "11:00"
-                    },
-                    {
-                        "dia": "JUEVES",
-                        "inicio": "18:00",
-                        "fin": "22:00"
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        "codigo": "01032",
-        "nombre": "Organización de las Computadoras",
-        "comisiones": [
-            {
-                "id": 7,
-                "comision": 1,
-                "modalidad": "PRESENCIAL",
-                "horarios": [
-                    {
-                        "dia": "LUNES",
-                        "inicio": "09:00",
-                        "fin": "11:00"
-                    },
-                    {
-                        "dia": "MIERCOLES",
-                        "inicio": "10:00",
-                        "fin": "12:00"
-                    }
-                ]
-            }
-        ]
-    }
-]
+type RequestFormProps = {
+    selections: RequestFormType;
+    options?: SubjectDTO[],
+    loading: boolean,
+    onSubmit: (selections: RequestFormType) => void,
+    onCancel: () => void
+}
 
-const RequestForm = () => {
-    const [selectionsG, setSelectionsG] = useState(new Set<number>());
-    const [selectionsS, setSelectionsS] = useState(new Set<number>());
+
+const RequestForm = ({selections, options = [], loading, onSubmit, onCancel}: RequestFormProps) => {
+    const first = selections[0].size === 0 && selections[1].size === 0;
+    const [selectionsG, setSelectionsG] = useState(selections[0]);
+    const [selectionsS, setSelectionsS] = useState(selections[1]);
+    const requestForm: RequestFormType = [selectionsG, selectionsS];
 
     const getSelection = (id: number) => {
         const selecG = selectionsG.has(id) ? ["G"] : undefined
@@ -152,12 +41,12 @@ const RequestForm = () => {
         }
     }
 
-    return <Page kind="narrow">
+    return <Page kind="narrow" margin={{vertical: "medium"}}>
         <PageContent gap="medium" justify="center">
-            <Text> G: Comisiones inscriptas por el Guaraní, S: Comisiones solicitando sobrecupo </Text>
-            <Box>
+            <Text> G: Comisiones inscriptas por el Guaraní S: Comisiones solicitando sobrecupo </Text>
+            <Box gap="medium">
                 <Accordion multiple gap="medium">
-                    {materias.map((m) => {
+                    {options.map((m) => {
                         return <AccordionPanel label={`${m.nombre} (${m.codigo})`} key={m.codigo}>
                             <Box height="xsmall">
                                 {m.comisiones.map(c => {
@@ -167,8 +56,7 @@ const RequestForm = () => {
                                             direction="row"
                                             options={["G", "S"]}
                                             value={getSelection(c.id)}
-                                            onChange={(event) => event && setSelection(event.option, c.id)}
-                                        />
+                                            onChange={(event) => event && setSelection(event.option, c.id)}/>
                                         <Text>{formatSubjectCourse(c.comision, c.modalidad, c.horarios)}</Text>
                                     </Box>
                                 })}
@@ -176,6 +64,13 @@ const RequestForm = () => {
                         </AccordionPanel>
                     })}
                 </Accordion>
+                <Box direction="row" justify="center" gap="large">
+                    <LoadingButton onClick={() => onSubmit(requestForm)}
+                                   loading={loading}
+                                   label={first? "Crear": "Editar"}
+                                   primary/>
+                    <Button disabled={loading} label="Cancelar" onClick={onCancel}/>
+                </Box>
             </Box>
         </PageContent>
     </Page>

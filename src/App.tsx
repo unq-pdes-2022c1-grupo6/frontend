@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {theme} from "./assets/theme";
-import {Main, Grommet} from 'grommet';
+import {Grommet, Box} from 'grommet';
 import {Outlet} from "react-router-dom";
 import ResponsiveHeader from "./components/ResponsiveHeader";
 import {MutationCache, QueryCache, QueryClient, QueryClientProvider} from 'react-query'
@@ -40,19 +40,15 @@ const App = () => {
     return (
         <AuthProvider>
             <Grommet theme={theme} full>
-                <Main gap="large">
-                    <ResponsiveHeader/>
+                <ResponsiveHeader/>
                     {notification &&
                         <Error400Notification
                             notification={notification}
                             onCloseNotification={() => setNotification("")}
                         />}
-                    <Main>
-                        <QueryClientProvider client={queryClient}>
-                            <Outlet/>
-                        </QueryClientProvider>
-                    </Main>
-                </Main>
+                    <QueryClientProvider client={queryClient}>
+                        <Outlet/>
+                    </QueryClientProvider>
             </Grommet>
         </AuthProvider>
     );
