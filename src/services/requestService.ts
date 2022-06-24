@@ -19,10 +19,7 @@ export const useRequestQuery = () => {
 
     return useQuery(["request"],
         () => getRequest(),
-        {
-            onSuccess: (data) => setRequest(data),
-            retry: 1,
-        }
+        {onSuccess: (data) => setRequest(data), retry: 1}
     )
 }
 
@@ -33,7 +30,7 @@ export const isRequestNotFound = (error: unknown) => {
     });
 }
 
-const postRequest = ([selectionS, selectionG]: RequestFormType): Promise<RequestDTO> => {
+const postRequest = ([selectionG, selectionS]: RequestFormType): Promise<RequestDTO> => {
     const body = {comisiones: Array.from(selectionS), comisionesInscripto: Array.from(selectionG)};
     return axiosInstance.post("/alumno/solicitudes", body).then((response) => response.data)
 }
@@ -42,16 +39,18 @@ const postRequest = ([selectionS, selectionG]: RequestFormType): Promise<Request
 export const useCreateRequest = () => {
     const queryClient = useQueryClient();
     const navigate = useNavigate();
+    const [, setRequest] = useRequest();
 
     return useMutation(postRequest, {
         onSuccess: (data) => {
-            queryClient.setQueryData(["request"], data)
+            queryClient.setQueryData(["request"], data);
+            setRequest(data);
             navigate("/" + REQUEST_ROUTE);
         }
     })
 }
 
-const editRequest = ([selectionS, selectionG]: RequestFormType): Promise<RequestDTO> => {
+const editRequest = ([selectionG, selectionS]: RequestFormType): Promise<RequestDTO> => {
     const body = {comisiones: Array.from(selectionS), comisionesInscripto: Array.from(selectionG)};
     return axiosInstance.patch("/alumno/solicitudes", body).then((response) => response.data)
 }
@@ -60,10 +59,12 @@ const editRequest = ([selectionS, selectionG]: RequestFormType): Promise<Request
 export const useEditRequest = () => {
     const queryClient = useQueryClient();
     const navigate = useNavigate();
+    const [, setRequest] = useRequest();
 
     return useMutation(editRequest, {
         onSuccess: (data) => {
-            queryClient.setQueryData(["request"], data)
+            queryClient.setQueryData(["request"], data);
+            setRequest(data);
             navigate("/" + REQUEST_ROUTE);
         }
     })
@@ -75,11 +76,13 @@ const deleteRequest = (): Promise<void> => {
 
 export const useDeleteRequest = () => {
     const queryClient = useQueryClient();
+    const [, setRequest] = useRequest();
 
     return useMutation(deleteRequest, {
         onSuccess: () => {
             queryClient.removeQueries(["request"]);
             queryClient.refetchQueries(["request"]);
+            setRequest(undefined);
         }
     })
 }

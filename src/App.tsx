@@ -1,24 +1,26 @@
-import React, {useState} from "react";
+import React from "react";
 import {theme} from "./assets/theme";
-import {Grommet} from 'grommet';
+import {Box, Grommet} from 'grommet';
 import {Outlet} from "react-router-dom";
 import ResponsiveHeader from "./components/ResponsiveHeader";
 import {MutationCache, QueryCache, QueryClient, QueryClientProvider} from 'react-query'
 import {AxiosError} from "axios";
-import Error400Notification from "./components/Error400Notification";
+import GlobalNotificator from "./components/GlobalNotificator";
 import {AuthProvider} from "./state/auth";
+import {handleGlobally} from "./utils/validators";
+import {useNotification} from "./state/notificator";
 
 
 const App = () => {
-    const [notification, setNotification] = useState("");
+    const {notification, setNotification, deleteNotification} = useNotification();
 
     const onError = (error: unknown) => {
         if (error instanceof AxiosError) {
             if (error.response &&
                 error.response.status === 400 &&
-                error.response.data) {
+                error.response.data && handleGlobally(error)) {
                 const {error: err, message} = error.response.data;
-                setNotification(`${err} : ${message}`)
+                setNotification(`${err} : ${message}`, "critical");
             }
         }
     }
@@ -41,14 +43,15 @@ const App = () => {
         <AuthProvider>
             <Grommet theme={theme} full>
                 <ResponsiveHeader/>
-                    {notification &&
-                        <Error400Notification
-                            notification={notification}
-                            onCloseNotification={() => setNotification("")}
-                        />}
-                    <QueryClientProvider client={queryClient}>
-                        <Outlet/>
-                    </QueryClientProvider>
+                <GlobalNotificator
+                    notification={notification}
+                    onCloseNotification={deleteNotification}
+                />
+                <QueryClientProvider client={queryClient}>
+                    <Outlet context={{setNotification}}/>
+                </QueryClientProvider>
+                <Box pad ="large">
+                </Box>
             </Grommet>
         </AuthProvider>
     );

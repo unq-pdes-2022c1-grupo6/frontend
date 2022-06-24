@@ -29,7 +29,7 @@ export const ResponsiveHeader = () => {
                     <Heading level="5"> DNI {auth?.student}</Heading>}
             </Box>
             <Box justify="end" direction="row" gap="medium">
-                {getStudentNav(auth?.student).map(({name, to}) => {
+                {getStudentNav(auth?.isStudentLogged).map(({name, to}) => {
                     return <Anchor
                         key={name}
                         color="text"

@@ -26,5 +26,5 @@ const ThreeStatesText = ([status1, status2]: [string,string]) =>
 
 };
 
-export const RequestStatusText = ThreeStatesText(["PENDIENTE", "RECHAZADO"]);
+export const RequestStatusText = ThreeStatesText(["APROBADO", "RECHAZADO"]);
 export const StatusText = ThreeStatesText(["APROBADO", "DESAPROBADO"]);

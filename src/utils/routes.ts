@@ -54,7 +54,7 @@ export const DIRECTOR_NAV = [
 ]
 
 
-export const getStudentNav = (student: string | undefined) => {
+export const getStudentNav = (student: boolean | undefined) => {
     return student ?
         [
             {
