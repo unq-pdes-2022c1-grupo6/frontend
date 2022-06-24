@@ -24,7 +24,7 @@ const RequestFormPage = ({selections = defaultSelections, onSubmit, loading}: Re
         options={studentSubjectsQuery.data}
         loading={loading0}
         onSubmit={onSubmit}
-        onCancel={() => navigate(HOME_ROUTE)}
+        onCancel={() => navigate("/" + HOME_ROUTE)}
     />
 };
 

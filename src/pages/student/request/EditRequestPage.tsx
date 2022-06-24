@@ -6,12 +6,12 @@ import {useEditRequest} from "../../../services/requestService";
 
 const EditRequestPage = () => {
     const editRequest = useEditRequest();
-    const {request} = useRequest();
+    const [request] = useRequest();
 
     return <RequestFormPage
         onSubmit={(form) => editRequest.mutate(form)}
         loading={editRequest.isLoading}
-        selections={request.data && getSelections(request.data)}
+        selections={request && getSelections(request)}
     />
 
 };

@@ -5,6 +5,7 @@ import {AxiosError} from "axios";
 import isEqual from "lodash/isEqual";
 import {REQUEST_ROUTE} from "../utils/routes";
 import {useNavigate} from "react-router-dom";
+import {useRequest} from "../components/layouts/PrivateStudentLayout";
 
 
 export type RequestFormType = [Set<number>, Set<number>];
@@ -13,10 +14,15 @@ const getRequest = (): Promise<RequestDTO> => {
     return axiosInstance.get("/alumno/formulario").then((response) => response.data)
 }
 
-export const useRequestQuery = (isStudentLogged: boolean | undefined) => {
+export const useRequestQuery = () => {
+    const [, setRequest] = useRequest();
+
     return useQuery(["request"],
         () => getRequest(),
-        {enabled: isStudentLogged}
+        {
+            onSuccess: (data) => setRequest(data),
+            retry: 1,
+        }
     )
 }
 
@@ -29,7 +35,7 @@ export const isRequestNotFound = (error: unknown) => {
 
 const postRequest = ([selectionS, selectionG]: RequestFormType): Promise<RequestDTO> => {
     const body = {comisiones: Array.from(selectionS), comisionesInscripto: Array.from(selectionG)};
-    return axiosInstance.post("/api/alumno/solicitudes", body).then((response) => response.data)
+    return axiosInstance.post("/alumno/solicitudes", body).then((response) => response.data)
 }
 
 
@@ -40,14 +46,14 @@ export const useCreateRequest = () => {
     return useMutation(postRequest, {
         onSuccess: (data) => {
             queryClient.setQueryData(["request"], data)
-            navigate(REQUEST_ROUTE);
+            navigate("/" + REQUEST_ROUTE);
         }
     })
 }
 
 const editRequest = ([selectionS, selectionG]: RequestFormType): Promise<RequestDTO> => {
     const body = {comisiones: Array.from(selectionS), comisionesInscripto: Array.from(selectionG)};
-    return axiosInstance.patch("/api/alumno/solicitudes", body).then((response) => response.data)
+    return axiosInstance.patch("/alumno/solicitudes", body).then((response) => response.data)
 }
 
 
@@ -58,8 +64,22 @@ export const useEditRequest = () => {
     return useMutation(editRequest, {
         onSuccess: (data) => {
             queryClient.setQueryData(["request"], data)
-            navigate(REQUEST_ROUTE);
+            navigate("/" + REQUEST_ROUTE);
         }
     })
 }
 
+const deleteRequest = (): Promise<void> => {
+    return axiosInstance.delete("/alumno/formulario").then((response) => response.data)
+}
+
+export const useDeleteRequest = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation(deleteRequest, {
+        onSuccess: () => {
+            queryClient.removeQueries(["request"]);
+            queryClient.refetchQueries(["request"]);
+        }
+    })
+}

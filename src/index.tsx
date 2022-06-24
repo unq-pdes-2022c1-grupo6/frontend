@@ -23,7 +23,6 @@ import StudentHomePage from "./pages/student/StudentHomePage";
 import RequestPage from "./pages/student/request/RequestPage";
 import CreateRequestPage from "./pages/student/request/CreateRequestPage";
 import EditRequestPage from "./pages/student/request/EditRequestPage";
-import RequestForm from "./components/RequestForm";
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
@@ -33,7 +32,6 @@ root.render(
             <Routes>
                 <Route path="/" element={<App/>}>
                     <Route index element={<LoginStudentPage/>}/>
-                    <Route path="prueba" element={<RequestForm/>}/>
                     <Route path={REGISTER_ROUTE} element={<RegisterPage/>}/>
                     <Route path={CONFIRM_ROUTE} element={<ConfirmPage/>}/>
                     <Route element={<PrivateStudentLayout/>}>

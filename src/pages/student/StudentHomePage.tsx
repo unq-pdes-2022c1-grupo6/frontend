@@ -2,14 +2,14 @@ import {useCurrentSemesterQuery} from "../../services/semesterService";
 import {Text, Box, Page, PageContent, Spinner, Button} from "grommet";
 import {PageHeader} from "grommet/components";
 import LoadingButton from "../../components/LoadingButton";
-import {isRequestNotFound} from "../../services/requestService";
-import {useRequest} from "../../components/layouts/PrivateStudentLayout";
+import {isRequestNotFound, useDeleteRequest, useRequestQuery} from "../../services/requestService";
 import {CREATE_REQUEST_ROUTE, EDIT_REQUEST_ROUTE, REQUEST_ROUTE} from "../../utils/routes";
 import {useNavigate} from "react-router-dom";
 
 const StudentHomePage = () => {
     const currentSemesterQuery = useCurrentSemesterQuery();
-    const {request} = useRequest();
+    const requestQuery = useRequestQuery();
+    const deleteRequest = useDeleteRequest();
     const navigate = useNavigate();
 
     if (currentSemesterQuery.isLoading) {
@@ -20,8 +20,7 @@ const StudentHomePage = () => {
     }
 
     const getTitle = () => {
-        let title = "Bienvenido";
-        const semester = currentSemesterQuery.data;
+        let title = "Bienvenido"; const semester = currentSemesterQuery.data;
         if (semester) {
             title = `Bienvenido al ${semester.getSemester()} cuatrimestre de ${semester.year}`
         }
@@ -44,23 +43,27 @@ const StudentHomePage = () => {
     }
 
     const getActions = () => {
-        let actions = <></>
-        if (request.isLoading) {
-            actions = <LoadingButton loading={request.isLoading} primary/>
+        let actions; const betweenPeriod = currentSemesterQuery.data?.isBetweenPeriod();
+        if (requestQuery.isLoading) {
+            actions = <LoadingButton loading={requestQuery.isLoading} primary/>
         }
-        if (isRequestNotFound(request.error)) {
-            actions = <Button label="Crear Solicitud" primary
-                              onClick={() => navigate(CREATE_REQUEST_ROUTE)} />
-        }
-        if (request.data) {
+        else {
             actions = <Box direction="row" gap="small" align="center">
-                <Button label="Ver Solicitud" primary
-                        onClick={() => navigate(REQUEST_ROUTE)} />
-                <Button label="Editar Solicitud"
-                        onClick={() => navigate(EDIT_REQUEST_ROUTE)} />
+                {betweenPeriod && isRequestNotFound(requestQuery.error) &&
+                    <Button label="Crear Solicitud" primary
+                            onClick={() => navigate("/" + CREATE_REQUEST_ROUTE)}/>}
+                {requestQuery.data &&
+                    <Button label="Ver Solicitud" primary
+                            onClick={() => navigate("/" + REQUEST_ROUTE)} />}
+                {requestQuery.data && betweenPeriod &&
+                    <Button label="Editar Solicitud"
+                            onClick={() => navigate("/" + EDIT_REQUEST_ROUTE)} />}
+                {requestQuery.data && betweenPeriod &&
+                    <LoadingButton label="Borrar Solicitud" loading={deleteRequest.isLoading}
+                                   onClick={() => deleteRequest.mutate()} />}
             </Box>
         }
-        return actions
+        return actions;
     }
 
     return <Page kind="narrow">
