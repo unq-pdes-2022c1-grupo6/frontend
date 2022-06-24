@@ -15,11 +15,12 @@ export interface SubjectCourseDTO {
     horarios: HourDTO[]
 }
 
-export const formatSubjectCourse = (comision: number, modalidad: string, horarios: HourDTO[]) => {
-    return `${comision} - (${capitalize(modalidad)}) ${formatHour(horarios)}`
+export const formatSubjectCourse = (comision: number, modalidad: string | undefined, horarios: HourDTO[]) => {
+    const mod = modalidad ? `(${capitalize(modalidad)}) ` : "";
+    return `${comision} - ${mod}${formatHour(horarios)}`
 }
 
 const formatHour = (hour: HourDTO[]) => {
     return hour.reduce((acc, {dia, inicio, fin}) =>
-            `${acc}- ${capitalize(dia)} ${inicio} a ${fin} `, "").substring(2);
+        `${acc}- ${capitalize(dia)} ${inicio} a ${fin} `, "").substring(2);
 }

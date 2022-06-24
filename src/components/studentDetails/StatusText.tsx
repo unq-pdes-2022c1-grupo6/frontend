@@ -1,5 +1,4 @@
 import {Text} from "grommet";
-import {CourseState} from "../../model/course";
 
 
 const ThreeStatesText = ([status1, status2]: [string,string]) =>
@@ -27,5 +26,5 @@ const ThreeStatesText = ([status1, status2]: [string,string]) =>
 
 };
 
-export const RequestStatusText = ThreeStatesText([CourseState.APROBADO, CourseState.RECHAZADO]);
+export const RequestStatusText = ThreeStatesText(["PENDIENTE", "RECHAZADO"]);
 export const StatusText = ThreeStatesText(["APROBADO", "DESAPROBADO"]);

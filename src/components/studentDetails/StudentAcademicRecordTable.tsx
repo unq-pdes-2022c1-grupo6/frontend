@@ -1,6 +1,6 @@
 import React from 'react';
 import {DataTable, Text} from "grommet";
-import {StatusText} from "./SubjectStatusText";
+import {StatusText} from "./StatusText";
 
 interface AcademicRecord {
     nombreMateria: string,
