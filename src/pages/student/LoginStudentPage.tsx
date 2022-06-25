@@ -1,7 +1,7 @@
 import {Anchor, Box, Form, FormField, Paragraph} from "grommet";
 import {minLength, validateDNI} from "../../utils/validators";
 import PasswordField from "../../components/PasswordField";
-import {CONFIRM_ROUTE, REGISTER_ROUTE} from "../../utils/routes";
+import {CONFIRM_ROUTE, DIRECTOR_ROUTE, REGISTER_ROUTE} from "../../utils/routes";
 import {useNavigate} from "react-router-dom";
 import {Account, useLoginStudent} from "../../services/authService";
 import {useState} from "react";
@@ -34,13 +34,16 @@ const LoginStudentPage = () => {
                     name="password"
                     required
                 />
-                <Box gap="medium" margin="medium" align="center">
+                <Box gap="medium" margin={{top: "medium"}} align="center">
                     <LoadingButton loading={login.isLoading} type="submit" label="Ingresar" primary/>
                     <Paragraph margin="none" alignSelf="center">
                         ¿No tenés Cuenta? <Anchor label="Registrate" onClick={() => navigate(REGISTER_ROUTE)}/>
                     </Paragraph>
                     <Paragraph margin="none" alignSelf="center">
                         ¿Te falta confirmar tu Cuenta? <Anchor label="Entra acá" onClick={() => navigate(CONFIRM_ROUTE)}/>
+                    </Paragraph>
+                    <Paragraph margin="none" alignSelf="center">
+                        Inicio de sesión como Directivo, <Anchor label="Entrar acá" onClick={() => navigate(DIRECTOR_ROUTE)}/>
                     </Paragraph>
                 </Box>
             </Form>

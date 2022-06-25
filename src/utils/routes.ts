@@ -17,44 +17,31 @@ export const EDIT_REQUEST_ROUTE = "solicitud/editar"
 
 export const DIRECTOR_ROUTE = "director"
 
+export const SUBJECTS_ROUTE = "materias"
+
+export const STUDENTS_ROUTE = "alumnos"
+
+export const REQUIRED_SUBJECTS = "materias/solicitudes"
+
+export const REQUESTING_STUDENTS = "alumnos/solicitudes"
+
+export const REQUIRED_SUBJECT = ":materia"
+
+export const REQUESTING_STUDENT = ":alumno"
+
+export const IMPORT_ROUTE = "importar"
+
+// deprecadas (?
 export const ACADEMIC_RECORDS_ROUTE = "/historial-academico"
 
 export const SUBJECTS_REQUESTS_ROUTE = "/solicitudes"
 
-export const SUBJECTS_ROUTE = "/oferta-academica"
+export const SUBJECTS_ROUTE0 = "oferta-academica"
 
 export const SUBJECTS_ASSIGNATIONS_ROUTE = "/asignaciones"
 
 export const STUDENT_REQUEST_ROUTE = "/alumnos/:dni/solicitud";
 
-export const DIRECTOR_NAV = [
-    {
-        to: ACADEMIC_RECORDS_ROUTE,
-        name: "Historial académico"
-    },
-    {
-        to: SUBJECTS_ROUTE,
-        name: "Oferta académica"
-    },
-    {
-        to: SUBJECTS_REQUESTS_ROUTE,
-        name: "Solicitudes",
-        menu: [
-            {
-                name: "Ver por Materias",
-                to: "?agrupar-por=materias"
-            },
-            {
-                name: "Ver por Alumnos",
-                to: "?agrupar-por=alumnos"
-            }
-        ]
-    },
-    {
-        to: SUBJECTS_ASSIGNATIONS_ROUTE,
-        name: "Asignaciones"
-    }
-]
 
 const privateStudentRoutes = [
     {
@@ -85,10 +72,31 @@ const publicStudentRoutes = [
 
 const privateDirectorRoutes = [
     {
-        to: DIRECTOR_ROUTE +  "/" + HOME_ROUTE,
+        to: DIRECTOR_ROUTE + "/" + HOME_ROUTE,
         name: "Home"
+    },
+    {
+        to: DIRECTOR_ROUTE + "/" + SUBJECTS_ROUTE,
+        name: "Materias"
+    },
+    {
+        to: DIRECTOR_ROUTE + "/" + STUDENTS_ROUTE,
+        name: "Alumnos"
+    },
+    {
+        to: DIRECTOR_ROUTE + "/" + REQUIRED_SUBJECTS,
+        name: "Materias Solicitadas"
+    },
+    {
+        to: DIRECTOR_ROUTE + "/" + REQUESTING_STUDENTS,
+        name: "Alumnos Solicitantes"
+    },
+    {
+        to: DIRECTOR_ROUTE + "/" + IMPORT_ROUTE,
+        name: "Importar"
     }
 ]
+
 
 const studentRoutes = {
     "public": publicStudentRoutes, "private": privateStudentRoutes
@@ -99,7 +107,8 @@ const directorRoutes = {
 }
 
 export const getUserNav = (path: string, loggedRol: string | undefined) => {
-    const [routes, rolRoute] = path.startsWith("/director") ? [directorRoutes, "Director"] : [studentRoutes, "Alumno"];
+    console.log("path", path, "rol", loggedRol);
+    const [routes, rolRoute] = path.startsWith("/director") ? [directorRoutes, "Directivo"] : [studentRoutes, "Alumno"];
     return routes[loggedRol === rolRoute ? "private" : "public"]
 }
 

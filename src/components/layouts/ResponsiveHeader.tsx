@@ -1,5 +1,5 @@
-import {Heading, Box, Header, Button, Anchor} from 'grommet';
-import {Logout as LogoutIcon} from 'grommet-icons';
+import {Heading, Box, Header, Button, Anchor, Nav, ResponsiveContext, Menu} from 'grommet';
+import {Logout as LogoutIcon, Menu as MenuIcon} from 'grommet-icons';
 import {useAuth} from "../../state/auth";
 import {useLocation, useNavigate} from "react-router-dom";
 import {DIRECTOR_ROUTE, getUserNav, LOGIN_ROUTE} from "../../utils/routes";
@@ -10,12 +10,9 @@ export const ResponsiveHeader = () => {
     const location = useLocation();
 
     return (
-        <Header
-            background="brand"
-            pad={{horizontal: 'medium'}}
-        >
-            <Box direction="row" align="center" gap="medium">
-                <Heading level='3'>UNQUE</Heading>
+        <Header background="brand" pad="medium">
+            <Box direction="row" align="center" gap="small">
+                <Heading level={3} margin="none">UNQUE</Heading>
                 {auth?.isLogged &&
                     <Button
                         icon={<LogoutIcon/>}
@@ -26,18 +23,32 @@ export const ResponsiveHeader = () => {
                         }}
                     />}
                 {auth?.isLogged &&
-                    <Heading level="5">{auth?.user}</Heading>}
+                    <Heading level={5} margin="none">{auth?.user}</Heading>}
             </Box>
-            <Box justify="end" direction="row" gap="medium">
-                {getUserNav(location.pathname, auth?.rol).map(({name, to}) => {
-                    return <Anchor
-                        key={name}
-                        color="text"
-                        label={name}
-                        disabled={location.pathname === "/" + to}
-                        onClick={() => navigate(to)}/>
-                })}
-            </Box>
+            <ResponsiveContext.Consumer>
+                {size =>
+                    size === "small" ?
+                        <Menu
+                            icon={<MenuIcon/>}
+                            items={getUserNav(location.pathname, auth?.rol).map(({name, to}) => {
+                                return ({
+                                    label: name,
+                                    onClick: () => navigate(to),
+                                    disabled: location.pathname === "/" + to
+                                })
+                            })}
+                        /> :
+                        <Nav direction="row">
+                            {getUserNav(location.pathname, auth?.rol).map(({name, to}) => {
+                                return <Anchor
+                                    key={name}
+                                    color="text"
+                                    label={name}
+                                    disabled={location.pathname === "/" + to}
+                                    onClick={() => navigate(to)}/>
+                            })}
+                        </Nav>}
+            </ResponsiveContext.Consumer>
         </Header>
     );
 };
