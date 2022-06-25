@@ -8,12 +8,11 @@ type GlobalNotificatorProps = {
 }
 
 // los parametros nunca van a estar vacios, es un problema de usar context
-// eslint-disable-line
-const GlobalNotificator = ({notification = {}, onCloseNotification = () => {}}: GlobalNotificatorProps) => {
+const GlobalNotificator = ({notification = {}, onCloseNotification}: GlobalNotificatorProps) => {
 
         useEffect(() => {
                 const timer = setTimeout(() => {
-                    onCloseNotification();
+                    onCloseNotification && onCloseNotification();
                 }, 10000);
                 return () => {
                     clearTimeout(timer);
@@ -25,7 +24,7 @@ return !isEmpty(notification) ?
     <Notification
         global
         {...notification}
-        onClose={onCloseNotification}
+        onClose={() => onCloseNotification && onCloseNotification()}
     /> :
     <></>
 
