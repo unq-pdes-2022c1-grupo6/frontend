@@ -4,6 +4,7 @@ import {AxiosResponseHeaders} from "axios";
 import {useNavigate} from "react-router-dom";
 import {CONFIRM_ROUTE, HOME_ROUTE, LOGIN_ROUTE} from "../utils/routes";
 import {useAuth} from "../state/auth";
+import {useGlobalNotificator} from "../state/notificator";
 
 export interface StudentAccount {
     dni: string,
@@ -42,11 +43,13 @@ const postRegister = (newRegister: StudentAccount): Promise<void> => {
 export const useRegisterStudent = (dni: string) => {
     const auth = useAuth();
     const navigate = useNavigate();
+    const notificator = useGlobalNotificator();
 
     return useMutation(postRegister,{
         onSuccess: () => {
             auth?.setStudent(dni);
             navigate("/" + CONFIRM_ROUTE);
+            notificator?.setNotification("Cuenta creada correctamente, ahora solo falta confirmar!");
         }
     });
 };
@@ -58,10 +61,12 @@ const postConfirmation = (confirmation: ConfirmationInfo): Promise<void> => {
 
 export const useConfirm = () => {
     const navigate = useNavigate();
+    const notificator = useGlobalNotificator();
 
     return useMutation(postConfirmation,{
         onSuccess: () => {
             navigate(LOGIN_ROUTE);
+            notificator?.setNotification("Cuenta confirmada correctamente, ya puede iniciar sesión normalmente")
         }
     });
 };

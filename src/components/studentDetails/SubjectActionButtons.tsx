@@ -1,5 +1,5 @@
 import {Box, Button, Text} from 'grommet';
-import {CourseState} from "../../model/course";
+import {CourseState} from "../../services/dtos/requestDTO";
 
 export type ActionsType = {
     onUpdateRequest: () => void,

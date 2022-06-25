@@ -1,7 +1,7 @@
 import {Box, Button, RadioButton} from "grommet";
 import {Checkmark, Close} from "grommet-icons";
 import {ActionsType} from "./SubjectActionButtons";
-import {CourseState} from "../../model/course";
+import {CourseState} from "../../services/dtos/requestDTO";
 
 interface CourseActionRadioI extends ActionsType {
     value: string,

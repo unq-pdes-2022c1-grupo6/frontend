@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {DataTable, Text} from "grommet";
 import SubjectActionButtons from "./SubjectActionButtons";
 import CourseActionRadio from "./CourseActionRadio";
-import {RequestStatusText} from "./SubjectStatusText";
+import {RequestStatusText} from "./StatusText";
 
 export interface Course {
     id: string,
