@@ -2,10 +2,10 @@ import React, {useState} from 'react';
 import {Page, PageContent, Tabs, Tab, Box} from "grommet";
 import StudentInfoDetails from "../components/studentDetails/StudentInfoDetails";
 import SubjectsRequestTable, {Course} from "../components/studentDetails/SubjectsRequestTable";
-import {CourseState} from "../model/course";
 import map from "lodash/map";
 import TextAreaForm from "../components/TextAreaForm";
 import StudentAcademicRecordTable from "../components/studentDetails/StudentAcademicRecordTable";
+import {CourseState} from "../services/dtos/requestDTO";
 
 const student = {
     nombre: "Nombre Apellido",

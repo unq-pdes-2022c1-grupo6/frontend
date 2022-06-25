@@ -50,3 +50,9 @@ export const getSelections = (requestDTO: RequestDTO): RequestFormType => {
     const selectionsS = requestDTO.solicitudes.map(c => c.comision.id)
     return [new Set(selectionsG), new Set(selectionsS)]
 }
+
+export enum CourseState {
+    PENDIENTE = "PENDIENTE",
+    APROBADO = "APROBADO",
+    RECHAZADO = "RECHAZADO",
+}

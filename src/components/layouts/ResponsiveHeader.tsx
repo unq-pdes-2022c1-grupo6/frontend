@@ -1,8 +1,8 @@
 import {Heading, Box, Header, Button, Anchor} from 'grommet';
 import {Logout as LogoutIcon} from 'grommet-icons';
-import {useAuth} from "../state/auth";
+import {useAuth} from "../../state/auth";
 import {useLocation, useNavigate} from "react-router-dom";
-import {getStudentNav, LOGIN_ROUTE} from "../utils/routes";
+import {getStudentNav, LOGIN_ROUTE} from "../../utils/routes";
 
 export const ResponsiveHeader = () => {
     const auth = useAuth();

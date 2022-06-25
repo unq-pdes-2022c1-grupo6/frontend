@@ -5,11 +5,9 @@ import App from './App';
 import {
     ACADEMIC_RECORDS_ROUTE, CONFIRM_ROUTE, CREATE_REQUEST_ROUTE, EDIT_REQUEST_ROUTE, HOME_ROUTE,
     REGISTER_ROUTE, REQUEST_ROUTE, STUDENT_REQUEST_ROUTE, SUBJECTS_ASSIGNATIONS_ROUTE,
-    SUBJECTS_REQUEST_ROUTE,
     SUBJECTS_REQUESTS_ROUTE,
     SUBJECTS_ROUTE
 } from "./utils/routes";
-import SubjectsRequest from "./pages/SubjectsRequest";
 import Subjects from "./pages/Subjects";
 import AcademicRecords from "./pages/AcademicRecords";
 import SubjectsRequestsPage from "./pages/SubjectsRequestsPage";
@@ -42,7 +40,6 @@ root.render(
                             <Route path={CREATE_REQUEST_ROUTE} element={<CreateRequestPage/>}/>
                             <Route path={EDIT_REQUEST_ROUTE} element={<EditRequestPage/>}/>
                         </Route>
-                        <Route path={SUBJECTS_REQUEST_ROUTE} element={<SubjectsRequest/>}/>
                         <Route path={SUBJECTS_ROUTE} element={<Subjects/>}/>
                         <Route path={ACADEMIC_RECORDS_ROUTE} element={<AcademicRecords/>}/>
                         <Route path={SUBJECTS_REQUESTS_ROUTE} element={<SubjectsRequestsPage/>}/>

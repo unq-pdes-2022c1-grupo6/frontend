@@ -2,7 +2,7 @@ import React from "react";
 import {theme} from "./assets/theme";
 import {Box, Grommet} from 'grommet';
 import {Outlet} from "react-router-dom";
-import ResponsiveHeader from "./components/ResponsiveHeader";
+import ResponsiveHeader from "./components/layouts/ResponsiveHeader";
 import {MutationCache, QueryCache, QueryClient, QueryClientProvider} from 'react-query'
 import {AxiosError} from "axios";
 import GlobalNotificator from "./components/GlobalNotificator";
