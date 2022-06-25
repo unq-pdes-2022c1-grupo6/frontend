@@ -1,5 +1,16 @@
 import {useState} from "react";
-import {Accordion, AccordionPanel, Box, Button, CheckBoxGroup, CheckBoxProps, Page, PageContent, Text} from "grommet";
+import {
+    Accordion,
+    AccordionPanel,
+    Box,
+    Button,
+    CheckBoxGroup,
+    CheckBoxProps,
+    Page,
+    PageContent,
+    Paragraph,
+    Text
+} from "grommet";
 import {formatSubjectCourse, SubjectDTO} from "../services/dtos/subjectDTO";
 import {RequestFormType} from "../services/requestService";
 import LoadingButton from "./LoadingButton";
@@ -14,10 +25,12 @@ type RequestFormProps = {
 
 
 const RequestForm = ({selections, options = [], loading, onSubmit, onCancel}: RequestFormProps) => {
-    const first = selections[0].size === 0 && selections[1].size === 0;
+    const creating = selections[0].size === 0 && selections[1].size === 0;
     const [selectionsG, setSelectionsG] = useState(selections[0]);
     const [selectionsS, setSelectionsS] = useState(selections[1]);
     const requestForm: RequestFormType = [selectionsG, selectionsS];
+    const [openedAccordions, setOpenedAccordions] = useState([0]);
+
 
     const getSelection = (id: number) => {
         const selecG = selectionsG.has(id) ? ["G"] : undefined
@@ -43,9 +56,18 @@ const RequestForm = ({selections, options = [], loading, onSubmit, onCancel}: Re
 
     return <Page kind="narrow" margin={{vertical: "medium"}}>
         <PageContent gap="medium" justify="center">
-            <Text> G: Comisiones inscriptas por el Guaraní S: Comisiones solicitando sobrecupo </Text>
+            <Paragraph fill>
+                Elija las comisiones que <b>pueda cursar este cuatrimestre</b>. Puede elegir <b>más de una comisión</b> en una misma
+                materia. También, confirme <b>las comisiones inscriptas por el Guaraní</b>. Serán usadas para chequear conflicto
+                de horarios y serán verificadas en el sistema de Guaraní.
+            </Paragraph>
+            <Text color="neutral-1"> G: Comisiones inscriptas por el Guaraní S: Comisiones solicitando sobrecupo </Text>
             <Box gap="medium">
-                <Accordion multiple gap="medium">
+                <Accordion
+                    activeIndex={openedAccordions}
+                    onActive={(newActiveIndex) => setOpenedAccordions(newActiveIndex)}
+                    multiple
+                    gap="medium">
                     {options.map((m) => {
                         return <AccordionPanel label={`${m.nombre} (${m.codigo})`} key={m.codigo}>
                             <Box height="xsmall">
@@ -64,13 +86,14 @@ const RequestForm = ({selections, options = [], loading, onSubmit, onCancel}: Re
                         </AccordionPanel>
                     })}
                 </Accordion>
+                {options &&
                 <Box direction="row" justify="center" gap="large">
                     <LoadingButton onClick={() => onSubmit(requestForm)}
                                    loading={loading}
-                                   label={first? "Crear": "Editar"}
+                                   label={creating? "Crear": "Editar"}
                                    primary/>
                     <Button disabled={loading} label="Cancelar" onClick={onCancel}/>
-                </Box>
+                </Box>}
             </Box>
         </PageContent>
     </Page>

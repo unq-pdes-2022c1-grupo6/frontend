@@ -15,7 +15,7 @@ const StudentHomePage = () => {
     if (currentSemesterQuery.isLoading) {
         return <Box align="center" direction="row" gap="small" pad="small">
             <Spinner/>
-            <Text>Loading...</Text>
+            <Text>Cargando...</Text>
         </Box>
     }
 
