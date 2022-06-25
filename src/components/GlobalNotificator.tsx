@@ -3,11 +3,11 @@ import {useEffect} from "react";
 import isEmpty from "lodash/isEmpty";
 
 type GlobalNotificatorProps = {
-    notification: NotificationProps,
-    onCloseNotification: () => void
+    notification?: NotificationProps,
+    onCloseNotification?: () => void
 }
 
-const GlobalNotificator = ({notification, onCloseNotification}: GlobalNotificatorProps) => {
+const GlobalNotificator = ({notification = {}, onCloseNotification = () => {}}: GlobalNotificatorProps) => {
 
         useEffect(() => {
                 let timer = setTimeout(() => {

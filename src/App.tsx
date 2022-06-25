@@ -8,11 +8,11 @@ import {AxiosError} from "axios";
 import GlobalNotificator from "./components/GlobalNotificator";
 import {AuthProvider} from "./state/auth";
 import {handleGlobally} from "./utils/validators";
-import {useNotification} from "./state/notificator";
+import {useGlobalNotificator} from "./state/notificator";
 
 
 const App = () => {
-    const {notification, setNotification, deleteNotification} = useNotification();
+    const notificator = useGlobalNotificator();
 
     const onError = (error: unknown) => {
         if (error instanceof AxiosError) {
@@ -20,7 +20,7 @@ const App = () => {
                 error.response.status === 400 &&
                 error.response.data && handleGlobally(error)) {
                 const {error: err, message} = error.response.data;
-                setNotification(`${err} : ${message}`, "critical");
+                notificator?.setNotification(`${err} : ${message}`, "critical");
             }
         }
     }
@@ -44,13 +44,13 @@ const App = () => {
             <Grommet theme={theme} full>
                 <ResponsiveHeader/>
                 <GlobalNotificator
-                    notification={notification}
-                    onCloseNotification={deleteNotification}
+                    notification={notificator?.notification}
+                    onCloseNotification={notificator?.deleteNotification}
                 />
                 <QueryClientProvider client={queryClient}>
-                    <Outlet context={{setNotification}}/>
+                    <Outlet/>
                 </QueryClientProvider>
-                <Box pad ="large">
+                <Box pad="large">
                 </Box>
             </Grommet>
         </AuthProvider>

@@ -1,10 +1,19 @@
-import {useState} from "react";
+import {createContext, ReactNode, useContext, useState} from "react";
 import {NotificationProps, StatusType} from "grommet";
-import {useOutletContext} from "react-router-dom";
 
 
-export const useNotification = () => {
-    const [notif, setNotif] = useState<NotificationProps>({});
+export interface GlobalNotificatorType {
+    notification: NotificationProps,
+    setNotification: (message: string, status?: StatusType) => void,
+    deleteNotification: () => void
+}
+
+
+const GlobalNotificatorContext = createContext<GlobalNotificatorType | null>(null);
+
+
+const GlobalNotificatorProvider = ({children}: { children: ReactNode }) => {
+    const [notification, setNotif] = useState<NotificationProps>({});
 
     const setNotification = (message: string, status: StatusType = "normal") => {
         setNotif({message, status});
@@ -12,11 +21,12 @@ export const useNotification = () => {
 
     const deleteNotification = () => setNotif({});
 
-    return {notification: notif, setNotification, deleteNotification}
+    return <GlobalNotificatorContext.Provider value={{notification, setNotification, deleteNotification}}>
+        {children}
+    </GlobalNotificatorContext.Provider>
 }
 
 
-export const useGlobalNotificator = () => {
-    return useOutletContext<{ setNotification: (message: string, status: StatusType) => void }>();
-}
+const useGlobalNotificator = () => useContext(GlobalNotificatorContext);
 
+export {GlobalNotificatorProvider, useGlobalNotificator}

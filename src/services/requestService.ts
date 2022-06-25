@@ -6,6 +6,7 @@ import isEqual from "lodash/isEqual";
 import {REQUEST_ROUTE} from "../utils/routes";
 import {useNavigate} from "react-router-dom";
 import {useRequest} from "../components/layouts/PrivateStudentLayout";
+import {useGlobalNotificator} from "../state/notificator";
 
 
 export type RequestFormType = [Set<number>, Set<number>];
@@ -30,44 +31,41 @@ export const isRequestNotFound = (error: unknown) => {
     });
 }
 
+export const useCreateUpdateRequest = (
+    axiosRequest: ([selectionG, selectionS]: RequestFormType) => Promise<RequestDTO>,
+    successMessage: string
+) => {
+    const queryClient = useQueryClient();
+    const navigate = useNavigate();
+    const [, setRequest] = useRequest();
+    const notificator = useGlobalNotificator();
+
+    return useMutation(axiosRequest, {
+        onSuccess: (data) => {
+            queryClient.setQueryData(["request"], data);
+            setRequest(data);
+            navigate("/" + REQUEST_ROUTE);
+            notificator?.setNotification(successMessage);
+        }
+    })
+}
+
+const patchRequest = ([selectionG, selectionS]: RequestFormType): Promise<RequestDTO> => {
+    const body = {comisiones: Array.from(selectionS), comisionesInscripto: Array.from(selectionG)};
+    return axiosInstance.patch("/alumno/solicitudes", body).then((response) => response.data)
+}
+
+export const useEditRequest = () => {
+    return useCreateUpdateRequest(patchRequest, "Solicitud actualizada correctamente!");
+}
+
 const postRequest = ([selectionG, selectionS]: RequestFormType): Promise<RequestDTO> => {
     const body = {comisiones: Array.from(selectionS), comisionesInscripto: Array.from(selectionG)};
     return axiosInstance.post("/alumno/solicitudes", body).then((response) => response.data)
 }
 
-
 export const useCreateRequest = () => {
-    const queryClient = useQueryClient();
-    const navigate = useNavigate();
-    const [, setRequest] = useRequest();
-
-    return useMutation(postRequest, {
-        onSuccess: (data) => {
-            queryClient.setQueryData(["request"], data);
-            setRequest(data);
-            navigate("/" + REQUEST_ROUTE);
-        }
-    })
-}
-
-const editRequest = ([selectionG, selectionS]: RequestFormType): Promise<RequestDTO> => {
-    const body = {comisiones: Array.from(selectionS), comisionesInscripto: Array.from(selectionG)};
-    return axiosInstance.patch("/alumno/solicitudes", body).then((response) => response.data)
-}
-
-
-export const useEditRequest = () => {
-    const queryClient = useQueryClient();
-    const navigate = useNavigate();
-    const [, setRequest] = useRequest();
-
-    return useMutation(editRequest, {
-        onSuccess: (data) => {
-            queryClient.setQueryData(["request"], data);
-            setRequest(data);
-            navigate("/" + REQUEST_ROUTE);
-        }
-    })
+    return useCreateUpdateRequest(postRequest, "Solicitud creada correctamente!");
 }
 
 const deleteRequest = (): Promise<void> => {
@@ -77,12 +75,14 @@ const deleteRequest = (): Promise<void> => {
 export const useDeleteRequest = () => {
     const queryClient = useQueryClient();
     const [, setRequest] = useRequest();
+    const notificator = useGlobalNotificator();
 
     return useMutation(deleteRequest, {
         onSuccess: () => {
             queryClient.removeQueries(["request"]);
             queryClient.refetchQueries(["request"]);
             setRequest(undefined);
+            notificator?.setNotification("Solicitud borrada correctamente!");
         }
     })
 }
