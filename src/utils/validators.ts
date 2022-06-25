@@ -20,6 +20,8 @@ export const validateDNI = {regexp: /^\d{1,3}\.?\d{3}\.?\d{3}$/, message: "DNI I
 
 export const validateNumber = {regexp: /^\d+$/, message: "Codigo Invalido"};
 
+export const validateEmail = {regexp: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/, message: "Email Invalido"};
+
 export const handleGlobally = (error: unknown) => {
     const handleLocallyCheckers =  [isRequestNotFound];
     return !handleLocallyCheckers.some(checker =>  checker(error))

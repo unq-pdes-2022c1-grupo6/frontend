@@ -3,35 +3,39 @@ import {AxiosResponseHeaders} from "axios";
 
 
 export interface AuthContextType {
-    student: string | undefined,
-    setStudent: (dni: string) => void,
-    isStudentLogged: boolean,
-    loginStudent: (dni: string, headers: AxiosResponseHeaders) => void,
+    user: string,
+    rol: string,
+    isLogged: boolean,
+    login: (user: string, headers: AxiosResponseHeaders) => void,
     logout: () => void
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
-const AuthProvider = ({ children }: { children: ReactNode }) => {
-    const [student, setStudent] = useState("");
-    const [isStudentLogged, setIsStudentLogged] = useState(false);
+const AuthProvider = ({children}: { children: ReactNode }) => {
+    const [user, setUser] = useState("");
+    const [rol, setRol] = useState(""); // Directivo | Alumno | ""
+    const [isLogged, setIsLogged] = useState(false);
 
-    const loginStudent = (dni: string, headers: AxiosResponseHeaders) => {
-        setStudent(dni);
+    const login = (user: string, headers: AxiosResponseHeaders) => {
         const token = headers.authorization;
         const rol = headers.rol;
         if (token && rol) {
-            localStorage.setItem("login", JSON.stringify({token, rol}));
-            setIsStudentLogged(true);
+            localStorage.setItem("login", JSON.stringify({user, token, rol}));
+            setIsLogged(true);
+            setRol(rol);
+            setUser(user);
         }
     }
 
     const logout = () => {
         localStorage.clear();
-        setIsStudentLogged(false);
+        setIsLogged(false);
+        setRol("");
+        setUser("");
     }
 
-    return <AuthContext.Provider value={{ student, setStudent, isStudentLogged, loginStudent, logout }}>
+    return <AuthContext.Provider value={{rol, user, isLogged, login, logout}}>
         {children}
     </AuthContext.Provider>;
 
