@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import App from './App';
 import {
-    ACADEMIC_RECORDS_ROUTE, CONFIRM_ROUTE, CREATE_REQUEST_ROUTE, EDIT_REQUEST_ROUTE, HOME_ROUTE,
+    ACADEMIC_RECORDS_ROUTE, CONFIRM_ROUTE, CREATE_REQUEST_ROUTE, DIRECTOR_ROUTE, EDIT_REQUEST_ROUTE, HOME_ROUTE,
     REGISTER_ROUTE, REQUEST_ROUTE, STUDENT_REQUEST_ROUTE, SUBJECTS_ASSIGNATIONS_ROUTE,
     SUBJECTS_REQUESTS_ROUTE,
     SUBJECTS_ROUTE
@@ -22,6 +22,10 @@ import RequestPage from "./pages/student/request/RequestPage";
 import CreateRequestPage from "./pages/student/request/CreateRequestPage";
 import EditRequestPage from "./pages/student/request/EditRequestPage";
 import {GlobalNotificatorProvider} from "./state/notificator";
+import DirectorLayout from "./components/layouts/DirectorLayout";
+import LoginDirectorPage from "./pages/director/LoginDirectorPage";
+import PrivateDirectorLayout from "./components/layouts/PrivateDirectorLayout";
+import DirectorHomePage from "./pages/director/DirectorHomePage";
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
@@ -39,6 +43,12 @@ root.render(
                             <Route path={REQUEST_ROUTE} element={<RequestPage/>}/>
                             <Route path={CREATE_REQUEST_ROUTE} element={<CreateRequestPage/>}/>
                             <Route path={EDIT_REQUEST_ROUTE} element={<EditRequestPage/>}/>
+                        </Route>
+                        <Route path={DIRECTOR_ROUTE} element={<DirectorLayout/>}>
+                            <Route index element={<LoginDirectorPage/>}/>
+                            <Route element={<PrivateDirectorLayout/>}>
+                                <Route path={HOME_ROUTE} element={<DirectorHomePage/>}/>
+                            </Route>
                         </Route>
                         <Route path={SUBJECTS_ROUTE} element={<Subjects/>}/>
                         <Route path={ACADEMIC_RECORDS_ROUTE} element={<AcademicRecords/>}/>

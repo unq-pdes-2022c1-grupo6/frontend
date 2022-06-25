@@ -2,7 +2,7 @@ import {Heading, Box, Header, Button, Anchor} from 'grommet';
 import {Logout as LogoutIcon} from 'grommet-icons';
 import {useAuth} from "../../state/auth";
 import {useLocation, useNavigate} from "react-router-dom";
-import {getStudentNav, LOGIN_ROUTE} from "../../utils/routes";
+import {DIRECTOR_ROUTE, getUserNav, LOGIN_ROUTE} from "../../utils/routes";
 
 export const ResponsiveHeader = () => {
     const auth = useAuth();
@@ -16,25 +16,25 @@ export const ResponsiveHeader = () => {
         >
             <Box direction="row" align="center" gap="medium">
                 <Heading level='3'>UNQUE</Heading>
-                {auth?.isStudentLogged &&
+                {auth?.isLogged &&
                     <Button
                         icon={<LogoutIcon/>}
                         hoverIndicator
                         onClick={() => {
-                            auth?.logout()
-                            navigate(LOGIN_ROUTE)
+                            auth?.logout();
+                            navigate(auth?.rol === "Directivo" ? "/" + DIRECTOR_ROUTE : LOGIN_ROUTE)
                         }}
                     />}
-                {auth?.isStudentLogged &&
-                    <Heading level="5"> DNI {auth?.student}</Heading>}
+                {auth?.isLogged &&
+                    <Heading level="5">{auth?.user}</Heading>}
             </Box>
             <Box justify="end" direction="row" gap="medium">
-                {getStudentNav(auth?.isStudentLogged).map(({name, to}) => {
+                {getUserNav(location.pathname, auth?.rol).map(({name, to}) => {
                     return <Anchor
                         key={name}
                         color="text"
                         label={name}
-                        disabled={location.pathname + location.search === "/" + to}
+                        disabled={location.pathname === "/" + to}
                         onClick={() => navigate(to)}/>
                 })}
             </Box>

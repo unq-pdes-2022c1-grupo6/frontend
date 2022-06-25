@@ -3,23 +3,20 @@ import {minLength, validateDNI} from "../../utils/validators";
 import PasswordField from "../../components/PasswordField";
 import {CONFIRM_ROUTE, REGISTER_ROUTE} from "../../utils/routes";
 import {useNavigate} from "react-router-dom";
-import {StudentAccount, useLoginStudent} from "../../services/authService";
+import {Account, useLoginStudent} from "../../services/authService";
 import {useState} from "react";
 import LoadingButton from "../../components/LoadingButton";
-import {useAuth} from "../../state/auth";
 
 const LoginStudentPage = () => {
-    const auth = useAuth();
     const [studentAccount, setStudentAccount] = useState(() => ({
-        dni: auth?.student || "",
-        contrasenia: ""
+        user: "", password: ""
     }))
     const navigate = useNavigate();
-    const login = useLoginStudent(studentAccount.dni);
+    const login = useLoginStudent(studentAccount.user);
 
     return <Box align="center" justify="center" margin={{top: "large"}}>
         <Box width="medium">
-            <Form<StudentAccount>
+            <Form<Account>
                 messages={{required: "Requerido*"}}
                 value={studentAccount}
                 onChange={(nextValue) => setStudentAccount(nextValue)}
@@ -27,14 +24,14 @@ const LoginStudentPage = () => {
             >
                 <FormField
                     label="DNI"
-                    name="dni"
+                    name="user"
                     validate={validateDNI}
                     required
                 />
                 <PasswordField
                     label="Contraseña"
                     validate={[minLength(6)]}
-                    name="contrasenia"
+                    name="password"
                     required
                 />
                 <Box gap="medium" margin="medium" align="center">

@@ -3,12 +3,12 @@ import {validateDNI, validateNumber} from "../../utils/validators";
 import LoadingButton from "../../components/LoadingButton";
 import {useState} from "react";
 import {ConfirmationInfo, useConfirm} from "../../services/authService";
-import {useAuth} from "../../state/auth";
+import {useSearchParams} from "react-router-dom";
 
 const ConfirmPage = () => {
-    const auth = useAuth();
+    const[searchParams] = useSearchParams();
     const [confirmForm, setConfirmForm] = useState(() => ({
-        dni: auth?.student || "",
+        dni: searchParams.get("dni") || "",
         codigo: ""
     }))
     const confirm = useConfirm();

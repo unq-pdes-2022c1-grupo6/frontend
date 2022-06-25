@@ -6,9 +6,9 @@ import {CONFIRM_ROUTE, HOME_ROUTE, LOGIN_ROUTE} from "../utils/routes";
 import {useAuth} from "../state/auth";
 import {useGlobalNotificator} from "../state/notificator";
 
-export interface StudentAccount {
-    dni: string,
-    contrasenia: string
+export interface Account {
+    user: string,
+    password: string
 }
 
 export interface ConfirmationInfo {
@@ -16,8 +16,8 @@ export interface ConfirmationInfo {
     codigo: string
 }
 
-const postLoginStudent = (newLogin: StudentAccount): Promise<AxiosResponseHeaders> => {
-    const data = {...newLogin, dni: parseInt(newLogin.dni)};
+const postLoginStudent = (newLogin: Account): Promise<AxiosResponseHeaders> => {
+    const data = {...newLogin, dni: parseInt(newLogin.user)};
     return  axiosInstance.post('/auth/alumno/login', data).then((response) => response.headers)
 };
 
@@ -27,29 +27,30 @@ export const useLoginStudent = (dni: string) => {
 
     return useMutation(postLoginStudent,{
         onSuccess: (headers) => {
-            auth?.loginStudent(dni, headers);
+            auth?.login(dni, headers);
             navigate("/" + HOME_ROUTE)
         }
     });
 };
 
-const postRegister = (newRegister: StudentAccount): Promise<void> => {
+const postRegister = (newRegister: Account): Promise<void> => {
     const data = {...newRegister,
-        dni: parseInt(newRegister.dni),
-        confirmacionContrasenia: newRegister.contrasenia};
+        dni: parseInt(newRegister.user),
+        confirmacionContrasenia: newRegister.password};
     return  axiosInstance.post('/auth/alumno/registrar', data).then((response) => response.data)
 };
 
 export const useRegisterStudent = (dni: string) => {
-    const auth = useAuth();
     const navigate = useNavigate();
     const notificator = useGlobalNotificator();
 
     return useMutation(postRegister,{
         onSuccess: () => {
-            auth?.setStudent(dni);
-            navigate("/" + CONFIRM_ROUTE);
-            notificator?.setNotification("Cuenta creada correctamente, ahora solo falta confirmar!");
+            navigate({
+                pathname: "/" + CONFIRM_ROUTE,
+                search: "?dni=" + dni,
+            });
+            notificator?.setNotification("Cuenta creada correctamente! Ahora solo falta confirmar");
         }
     });
 };
@@ -70,3 +71,20 @@ export const useConfirm = () => {
         }
     });
 };
+
+const postLoginDirector = (directorLogin: Account): Promise<AxiosResponseHeaders> => {
+    const body = {correo: directorLogin.user, contrasenia: directorLogin.password};
+    return  axiosInstance.post('/auth/directivo/login', body).then((response) => response.headers)
+}
+
+export const useLoginDirector = (email: string) => {
+    const auth = useAuth();
+    const navigate = useNavigate();
+
+    return useMutation(postLoginDirector,{
+        onSuccess: (headers) => {
+            auth?.login(email, headers);
+            navigate(HOME_ROUTE);
+        }
+    });
+}

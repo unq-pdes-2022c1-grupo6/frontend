@@ -9,10 +9,10 @@ const PrivateStudentLayout = () => {
     const [request, setRequest] = useState<RequestDTO| undefined>();
     const auth = useAuth();
 
-    if (!auth?.isStudentLogged)
-        return <Navigate to={LOGIN_ROUTE}/>
+    if (auth?.isLogged && auth?.rol === "Alumno")
+        return <Outlet context={[request, setRequest]}/>
 
-    return <Outlet context={[request, setRequest]}/>
+    return <Navigate to={LOGIN_ROUTE}/>
 
 };
 

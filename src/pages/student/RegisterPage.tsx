@@ -1,4 +1,4 @@
-import {StudentAccount, useRegisterStudent} from "../../services/authService";
+import {Account, useRegisterStudent} from "../../services/authService";
 import {Box, Form, FormField} from "grommet";
 import {minLength, validateDNI} from "../../utils/validators";
 import PasswordField from "../../components/PasswordField";
@@ -7,14 +7,14 @@ import LoadingButton from "../../components/LoadingButton";
 
 const RegisterPage = () => {
     const [studentAccount, setStudentAccount] = useState({
-        dni: "",
-        contrasenia: ""
+        user: "",
+        password: ""
     })
-    const registerStudent = useRegisterStudent(studentAccount.dni);
+    const registerStudent = useRegisterStudent(studentAccount.user);
 
     return <Box align="center" justify="center" margin={{top: "large"}}>
         <Box width="medium">
-            <Form<StudentAccount>
+            <Form<Account>
                 messages={{required: "Requerido*"}}
                 value={studentAccount}
                 onChange={(nextValue) => setStudentAccount(nextValue)}
@@ -22,14 +22,14 @@ const RegisterPage = () => {
             >
                 <FormField
                     label="DNI"
-                    name="dni"
+                    name="user"
                     validate={validateDNI}
                     required
                 />
                 <PasswordField
                     label="Nueva Contraseña"
                     validate={[minLength(6)]}
-                    name="contrasenia"
+                    name="password"
                     required
                 />
                 <Box gap="medium" margin={{top: "medium"}} align="center">
