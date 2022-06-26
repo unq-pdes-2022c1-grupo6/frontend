@@ -24,13 +24,6 @@ export const useCurrentSemesterQuery = () => {
         })
 }
 
-const getSemester = (anio: number, semestre: string): Promise<SemesterDTO> => {
-    const params = {anio, semestre};
-    console.log("fetch semester");
-    return axiosInstance.get("/cuatrimestres", {params})
-        .then((response) => response.data)
-}
-
 export const isSemesterNotFound = (error: unknown) => {
     return error instanceof AxiosError && isEqual(error.response?.data, {
         error: "ExcepcionUNQUE",
@@ -38,12 +31,21 @@ export const isSemesterNotFound = (error: unknown) => {
     });
 }
 
-export const useSemesterQuery = (year: number, semester: string) => {
-    return useQuery(["semester"],
-        () => getSemester(year, semester))
+const getSemester = (anio: number, semestre: string): Promise<SemesterDTO> => {
+    const params = {anio, semestre};
+    return axiosInstance.get("/cuatrimestres", {params})
+        .then((response) => response.data)
+}
+
+export const useSemesterQuery = (year: number, semester: string, setTerm: (term: string[]) => void) => {
+    return useQuery(["enrollment", year, semester],
+        () => getSemester(year, semester),
+        {onSuccess: (data) => setTerm([data.inicioInscripciones, data.finInscripciones])}
+    )
 }
 
 const postSemester = ([inicioInscripciones, finInscripciones]: string[]): Promise<void> => {
+    console.log(inicioInscripciones, finInscripciones);
     return axiosInstance.post('/comisiones/oferta', {inicioInscripciones, finInscripciones})
         .then((response) => response.data)
 }
@@ -53,9 +55,9 @@ export const useUpdateSemesterQuery = (year: number, semester: string) => {
     const queryClient = useQueryClient();
 
     return useMutation(postSemester, {
-        onSuccess: () => queryClient.invalidateQueries(["semester"], {refetchInactive: true})
-                .then(() => {
-                    notificator?.setNotification("Plazo fijado exitosamente!");
-                })
+        onSuccess: () => queryClient.invalidateQueries(["enrollment", year, semester])
+            .then(() => {
+            notificator?.setNotification("Plazo fijado exitosamente!");
+        })
     });
 }

@@ -1,6 +1,6 @@
 import {Box, Button, DateInput, Form, FormField} from "grommet";
 import LoadingButton from "./LoadingButton";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {formatDate} from "../model/semester";
 
 type TermFormProps = {
@@ -9,8 +9,14 @@ type TermFormProps = {
     loading: boolean
 }
 
+type TermFormType = { term: string[] };
+
 const TermForm = ({term, onSubmit, loading}: TermFormProps) => {
-    const [termForm, setTermForm] = useState({term});
+    const [termForm, setTermForm] = useState<TermFormType>({term: []});
+
+    useEffect(() => {
+        setTermForm({term});
+    },[term])
 
     const getTermLabel = () => {
         return termForm.term[0] && termForm.term[1] ?
@@ -20,7 +26,7 @@ const TermForm = ({term, onSubmit, loading}: TermFormProps) => {
 
     const onReset = () => setTermForm({term: term})
 
-    return <Form<{ term: string[] }>
+    return <Form<TermFormType>
         value={termForm}
         onChange={setTermForm}
         onReset={onReset}
@@ -30,7 +36,7 @@ const TermForm = ({term, onSubmit, loading}: TermFormProps) => {
                 name="term"
                 buttonProps={{label: getTermLabel()}}
                 dropProps={{align: {left: "right"}}}
-                calendarProps={{size: "medium"}}
+                calendarProps={{locale: "es-AR", size: "medium"}}
             />
         </FormField>
         <Box direction="row" gap="large">

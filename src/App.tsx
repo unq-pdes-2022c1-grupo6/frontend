@@ -9,7 +9,7 @@ import GlobalNotificator from "./components/GlobalNotificator";
 import {AuthProvider} from "./state/auth";
 import {handleGlobally} from "./utils/validators";
 import {useGlobalNotificator} from "./state/notificator";
-import { ReactQueryDevtools } from 'react-query/devtools';
+
 
 const createQueryClient = (onError: (error: unknown) => void) => {
     return new QueryClient({
@@ -46,7 +46,6 @@ const App = () => {
                     onCloseNotification={notificator?.deleteNotification}
                 />
                 <QueryClientProvider client={createQueryClient(onError)}>
-                    <ReactQueryDevtools initialIsOpen={true} />
                     <Outlet/>
                 </QueryClientProvider>
                 <Box pad="large">
