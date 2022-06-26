@@ -1,5 +1,22 @@
 import {SemesterDTO} from "../services/semesterService";
 
+
+export const formatSemester = (semester: string) => semester === "S1"? "1º": "2º";
+
+export const formatDate = (date: Date) => {
+    return date.toLocaleDateString('es-AR',
+        { weekday: 'long', month: 'long', day: 'numeric', hour: "numeric", minute: "numeric"})
+}
+
+
+export const getCurrentSemester = () => {
+    const now = new Date();
+    return {
+        semester: now.getMonth() <= 6 ? "S1" : "S2",
+        year: now.getFullYear()
+    }
+}
+
 export class Semester {
     year: number
     semester: "S1" | "S2"
@@ -14,15 +31,15 @@ export class Semester {
     }
 
     getStart() {
-        return this.start.toLocaleDateString('es-AR', {day: "numeric", weekday:"long", month:"long"})
+        return formatDate(this.start);
     }
 
     getEnd() {
-        return this.end.toLocaleDateString('es-AR', {day: "numeric", weekday:"long", month:"long"})
+        return formatDate(this.end);
     }
 
     getSemester() {
-        return this.semester === "S1"? "1º": "2º"
+        return formatSemester(this.semester)
     }
 
     isBeforePeriod() {
