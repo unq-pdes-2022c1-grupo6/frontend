@@ -11,6 +11,18 @@ import {handleGlobally} from "./utils/validators";
 import {useGlobalNotificator} from "./state/notificator";
 
 
+const createQueryClient = (onError: (error: unknown) => void) => {
+    return new QueryClient({
+        queryCache: new QueryCache({
+            onError: (error) => onError(error)
+        }),
+        mutationCache: new MutationCache({
+            onError: (error) => onError(error)
+        }),
+    })
+}
+
+
 const App = () => {
     const notificator = useGlobalNotificator();
 
@@ -25,20 +37,6 @@ const App = () => {
         }
     }
 
-    const queryClient = new QueryClient({
-        defaultOptions: {
-            queries: {
-                refetchOnWindowFocus: false,
-            },
-        },
-        queryCache: new QueryCache({
-            onError: (error) => onError(error)
-        }),
-        mutationCache: new MutationCache({
-            onError: (error) => onError(error)
-        }),
-    })
-
     return (
         <AuthProvider>
             <Grommet theme={theme} full>
@@ -47,7 +45,7 @@ const App = () => {
                     notification={notificator?.notification}
                     onCloseNotification={notificator?.deleteNotification}
                 />
-                <QueryClientProvider client={queryClient}>
+                <QueryClientProvider client={createQueryClient(onError)}>
                     <Outlet/>
                 </QueryClientProvider>
                 <Box pad="large">
