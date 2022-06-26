@@ -2,6 +2,8 @@ import {useMutation, useQuery} from "react-query";
 import axiosInstance from "../utils/axios-instance";
 import {Semester} from "../model/semester";
 import {useGlobalNotificator} from "../state/notificator";
+import {AxiosError} from "axios";
+import isEqual from "lodash/isEqual";
 
 export interface SemesterDTO {
     id: number,
@@ -28,6 +30,13 @@ const getSemester = (anio: number, semestre: string): Promise<SemesterDTO> => {
     const params = {anio, semestre};
     return axiosInstance.get("/cuatrimestres", {params})
         .then((response) => response.data)
+}
+
+export const isSemesterNotFound = (error: unknown) => {
+    return error instanceof AxiosError && isEqual(error.response?.data, {
+        error: "ExcepcionUNQUE",
+        message: "No se ha encontrado el cuatrimestre"
+    });
 }
 
 export const useSemesterQuery = (year: number, semester: string, setTerm: (term: TermFormType) => void) => {
