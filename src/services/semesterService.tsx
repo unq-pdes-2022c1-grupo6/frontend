@@ -49,8 +49,8 @@ export const useSemesterQuery = (year: number, semester: string, setTerm: (term:
 const postSemester = ([start, end]: string[]): Promise<void> => {
     const body = {
         inicioInscripciones: start.replace('.000Z', ''),
-        finInscripciones: end.replace('.000Z', '')};
-    console.log("plazo cambiado", start, end);
+        finInscripciones: end.replace('.000Z', '')
+    };
     return axiosInstance.post('/comisiones/oferta', body)
         .then((response) => response.data)
 }
