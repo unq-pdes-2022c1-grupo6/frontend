@@ -1,13 +1,12 @@
 import {SemesterDTO} from "../services/semesterService";
 
 
-export const formatSemester = (semester: string) => semester === "S1"? "1º": "2º";
+export const formatSemester = (semester: string) => semester === "S1" ? "1º" : "2º";
 
 export const formatDate = (date: Date) => {
     return date.toLocaleDateString('es-AR',
-        { weekday: 'long', month: 'long', day: 'numeric', hour: "numeric", minute: "numeric"})
+        {weekday: 'long', month: 'long', day: 'numeric', hour: "numeric", minute: "numeric"})
 }
-
 
 export const getCurrentSemester = () => {
     const now = new Date();

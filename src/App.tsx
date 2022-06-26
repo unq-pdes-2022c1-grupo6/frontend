@@ -9,6 +9,18 @@ import GlobalNotificator from "./components/GlobalNotificator";
 import {AuthProvider} from "./state/auth";
 import {handleGlobally} from "./utils/validators";
 import {useGlobalNotificator} from "./state/notificator";
+import { ReactQueryDevtools } from 'react-query/devtools';
+
+const createQueryClient = (onError: (error: unknown) => void) => {
+    return new QueryClient({
+        queryCache: new QueryCache({
+            onError: (error) => onError(error)
+        }),
+        mutationCache: new MutationCache({
+            onError: (error) => onError(error)
+        }),
+    })
+}
 
 
 const App = () => {
@@ -25,20 +37,6 @@ const App = () => {
         }
     }
 
-    const queryClient = new QueryClient({
-        defaultOptions: {
-            queries: {
-                refetchOnWindowFocus: false,
-            },
-        },
-        queryCache: new QueryCache({
-            onError: (error) => onError(error)
-        }),
-        mutationCache: new MutationCache({
-            onError: (error) => onError(error)
-        }),
-    })
-
     return (
         <AuthProvider>
             <Grommet theme={theme} full>
@@ -47,7 +45,8 @@ const App = () => {
                     notification={notificator?.notification}
                     onCloseNotification={notificator?.deleteNotification}
                 />
-                <QueryClientProvider client={queryClient}>
+                <QueryClientProvider client={createQueryClient(onError)}>
+                    <ReactQueryDevtools initialIsOpen={true} />
                     <Outlet/>
                 </QueryClientProvider>
                 <Box pad="large">
