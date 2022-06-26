@@ -107,7 +107,6 @@ const directorRoutes = {
 }
 
 export const getUserNav = (path: string, loggedRol: string | undefined) => {
-    console.log("path", path, "rol", loggedRol);
     const [routes, rolRoute] = path.startsWith("/director") ? [directorRoutes, "Directivo"] : [studentRoutes, "Alumno"];
     return routes[loggedRol === rolRoute ? "private" : "public"]
 }

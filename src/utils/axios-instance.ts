@@ -9,14 +9,11 @@ const axiosLiveInstance = axios.create({
 });
 
 axiosLiveInstance.interceptors.request.use(request => {
-    //console.log(request);
     const login = JSON.parse(localStorage.getItem('login') || "null");
-    const isStudentPrivateRoute = request?.url?.startsWith("/alumno");
-    const isDirectorPrivateRoute = request?.url?.startsWith("/director");
-    //console.log(login);
-    //console.log(isStudentPrivateRoute);
+    const isStudentPrivateRoute = request?.url?.startsWith("/alumno/");
+    const isDirectorPrivateRoute = !request?.url?.startsWith("/auth") && !isStudentPrivateRoute;
     if (((isStudentPrivateRoute && login?.rol === "Alumno") ||
-        (isDirectorPrivateRoute && login?.rol === "Director"))
+        (isDirectorPrivateRoute && login?.rol === "Directivo"))
         && login?.token) {
         request.headers = {
             ...request.headers,

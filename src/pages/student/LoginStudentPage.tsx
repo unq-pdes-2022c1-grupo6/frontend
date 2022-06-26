@@ -43,7 +43,7 @@ const LoginStudentPage = () => {
                         ¿Te falta confirmar tu Cuenta? <Anchor label="Entra acá" onClick={() => navigate(CONFIRM_ROUTE)}/>
                     </Paragraph>
                     <Paragraph margin="none" alignSelf="center">
-                        Inicio de sesión como Directivo, <Anchor label="Entrar acá" onClick={() => navigate(DIRECTOR_ROUTE)}/>
+                        Inicio de sesión como Directivo <Anchor label="Entrar acá" onClick={() => navigate(DIRECTOR_ROUTE)}/>
                     </Paragraph>
                 </Box>
             </Form>
