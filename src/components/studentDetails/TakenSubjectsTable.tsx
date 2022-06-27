@@ -1,22 +1,12 @@
 import React from 'react';
 import {DataTable, Text} from "grommet";
 import {StatusText} from "./StatusText";
+import {TakenSubjectDTO} from "../../services/dtos/studentDTO";
 
-interface AcademicRecord {
-    nombreMateria: string,
-    codigoMateria: string,
-    estado: string,
-    fechaDeCarga: string,
-    cantidadDeVecesCursada: number
-}
 
-const StudentAcademicRecordTable = ({record}: { record: AcademicRecord[] }) => {
+const TakenSubjectsTable = ({content = []}: { content?: TakenSubjectDTO[] }) => {
 
-    return <DataTable
-        data={record}
-        pad="xxsmall"
-        step={10}
-        paginate
+    return <DataTable data={content} pad="xxsmall" step={10} paginate
         columns={[
             {
                property: 'codigoMateria',
@@ -52,4 +42,4 @@ const StudentAcademicRecordTable = ({record}: { record: AcademicRecord[] }) => {
     />
 };
 
-export default StudentAcademicRecordTable;
+export default TakenSubjectsTable;

@@ -8,14 +8,15 @@ type StudentInfoProps = {
     coeficiente?: number,
 }
 
-const StudentInfo = ({nombre, dni, legajo, carrera, coeficiente} : StudentInfoProps) => {
+const StudentInfo = ({nombre, dni, legajo, carrera, coeficiente}: StudentInfoProps) => {
 
     return <NameValueList layout="grid" valueProps={{"width": "small"}} nameProps={{"width": "small"}}
                           pairProps={{"direction": "column"}}>
-        {[["DNI", dni], ["Legajo", legajo], ["Nombre y Apellido", nombre],
-            ["Carrera", carrera], ["Coeficiente", coeficiente]].map(([name, value]) => {
-            return <NameValuePair name={name}>{value || "----"}</NameValuePair>
-        })}
+        <NameValuePair name="DNI">{dni || "----"}</NameValuePair>
+        <NameValuePair name="Legajo">{legajo || "----"}</NameValuePair>
+        <NameValuePair name="Nombre y Apellido">{nombre || "----"}</NameValuePair>
+        <NameValuePair name="Carrera">{carrera || "----"}</NameValuePair>
+        <NameValuePair name="Coeficiente">{coeficiente || "----"}</NameValuePair>
     </NameValueList>
 };
 

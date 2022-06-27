@@ -20,7 +20,7 @@ interface CommentDTO {
     fecha: string
 }
 
-interface TakenSubjectDTO {
+export interface TakenSubjectDTO {
     nombreMateria: string,
     codigoMateria: string,
     estado: "APROBADO" | "DESAPROBADO" | "PA"
