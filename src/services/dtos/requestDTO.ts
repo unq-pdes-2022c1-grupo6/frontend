@@ -4,8 +4,9 @@ export interface RequestDTO {
     id: number,
     dniAlumno: number,
     solicitudes: RequestCourseDTO[],
-    "comisionesInscripto": EnrolledCourse[],
-    estado: "CERRADO" | "ABIERTO"
+    comisionesInscripto: EnrolledCourse[],
+    estado: "CERRADO" | "ABIERTO",
+
 }
 
 export interface RequestCourseDTO {

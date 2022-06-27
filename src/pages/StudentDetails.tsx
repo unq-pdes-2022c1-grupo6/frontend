@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {Page, PageContent, Tabs, Tab, Box} from "grommet";
-import StudentInfoDetails from "../components/studentDetails/StudentInfoDetails";
+import StudentInfo from "../components/studentDetails/StudentInfo";
 import SubjectsRequestTable, {Course} from "../components/studentDetails/SubjectsRequestTable";
 import map from "lodash/map";
 import TextAreaForm from "../components/TextAreaForm";
@@ -139,7 +139,7 @@ const StudentDetails = () => {
 
     return <Page kind="wide" gap="large" pad="medium">
         <PageContent>
-            <StudentInfoDetails information={student}/>
+            <StudentInfo information={student}/>
         </PageContent>
         <PageContent>
             <Tabs activeIndex={index}
