@@ -1,11 +1,11 @@
 import {useParams} from "react-router-dom";
 import {useStudentQuery} from "../../../services/studentService";
 import {Page, PageContent, Tabs, Tab, Box} from "grommet";
-import StudentInfo from "../../../components/studentDetails/StudentInfo";
+import StudentInfo from "../../../components/student/StudentInfo";
 import {useState} from "react";
-import TakenSubjectsTable from "../../../components/studentDetails/TakenSubjectsTable";
-import RequestPage from "../../../components/RequestPage";
-import EnrolledCoursesTable from "../../../components/EnrolledCoursesTable";
+import TakenSubjectsTable from "../../../components/student/TakenSubjectsTable";
+import RequestPage from "../../../components/request/RequestPage";
+import EnrolledCoursesTable from "../../../components/courses/EnrolledCoursesTable";
 import {getApprovedSubjects} from "../../../services/dtos/requestDTO";
 
 

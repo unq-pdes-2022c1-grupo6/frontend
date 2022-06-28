@@ -2,7 +2,7 @@ import {RequestFormType} from "../../../services/requestService";
 import {useStudentSubjectsQuery} from "../../../services/subjectsService";
 import {useNavigate} from "react-router-dom";
 import {HOME_ROUTE} from "../../../utils/routes";
-import RequestForm from "../../../components/RequestForm";
+import RequestForm from "../../../components/request/RequestForm";
 
 
 type RequestFormPageProps = {

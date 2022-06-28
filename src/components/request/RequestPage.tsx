@@ -1,9 +1,9 @@
-import {RequestCourseDTO} from "../services/dtos/requestDTO";
+import {RequestCourseDTO} from "../../services/dtos/requestDTO";
 import RequestTable from "./RequestTable";
-import {useCloseRequest, useUpdateCourseState} from "../services/requestService";
+import {useCloseRequest, useUpdateCourseState} from "../../services/requestService";
 import {useEffect, useState} from "react";
 import {Box, Button, Heading, Layer, Spinner} from "grommet";
-import AddCourseForm from "./AddCourseForm";
+import AddCourseForm from "../courses/AddCourseForm";
 
 // PATCH api/alumnos/{dni}/formulario agrega una --- solicitud de comision nueva
 // PATCH api/alumnos/{dni}/solicitudes/{id} ---- define estado de comision solicitada

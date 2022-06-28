@@ -1,9 +1,9 @@
 import {useState} from "react";
-import {useAvailableCoursesQuery} from "../services/courseService";
-import {SetRequestFn, useAddCourseToRequest} from "../services/requestService";
-import {getCurrentSemester} from "../model/semester";
+import {useAvailableCoursesQuery} from "../../services/courseService";
+import {SetRequestFn, useAddCourseToRequest} from "../../services/requestService";
+import {getCurrentSemester} from "../../model/semester";
 import {Box} from "grommet";
-import RequestsSearchBar from "./subjectsRequests/RequestsSearchBar";
+import RequestsSearchBar from "../subjectsRequests/RequestsSearchBar";
 import AvailableCoursesTable from "./AvailableCoursesTable";
 
 type AddCourseFormProps = {

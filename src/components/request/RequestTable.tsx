@@ -1,9 +1,8 @@
 import {DataTable, Text} from "grommet";
-import {CourseState, RequestCourseDTO} from "../services/dtos/requestDTO";
-import React, {useState} from "react";
-import {RequestStatusText} from "./studentDetails/StatusText";
-import {formatSubjectCourse} from "../services/dtos/subjectDTO";
-import CourseActionButtons from "./CourseActionButtons";
+import {CourseState, RequestCourseDTO} from "../../services/dtos/requestDTO";
+import {RequestStatusText} from "../student/StatusText";
+import {formatSubjectCourse} from "../../services/dtos/subjectDTO";
+import CourseActionButtons from "../courses/CourseActionButtons";
 
 type RequestTableProps = {
     content: RequestCourseDTO[];
@@ -11,22 +10,15 @@ type RequestTableProps = {
 }
 
 const RequestTable = ({content, onChangeCourseState}: RequestTableProps) => {
-    const [select, setSelect] = useState<(string | number)[]>([]);
 
 
     return <DataTable
         replace
         pad="xsmall"
-        primaryKey="comision.id"
+        primaryKey="id"
         step={10}
         paginate
         data={content}
-        select={select}
-        onSelect={(select, datum) => {
-            console.log("selecccionar", select);
-            console.log("dato", datum);
-            setSelect(select);
-        }}
         columns={[
             {property: "comision.materia", header: "Materia", size: "small"},
             {property: "comision.id", header: "Comisión", size: "small", render: ({estado, comision}) =>
@@ -39,7 +31,7 @@ const RequestTable = ({content, onChangeCourseState}: RequestTableProps) => {
                     <RequestStatusText state={row.estado}/>},
             {property: "", header: "Acciones", size: 'small', render: (row) => {
                     return <CourseActionButtons
-                        onChangeState={(state) => onChangeCourseState(state, row.comision.id)}
+                        onChangeState={(state) => onChangeCourseState(state, row.id)}
                         courseState={row.estado}
                     />}}
         ]}

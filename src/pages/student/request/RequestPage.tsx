@@ -1,13 +1,13 @@
 import {Heading, Page, PageContent, Text} from "grommet";
 import {formatSubjectCourse} from "../../../services/dtos/subjectDTO";
-import {RequestStatusText} from "../../../components/studentDetails/StatusText";
+import {RequestStatusText} from "../../../components/student/StatusText";
 import {RequestCourseDTO} from "../../../services/dtos/requestDTO";
 import sortBy from "lodash/sortBy";
 import GenericTable from "../../../components/GenericTable";
 import {useRequest} from "../../../components/layouts/PrivateStudentLayout";
 import {Navigate} from "react-router-dom";
 import {HOME_ROUTE} from "../../../utils/routes";
-import EnrolledCoursesTable from "../../../components/EnrolledCoursesTable";
+import EnrolledCoursesTable from "../../../components/courses/EnrolledCoursesTable";
 
 
 const RequestPage = () => {

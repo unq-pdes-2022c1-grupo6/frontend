@@ -1,5 +1,5 @@
 import {Box, Button, Text} from "grommet";
-import {CourseState} from "../services/dtos/requestDTO";
+import {CourseState} from "../../services/dtos/requestDTO";
 import React from "react";
 
 type CourseActionButtonsProps = {

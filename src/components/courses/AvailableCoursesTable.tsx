@@ -1,6 +1,6 @@
-import {EnrolledCourse} from "../services/dtos/requestDTO";
+import {EnrolledCourse} from "../../services/dtos/requestDTO";
 import {DataTable} from "grommet";
-import {formatSubjectCourse} from "../services/dtos/subjectDTO";
+import {formatSubjectCourse} from "../../services/dtos/subjectDTO";
 import React from "react";
 
 type AvailableCoursesTableProps = {
