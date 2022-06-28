@@ -6,12 +6,16 @@ import {useState} from "react";
 import TakenSubjectsTable from "../../../components/studentDetails/TakenSubjectsTable";
 import RequestPage from "../../../components/RequestPage";
 import EnrolledCoursesTable from "../../../components/EnrolledCoursesTable";
+import {useUpdateCourseState} from "../../../services/requestService";
 
 
 const RequestingStudentPage = () => {
     const [tab, setTab] = useState(0);
     const params = useParams();
-    const studentQuery = useStudentQuery(params.dni);
+    const parsedDni = params.dni? parseInt(params.dni): undefined;
+    const [updated, setUpdated] = useState(true);
+    const studentQuery = useStudentQuery(parsedDni, updated);
+    const updateCourseState = useUpdateCourseState(parsedDni);
 
     const getStudentInfo = () => {
         let studentInfo = {};
@@ -22,6 +26,7 @@ const RequestingStudentPage = () => {
         return studentInfo;
     }
 
+
     return <Page kind="wide" margin={{top: "medium"}} gap="large">
         <PageContent>
             <StudentInfo {...getStudentInfo()}/>
@@ -29,8 +34,18 @@ const RequestingStudentPage = () => {
         <PageContent>
             <Tabs activeIndex={tab} onActive={setTab} justify="start">
                 <Tab title="Solicitud">
-                    <Box width="xlarge" margin={{top: "medium"}}>
-                        <RequestPage content={studentQuery.data?.formulario.solicitudes}/>
+                    <Box margin={{top: "medium"}}>
+                        <RequestPage
+                            onChangeCourseState={(state, id) => {
+                                const student = studentQuery.data;
+                                if (student) {
+                                    updateCourseState.mutate({
+                                        dni: student.dni, requestId: student.formulario.id, state, id},
+                                        {onSuccess: () => {
+                                                setUpdated(true);
+                                            }})
+                                }}}
+                            content={studentQuery.data?.formulario.solicitudes}/>
                     </Box>
                 </Tab>
                 <Tab title="Comisiones Inscriptas en Guaraní">

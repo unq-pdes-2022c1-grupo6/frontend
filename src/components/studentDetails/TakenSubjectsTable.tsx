@@ -13,9 +13,7 @@ const TakenSubjectsTable = ({content = []}: { content?: TakenSubjectDTO[] }) => 
                header: "Materia",
                primary: true,
                render: ({nombreMateria, codigoMateria}) =>
-                   <Text weight="bold">
-                       {`${nombreMateria} (${codigoMateria})`}
-                   </Text>,
+                   <Text weight="bold"> {`${nombreMateria} (${codigoMateria})`} </Text>,
                size: 'small'
             },
             {

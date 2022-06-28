@@ -1,6 +1,6 @@
 import {useMutation, useQuery, useQueryClient} from "react-query";
 import axiosInstance from "../utils/axios-instance";
-import {RequestDTO} from "./dtos/requestDTO";
+import {CourseState, RequestDTO} from "./dtos/requestDTO";
 import {AxiosError} from "axios";
 import isEqual from "lodash/isEqual";
 import {REQUEST_ROUTE} from "../utils/routes";
@@ -10,6 +10,13 @@ import {useGlobalNotificator} from "../state/notificator";
 
 
 export type RequestFormType = [Set<number>, Set<number>];
+
+export type UpdateCourseDTO = {
+    dni: number,
+    requestId: number,
+    state: CourseState,
+    id: number
+}
 
 const getRequest = (): Promise<RequestDTO> => {
     return axiosInstance.get("/alumno/formulario").then((response) => response.data)
@@ -86,3 +93,21 @@ export const useDeleteRequest = () => {
         }
     })
 }
+
+const patchCourseState = ({dni, requestId, state, id}: UpdateCourseDTO) => {
+    console.log("fetchendo");
+    return axiosInstance
+        .patch(`/alumnos/${dni}/solicitudes/${id}?formularioId=${requestId}&estado=${state}`)
+        .then((response) => response.data)
+}
+
+export const useUpdateCourseState = (dni: number | undefined) => {
+    const queryClient = useQueryClient();
+
+    return useMutation(patchCourseState, {
+        onSuccess: (data) => {
+            console.log(data);
+            return queryClient.invalidateQueries(["student", dni]);
+        }})
+}
+

@@ -18,9 +18,15 @@ interface CommentDTO {
     fecha: string
 }
 
+export enum CourseState {
+    PENDIENTE = "PENDIENTE",
+    APROBADO = "APROBADO",
+    RECHAZADO = "RECHAZADO",
+}
+
 export interface RequestCourseDTO {
     id: number,
-    estado: "PENDIENTE" | "APROBADO" | "RECHAZADO",
+    estado: CourseState,
     comision: RequestedCourse
 }
 
@@ -38,7 +44,7 @@ export interface HourDTO {
 }
 
 export interface RequestedCourse extends CourseDTO {
-    modalidad: "PRESENCIAL" | "VIRTUAL" | "SEMIPRESENCIAL" | "",
+    modalidad: "PRESENCIAL" | "VIRTUAL" | "SEMIPRESENCIAL",
     sobrecuposTotales: number,
     sobrecuposDisponibles: number,
 }
@@ -53,10 +59,4 @@ export const getSelections = (requestDTO: RequestDTO): RequestFormType => {
     const selectionsG = requestDTO.comisionesInscripto.map(c => c.id);
     const selectionsS = requestDTO.solicitudes.map(c => c.comision.id)
     return [new Set(selectionsG), new Set(selectionsS)]
-}
-
-export enum CourseState {
-    PENDIENTE = "PENDIENTE",
-    APROBADO = "APROBADO",
-    RECHAZADO = "RECHAZADO",
 }

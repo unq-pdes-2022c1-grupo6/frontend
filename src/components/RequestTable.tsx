@@ -1,12 +1,13 @@
 import {DataTable, Text} from "grommet";
-import {RequestCourseDTO} from "../services/dtos/requestDTO";
+import {CourseState, RequestCourseDTO} from "../services/dtos/requestDTO";
 import React, {useState} from "react";
 import {RequestStatusText} from "./studentDetails/StatusText";
 import {formatSubjectCourse} from "../services/dtos/subjectDTO";
+import CourseActionButtons from "./CourseActionButtons";
 
 type RequestTableProps = {
     content: RequestCourseDTO[];
-    onChangeCourseState: () => void;
+    onChangeCourseState: (state: CourseState, id: number) => void;
 }
 
 const RequestTable = ({content, onChangeCourseState}: RequestTableProps) => {
@@ -30,8 +31,13 @@ const RequestTable = ({content, onChangeCourseState}: RequestTableProps) => {
                     </Text>},
             {property: "comision.sobrecuposTotales", header: "Sobrecupo Disp.", size: 'xsmall', align: 'end'},
             {property: "comision.sobrecuposDisponibles", header: "Sobrecupo Total", size: 'xsmall', align: 'end'},
-            {property: "estado", header: "Estado", align: 'center', size: 'xsmall', render: (row) =>
-                    <RequestStatusText state={row.estado}/>}
+            {property: "estado", header: "Estado", size: 'xsmall', render: (row) =>
+                    <RequestStatusText state={row.estado}/>},
+            {property: "", header: "Acciones", size: 'small', render: (row) => {
+                    return <CourseActionButtons
+                        onChangeState={(state) => onChangeCourseState(state, row.comision.id)}
+                        courseState={row.estado}
+                    />}}
         ]}
     />
 

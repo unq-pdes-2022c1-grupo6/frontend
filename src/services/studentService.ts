@@ -3,18 +3,17 @@ import {useQuery} from "react-query";
 import {StudentDTO} from "./dtos/studentDTO";
 
 
-const getStudent = (dni: string | undefined): Promise<StudentDTO> => {
-    console.log("fetcheando");
+const getStudent = (dni: number | undefined): Promise<StudentDTO> => {
     return dni?
         axiosInstance.get(`/alumnos/${dni}`)
             .then((response) => response.data)
         : Promise.reject(new Error("DNI no especificado"))
 };
 
-export const useStudentQuery = (dni: string | undefined) => {
-    console.log(dni);
+export const useStudentQuery = (dni: number | undefined, newState: boolean) => {
     return useQuery(["student", dni],
         () => getStudent(dni),
-        {enabled: Boolean(dni)}
+        {enabled: Boolean(dni) && newState}
     );
 }
+
