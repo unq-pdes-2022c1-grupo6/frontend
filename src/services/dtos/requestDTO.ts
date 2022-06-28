@@ -1,4 +1,5 @@
 import {RequestFormType} from "../requestService";
+import {TakenSubjectDTO} from "./studentDTO";
 
 export interface RequestDTO {
     id: number,
@@ -59,4 +60,8 @@ export const getSelections = (requestDTO: RequestDTO): RequestFormType => {
     const selectionsG = requestDTO.comisionesInscripto.map(c => c.id);
     const selectionsS = requestDTO.solicitudes.map(c => c.comision.id)
     return [new Set(selectionsG), new Set(selectionsS)]
+}
+
+export const getApprovedSubjects = (subjects: TakenSubjectDTO[]) => {
+    return subjects.flatMap((s) => s.estado === "APROBADO"? [s.nombreMateria]: [])
 }

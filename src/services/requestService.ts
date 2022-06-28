@@ -11,12 +11,14 @@ import {useGlobalNotificator} from "../state/notificator";
 
 export type RequestFormType = [Set<number>, Set<number>];
 
-export type UpdateCourseDTO = {
+type UpdateCourseDTO = {
     dniAlumno: number,
     id: number,
     state: CourseState,
     courseId: number
 }
+
+export type SetRequestFn =  (newData: RequestCourseDTO[], newState?: "CERRADO" | "ABIERTO") => void;
 
 const getRequest = (): Promise<RequestDTO> => {
     return axiosInstance.get("/alumno/formulario").then((response) => response.data)
@@ -114,14 +116,10 @@ export const useUpdateCourseState = (dni: number | undefined, updateCourse: (dat
 const patchCloseRequest = ({dniAlumno, id}: { dniAlumno: number, id: number }): Promise<RequestWithCommentsDTO> => {
     return axiosInstance
         .patch(`/formulario/${id}/cerrar?dni=${dniAlumno}`)
-        .then((response) => {
-            console.log(response.data);
-            return response.data;
-        })
+        .then((response) => response.data)
 }
 
-export const useCloseRequest = (dni: number | undefined,
-                                close: (newData: RequestCourseDTO[], newState: "CERRADO" | "ABIERTO") => void) => {
+export const useCloseRequest = (dni: number | undefined, close: SetRequestFn) => {
     const queryClient = useQueryClient();
 
     return useMutation(patchCloseRequest, {
@@ -132,3 +130,22 @@ export const useCloseRequest = (dni: number | undefined,
     })
 }
 
+const patchNewCourse = ({dni, id}: { dni: number, id: number }): Promise<RequestWithCommentsDTO> => {
+    return axiosInstance
+        .patch(`/alumnos/${dni}/formulario?idComision=${id}`)
+        .then((response) => response.data)
+}
+
+export const useAddCourseToRequest = (dni: number | undefined, onAddCourse: SetRequestFn) => {
+    const queryClient = useQueryClient();
+    const notificator = useGlobalNotificator();
+
+    return useMutation(patchNewCourse, {
+        onSuccess: (data) => {
+            return queryClient.invalidateQueries(["student", dni]).then(() => {
+                notificator?.setNotification("Comisión agregada correctamente!");
+                onAddCourse(data.solicitudes);
+            });
+        }
+    })
+}

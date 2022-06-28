@@ -18,6 +18,8 @@ const RequestTable = ({content, onChangeCourseState}: RequestTableProps) => {
         replace
         pad="xsmall"
         primaryKey="comision.id"
+        step={10}
+        paginate
         data={content}
         select={select}
         onSelect={(select, datum) => {

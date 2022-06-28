@@ -6,6 +6,7 @@ import {useState} from "react";
 import TakenSubjectsTable from "../../../components/studentDetails/TakenSubjectsTable";
 import RequestPage from "../../../components/RequestPage";
 import EnrolledCoursesTable from "../../../components/EnrolledCoursesTable";
+import {getApprovedSubjects} from "../../../services/dtos/requestDTO";
 
 
 const RequestingStudentPage = () => {
@@ -26,8 +27,10 @@ const RequestingStudentPage = () => {
     const getRequestPageProps = () => {
         let props = {};
         if (studentQuery.data) {
-            const {formulario: {comisionesInscripto, comentarios, ...rest}} = studentQuery.data;
-            props = rest
+            const {resumenCursadas, formulario: {comisionesInscripto, comentarios, ...rest}} = studentQuery.data;
+            const excSubj1 = getApprovedSubjects(resumenCursadas);
+            const excSubj2 = comisionesInscripto.map(c => c.materia);
+            props = {excludingSubjects: [...excSubj1, ...excSubj2], ...rest}
         }
         return props;
     }
