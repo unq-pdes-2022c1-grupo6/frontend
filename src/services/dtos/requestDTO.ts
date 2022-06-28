@@ -6,7 +6,16 @@ export interface RequestDTO {
     solicitudes: RequestCourseDTO[],
     comisionesInscripto: EnrolledCourse[],
     estado: "CERRADO" | "ABIERTO",
+}
 
+export interface RequestWithCommentsDTO extends RequestDTO {
+    comentarios: CommentDTO[]
+}
+
+interface CommentDTO {
+    autor: string,
+    descripcion: string,
+    fecha: string
 }
 
 export interface RequestCourseDTO {
@@ -29,7 +38,7 @@ export interface HourDTO {
 }
 
 export interface RequestedCourse extends CourseDTO {
-    modalidad: "PRESENCIAL" | "VIRTUAL" | "SEMIPRESENCIAL",
+    modalidad: "PRESENCIAL" | "VIRTUAL" | "SEMIPRESENCIAL" | "",
     sobrecuposTotales: number,
     sobrecuposDisponibles: number,
 }
@@ -39,12 +48,6 @@ export interface EnrolledCourse extends CourseDTO {
     sobreCuposTotales: number,
     cuposDisponibles: number,
 }
-
-export interface RequestFormDTO {
-    comisiones: number[],
-    comisionesInscripto: number[]
-}
-
 
 export const getSelections = (requestDTO: RequestDTO): RequestFormType => {
     const selectionsG = requestDTO.comisionesInscripto.map(c => c.id);

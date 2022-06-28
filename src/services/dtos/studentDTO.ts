@@ -1,4 +1,4 @@
-import {RequestDTO} from "./requestDTO";
+import {RequestWithCommentsDTO} from "./requestDTO";
 
 export interface StudentDTO {
     nombre: string,
@@ -8,16 +8,6 @@ export interface StudentDTO {
     coeficiente: number,
     formulario: RequestWithCommentsDTO,
     resumenCursadas: TakenSubjectDTO[]
-}
-
-interface RequestWithCommentsDTO extends RequestDTO {
-    comentarios: CommentDTO[]
-}
-
-interface CommentDTO {
-    autor: string,
-    descripcion: string,
-    fecha: string
 }
 
 export interface TakenSubjectDTO {
