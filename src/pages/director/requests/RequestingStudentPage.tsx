@@ -6,16 +6,13 @@ import {useState} from "react";
 import TakenSubjectsTable from "../../../components/studentDetails/TakenSubjectsTable";
 import RequestPage from "../../../components/RequestPage";
 import EnrolledCoursesTable from "../../../components/EnrolledCoursesTable";
-import {useUpdateCourseState} from "../../../services/requestService";
 
 
 const RequestingStudentPage = () => {
     const [tab, setTab] = useState(0);
     const params = useParams();
     const parsedDni = params.dni? parseInt(params.dni): undefined;
-    const [updated, setUpdated] = useState(true);
-    const studentQuery = useStudentQuery(parsedDni, updated);
-    const updateCourseState = useUpdateCourseState(parsedDni);
+    const studentQuery = useStudentQuery(parsedDni);
 
     const getStudentInfo = () => {
         let studentInfo = {};
@@ -36,15 +33,8 @@ const RequestingStudentPage = () => {
                 <Tab title="Solicitud">
                     <Box margin={{top: "medium"}}>
                         <RequestPage
-                            onChangeCourseState={(state, id) => {
-                                const student = studentQuery.data;
-                                if (student) {
-                                    updateCourseState.mutate({
-                                        dni: student.dni, requestId: student.formulario.id, state, id},
-                                        {onSuccess: () => {
-                                                setUpdated(true);
-                                            }})
-                                }}}
+                            requestId={studentQuery.data?.formulario.id}
+                            dni={studentQuery.data?.dni}
                             content={studentQuery.data?.formulario.solicitudes}/>
                     </Box>
                 </Tab>

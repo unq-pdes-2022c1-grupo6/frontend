@@ -10,10 +10,10 @@ const getStudent = (dni: number | undefined): Promise<StudentDTO> => {
         : Promise.reject(new Error("DNI no especificado"))
 };
 
-export const useStudentQuery = (dni: number | undefined, newState: boolean) => {
+export const useStudentQuery = (dni: number | undefined) => {
     return useQuery(["student", dni],
         () => getStudent(dni),
-        {enabled: Boolean(dni) && newState}
+        {enabled: Boolean(dni)}
     );
 }
 

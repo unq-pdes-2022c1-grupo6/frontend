@@ -1,6 +1,6 @@
 import {useMutation, useQuery, useQueryClient} from "react-query";
 import axiosInstance from "../utils/axios-instance";
-import {CourseState, RequestDTO} from "./dtos/requestDTO";
+import {CourseState, RequestCourseDTO, RequestDTO} from "./dtos/requestDTO";
 import {AxiosError} from "axios";
 import isEqual from "lodash/isEqual";
 import {REQUEST_ROUTE} from "../utils/routes";
@@ -94,20 +94,20 @@ export const useDeleteRequest = () => {
     })
 }
 
-const patchCourseState = ({dni, requestId, state, id}: UpdateCourseDTO) => {
-    console.log("fetchendo");
+const patchCourseState = ({dni, requestId, state, id}: UpdateCourseDTO): Promise<RequestCourseDTO> => {
     return axiosInstance
         .patch(`/alumnos/${dni}/solicitudes/${id}?formularioId=${requestId}&estado=${state}`)
         .then((response) => response.data)
 }
 
-export const useUpdateCourseState = (dni: number | undefined) => {
+export const useUpdateCourseState = (dni: number | undefined, updateCourse: (data: RequestCourseDTO) => void) => {
     const queryClient = useQueryClient();
 
     return useMutation(patchCourseState, {
         onSuccess: (data) => {
-            console.log(data);
+            updateCourse(data);
             return queryClient.invalidateQueries(["student", dni]);
-        }})
+        }
+    })
 }
 

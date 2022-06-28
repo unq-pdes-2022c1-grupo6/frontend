@@ -13,7 +13,9 @@ type RequestTableProps = {
 const RequestTable = ({content, onChangeCourseState}: RequestTableProps) => {
     const [select, setSelect] = useState<(string | number)[]>([]);
 
+
     return <DataTable
+        replace
         pad="xxsmall"
         primaryKey="comision.id"
         data={content}

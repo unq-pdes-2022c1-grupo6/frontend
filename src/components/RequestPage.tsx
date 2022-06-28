@@ -1,5 +1,7 @@
-import {CourseState, RequestCourseDTO} from "../services/dtos/requestDTO";
+import {RequestCourseDTO} from "../services/dtos/requestDTO";
 import RequestTable from "./RequestTable";
+import {useUpdateCourseState} from "../services/requestService";
+import {useEffect, useState} from "react";
 
 // PATCH api/alumnos/{dni}/formulario agrega una --- solicitud de comision nueva
 // PATCH api/alumnos/{dni}/solicitudes/{id} ---- define estado de comision solicitada
@@ -7,17 +9,31 @@ import RequestTable from "./RequestTable";
 // GET /api/cuatrimestres/oferta  ---- comisiones con busqueda por nombre
 
 type RequestPageProps = {
-    onChangeCourseState: (state: CourseState, id: number) => void
-    content?:  RequestCourseDTO[],
+    requestId?: number,
+    dni?: number,
+    content?: RequestCourseDTO[],
 }
 
+const RequestPage = ({requestId, dni, content = []} : RequestPageProps) => {
+    const [data, setData] = useState<RequestCourseDTO[]>([]);
+    const replaceDataItem = (newCourse: RequestCourseDTO) => {
+        setData((prevState) => {
+            return prevState.map(s => s.id === newCourse.id ? newCourse : s)
+        })
+    };
+    const updateCourseState = useUpdateCourseState(dni, replaceDataItem);
 
-const RequestPage = ({onChangeCourseState, content} : RequestPageProps) => {
+    useEffect(() => {
+        setData(content)
+    },[content])
 
     return <RequestTable
-        content={content || []}
-        onChangeCourseState={onChangeCourseState}
-    />
+        content={data}
+        onChangeCourseState={(state, id) => {
+            if (requestId && dni) {
+                updateCourseState.mutate({requestId, dni, state, id})
+            }
+        }}/>
 
 };
 
