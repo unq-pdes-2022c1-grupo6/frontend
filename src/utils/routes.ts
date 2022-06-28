@@ -21,13 +21,13 @@ export const SUBJECTS_ROUTE = "materias"
 
 export const STUDENTS_ROUTE = "alumnos"
 
-export const REQUIRED_SUBJECTS = "materias/solicitudes"
+export const REQUIRED_SUBJECTS = "solicitudes/materias"
 
-export const REQUESTING_STUDENTS = "alumnos/solicitudes"
+export const REQUESTING_STUDENTS = "solicitudes/alumnos"
 
 export const REQUIRED_SUBJECT = ":materia"
 
-export const REQUESTING_STUDENT = ":alumno"
+export const REQUESTING_STUDENT = ":dni"
 
 export const IMPORT_ROUTE = "importar"
 

@@ -1,6 +1,6 @@
 import {useMutation, useQuery, useQueryClient} from "react-query";
 import axiosInstance from "../utils/axios-instance";
-import {RequestDTO} from "./dtos/requestDTO";
+import {CourseState, RequestCourseDTO, RequestDTO, RequestWithCommentsDTO} from "./dtos/requestDTO";
 import {AxiosError} from "axios";
 import isEqual from "lodash/isEqual";
 import {REQUEST_ROUTE} from "../utils/routes";
@@ -10,6 +10,15 @@ import {useGlobalNotificator} from "../state/notificator";
 
 
 export type RequestFormType = [Set<number>, Set<number>];
+
+type UpdateCourseDTO = {
+    dniAlumno: number,
+    id: number,
+    state: CourseState,
+    courseId: number
+}
+
+export type SetRequestFn =  (newData: RequestCourseDTO[], newState?: "CERRADO" | "ABIERTO") => void;
 
 const getRequest = (): Promise<RequestDTO> => {
     return axiosInstance.get("/alumno/formulario").then((response) => response.data)
@@ -83,6 +92,60 @@ export const useDeleteRequest = () => {
             queryClient.refetchQueries(["request"]);
             setRequest(undefined);
             notificator?.setNotification("Solicitud borrada correctamente!");
+        }
+    })
+}
+
+const patchCourseState = ({dniAlumno, id, state, courseId}: UpdateCourseDTO): Promise<RequestCourseDTO> => {
+    return axiosInstance
+        .patch(`/alumnos/${dniAlumno}/solicitudes/${courseId}?formularioId=${id}&estado=${state}`)
+        .then((response) => response.data)
+}
+
+export const useUpdateCourseState = (dni: number | undefined, updateCourse: (data: RequestCourseDTO) => void) => {
+    const queryClient = useQueryClient();
+
+    return useMutation(patchCourseState, {
+        onSuccess: (data) => {
+            updateCourse(data);
+            return queryClient.invalidateQueries(["student", dni]);
+        }
+    })
+}
+
+const patchCloseRequest = ({dniAlumno, id}: { dniAlumno: number, id: number }): Promise<RequestWithCommentsDTO> => {
+    return axiosInstance
+        .patch(`/formulario/${id}/cerrar?dni=${dniAlumno}`)
+        .then((response) => response.data)
+}
+
+export const useCloseRequest = (dni: number | undefined, close: SetRequestFn) => {
+    const queryClient = useQueryClient();
+
+    return useMutation(patchCloseRequest, {
+        onSuccess: (data) => {
+            close(data.solicitudes, data.estado);
+            return queryClient.invalidateQueries(["student", dni]);
+        }
+    })
+}
+
+const patchNewCourse = ({dni, id}: { dni: number, id: number }): Promise<RequestWithCommentsDTO> => {
+    return axiosInstance
+        .patch(`/alumnos/${dni}/formulario?idComision=${id}`)
+        .then((response) => response.data)
+}
+
+export const useAddCourseToRequest = (dni: number | undefined, onAddCourse: SetRequestFn) => {
+    const queryClient = useQueryClient();
+    const notificator = useGlobalNotificator();
+
+    return useMutation(patchNewCourse, {
+        onSuccess: (data) => {
+            return queryClient.invalidateQueries(["student", dni]).then(() => {
+                notificator?.setNotification("Comisión agregada correctamente!");
+                onAddCourse(data.solicitudes);
+            });
         }
     })
 }

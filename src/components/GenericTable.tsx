@@ -5,7 +5,7 @@ type GenericTableProps<T> = {
     data: T[],
     columns: {
         label: string,
-        format: (datum: T) => ReactNode
+        format: (datum: T) => ReactNode | string | number
     }[]
 }
 

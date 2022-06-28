@@ -11,9 +11,9 @@ import {
     Paragraph,
     Text
 } from "grommet";
-import {formatSubjectCourse, SubjectDTO} from "../services/dtos/subjectDTO";
-import {RequestFormType} from "../services/requestService";
-import LoadingButton from "./LoadingButton";
+import {formatSubjectCourse, SubjectDTO} from "../../services/dtos/subjectDTO";
+import {RequestFormType} from "../../services/requestService";
+import LoadingButton from "../LoadingButton";
 
 type RequestFormProps = {
     selections: RequestFormType;

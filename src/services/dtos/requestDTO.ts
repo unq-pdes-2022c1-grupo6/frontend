@@ -1,16 +1,33 @@
 import {RequestFormType} from "../requestService";
+import {TakenSubjectDTO} from "./studentDTO";
 
 export interface RequestDTO {
     id: number,
     dniAlumno: number,
     solicitudes: RequestCourseDTO[],
-    "comisionesInscripto": EnrolledCourse[],
-    estado: "CERRADO" | "ABIERTO"
+    comisionesInscripto: EnrolledCourse[],
+    estado: "CERRADO" | "ABIERTO",
+}
+
+export interface RequestWithCommentsDTO extends RequestDTO {
+    comentarios: CommentDTO[]
+}
+
+interface CommentDTO {
+    autor: string,
+    descripcion: string,
+    fecha: string
+}
+
+export enum CourseState {
+    PENDIENTE = "PENDIENTE",
+    APROBADO = "APROBADO",
+    RECHAZADO = "RECHAZADO",
 }
 
 export interface RequestCourseDTO {
     id: number,
-    estado: "PENDIENTE" | "APROBADO" | "RECHAZADO",
+    estado: CourseState,
     comision: RequestedCourse
 }
 
@@ -39,20 +56,12 @@ export interface EnrolledCourse extends CourseDTO {
     cuposDisponibles: number,
 }
 
-export interface RequestFormDTO {
-    comisiones: number[],
-    comisionesInscripto: number[]
-}
-
-
 export const getSelections = (requestDTO: RequestDTO): RequestFormType => {
     const selectionsG = requestDTO.comisionesInscripto.map(c => c.id);
     const selectionsS = requestDTO.solicitudes.map(c => c.comision.id)
     return [new Set(selectionsG), new Set(selectionsS)]
 }
 
-export enum CourseState {
-    PENDIENTE = "PENDIENTE",
-    APROBADO = "APROBADO",
-    RECHAZADO = "RECHAZADO",
+export const getApprovedSubjects = (subjects: TakenSubjectDTO[]) => {
+    return subjects.flatMap((s) => s.estado === "APROBADO"? [s.nombreMateria]: [])
 }
