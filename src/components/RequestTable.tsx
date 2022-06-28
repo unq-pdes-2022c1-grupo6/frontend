@@ -16,7 +16,7 @@ const RequestTable = ({content, onChangeCourseState}: RequestTableProps) => {
 
     return <DataTable
         replace
-        pad="xxsmall"
+        pad="xsmall"
         primaryKey="comision.id"
         data={content}
         select={select}
@@ -27,7 +27,7 @@ const RequestTable = ({content, onChangeCourseState}: RequestTableProps) => {
         }}
         columns={[
             {property: "comision.materia", header: "Materia", size: "small"},
-            {property: "comision.id", header: "Comisión", size: "medium", render: ({estado, comision}) =>
+            {property: "comision.id", header: "Comisión", size: "small", render: ({estado, comision}) =>
                     <Text weight={estado === "APROBADO" ? "bold" : "normal"}>
                         {formatSubjectCourse(comision.numero, comision.modalidad, comision.horarios)}
                     </Text>},

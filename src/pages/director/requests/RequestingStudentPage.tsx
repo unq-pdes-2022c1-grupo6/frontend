@@ -23,8 +23,16 @@ const RequestingStudentPage = () => {
         return studentInfo;
     }
 
+    const getRequestPageProps = () => {
+        let props = {};
+        if (studentQuery.data) {
+            const {formulario: {comisionesInscripto, comentarios, ...rest}} = studentQuery.data;
+            props = rest
+        }
+        return props;
+    }
 
-    return <Page kind="wide" margin={{top: "medium"}} gap="large">
+    return <Page kind="wide" margin={{top: "medium"}} gap="medium">
         <PageContent>
             <StudentInfo {...getStudentInfo()}/>
         </PageContent>
@@ -33,9 +41,7 @@ const RequestingStudentPage = () => {
                 <Tab title="Solicitud">
                     <Box margin={{top: "medium"}}>
                         <RequestPage
-                            requestId={studentQuery.data?.formulario.id}
-                            dni={studentQuery.data?.dni}
-                            content={studentQuery.data?.formulario.solicitudes}/>
+                            {...getRequestPageProps()}/>
                     </Box>
                 </Tab>
                 <Tab title="Comisiones Inscriptas en Guaraní">

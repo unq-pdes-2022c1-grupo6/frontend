@@ -1,6 +1,6 @@
 import {useMutation, useQuery, useQueryClient} from "react-query";
 import axiosInstance from "../utils/axios-instance";
-import {CourseState, RequestCourseDTO, RequestDTO} from "./dtos/requestDTO";
+import {CourseState, RequestCourseDTO, RequestDTO, RequestWithCommentsDTO} from "./dtos/requestDTO";
 import {AxiosError} from "axios";
 import isEqual from "lodash/isEqual";
 import {REQUEST_ROUTE} from "../utils/routes";
@@ -12,10 +12,10 @@ import {useGlobalNotificator} from "../state/notificator";
 export type RequestFormType = [Set<number>, Set<number>];
 
 export type UpdateCourseDTO = {
-    dni: number,
-    requestId: number,
+    dniAlumno: number,
+    id: number,
     state: CourseState,
-    id: number
+    courseId: number
 }
 
 const getRequest = (): Promise<RequestDTO> => {
@@ -94,9 +94,9 @@ export const useDeleteRequest = () => {
     })
 }
 
-const patchCourseState = ({dni, requestId, state, id}: UpdateCourseDTO): Promise<RequestCourseDTO> => {
+const patchCourseState = ({dniAlumno, id, state, courseId}: UpdateCourseDTO): Promise<RequestCourseDTO> => {
     return axiosInstance
-        .patch(`/alumnos/${dni}/solicitudes/${id}?formularioId=${requestId}&estado=${state}`)
+        .patch(`/alumnos/${dniAlumno}/solicitudes/${courseId}?formularioId=${id}&estado=${state}`)
         .then((response) => response.data)
 }
 
@@ -106,6 +106,27 @@ export const useUpdateCourseState = (dni: number | undefined, updateCourse: (dat
     return useMutation(patchCourseState, {
         onSuccess: (data) => {
             updateCourse(data);
+            return queryClient.invalidateQueries(["student", dni]);
+        }
+    })
+}
+
+const patchCloseRequest = ({dniAlumno, id}: { dniAlumno: number, id: number }): Promise<RequestWithCommentsDTO> => {
+    return axiosInstance
+        .patch(`/formulario/${id}/cerrar?dni=${dniAlumno}`)
+        .then((response) => {
+            console.log(response.data);
+            return response.data;
+        })
+}
+
+export const useCloseRequest = (dni: number | undefined,
+                                close: (newData: RequestCourseDTO[], newState: "CERRADO" | "ABIERTO") => void) => {
+    const queryClient = useQueryClient();
+
+    return useMutation(patchCloseRequest, {
+        onSuccess: (data) => {
+            close(data.solicitudes, data.estado);
             return queryClient.invalidateQueries(["student", dni]);
         }
     })
