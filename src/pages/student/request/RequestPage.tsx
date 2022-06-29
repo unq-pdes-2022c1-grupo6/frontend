@@ -1,6 +1,6 @@
 import {Heading, Page, PageContent, Text} from "grommet";
 import {formatSubjectCourse} from "../../../services/dtos/subjectDTO";
-import {RequestStatusText} from "../../../components/student/StatusText";
+import {CourseStatusText} from "../../../components/StatusText";
 import {RequestCourseDTO} from "../../../services/dtos/requestDTO";
 import sortBy from "lodash/sortBy";
 import GenericTable from "../../../components/GenericTable";
@@ -33,7 +33,7 @@ const RequestPage = () => {
                     {label: 'Comisión', format: (c) => <Text>
                             {formatSubjectCourse(c.comision.numero, c.comision.modalidad, c.comision.horarios)}
                     </Text>},
-                    {label: 'Estado', format: (c) => <RequestStatusText state={c.estado}/>},
+                    {label: 'Estado', format: (c) => <CourseStatusText state={c.estado}/>},
                 ]}
             />
             <Heading level={4} size="medium" margin={{top: "medium", bottom: "xxsmall"}}>

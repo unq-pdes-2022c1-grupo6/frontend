@@ -1,6 +1,6 @@
 import {DataTable, Text} from "grommet";
 import {CourseState, RequestCourseDTO} from "../../services/dtos/requestDTO";
-import {RequestStatusText} from "../student/StatusText";
+import {CourseStatusText} from "../StatusText";
 import {formatSubjectCourse} from "../../services/dtos/subjectDTO";
 import CourseActionButtons from "../courses/CourseActionButtons";
 
@@ -28,7 +28,7 @@ const RequestTable = ({content, onChangeCourseState}: RequestTableProps) => {
             {property: "comision.sobrecuposTotales", header: "Sobrecupo Disp.", size: 'xsmall', align: 'end'},
             {property: "comision.sobrecuposDisponibles", header: "Sobrecupo Total", size: 'xsmall', align: 'end'},
             {property: "estado", header: "Estado", size: 'xsmall', render: (row) =>
-                    <RequestStatusText state={row.estado}/>},
+                    <CourseStatusText state={row.estado}/>},
             {property: "", header: "Acciones", size: 'small', render: (row) => {
                     return <CourseActionButtons
                         onChangeState={(state) => onChangeCourseState(state, row.id)}

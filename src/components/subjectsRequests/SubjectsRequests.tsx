@@ -1,8 +1,8 @@
 import React, {useState} from "react";
 import {Search, SearchField} from "../../model/search";
 import {ColumnConfig, Page, PageContent} from "grommet";
-import RequestsSearchBar from "./RequestsSearchBar";
-import {CareerRadioGroup, StatusRequestRadioGroup} from "./FilterRadioGroup";
+import RequestsSearchBar from "../request/RequestsSearchBar";
+import {CareerRadioGroup, StatusRequestRadioGroup} from "../request/FilterRadioGroup";
 import SubjectsRequestsTable from "./SubjectsRequestsTable";
 
 type SubjectsRequestsProps<RowType> = {

@@ -1,7 +1,7 @@
 import React from 'react';
 import {DataTable, Text} from "grommet";
-import {StatusText} from "./StatusText";
-import {TakenSubjectDTO} from "../../services/dtos/studentDTO";
+import {StatusText} from "../StatusText";
+import {TakenSubjectDTO} from "../../services/dtos/subjectDTO";
 
 
 const TakenSubjectsTable = ({content = []}: { content?: TakenSubjectDTO[] }) => {

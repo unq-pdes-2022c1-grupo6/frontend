@@ -1,6 +1,7 @@
 import axiosInstance from "../utils/axios-instance";
 import {useQuery} from "react-query";
-import {StudentDTO} from "./dtos/studentDTO";
+import {SearchedStudentDTO, StudentDTO} from "./dtos/studentDTO";
+import {StudentSearch, toStudentSearchDTO} from "../state/search";
 
 
 const getStudent = (dni: number | undefined): Promise<StudentDTO> => {
@@ -17,3 +18,13 @@ export const useStudentQuery = (dni: number | undefined) => {
     );
 }
 
+const getRequestingStudents = (search: StudentSearch): Promise<SearchedStudentDTO[]> => {
+    const params =  toStudentSearchDTO(search);
+    console.log(params);
+    return axiosInstance.get("/alumnos/formulario", {params}).then((response) => response.data);
+};
+
+export const useSearchRequestingStudentsQuery = (search: StudentSearch) => {
+    return useQuery(["requestingStudents", search],
+        () => getRequestingStudents(search));
+}

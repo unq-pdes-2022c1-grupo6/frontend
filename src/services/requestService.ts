@@ -108,6 +108,7 @@ export const useUpdateCourseState = (dni: number | undefined, updateCourse: (dat
     return useMutation(patchCourseState, {
         onSuccess: (data) => {
             updateCourse(data);
+            queryClient.invalidateQueries(["requestingStudents"]);
             return queryClient.invalidateQueries(["student", dni]);
         }
     })
@@ -125,6 +126,7 @@ export const useCloseRequest = (dni: number | undefined, close: SetRequestFn) =>
     return useMutation(patchCloseRequest, {
         onSuccess: (data) => {
             close(data.solicitudes, data.estado);
+            queryClient.invalidateQueries(["requestingStudents"]);
             return queryClient.invalidateQueries(["student", dni]);
         }
     })
@@ -142,6 +144,7 @@ export const useAddCourseToRequest = (dni: number | undefined, onAddCourse: SetR
 
     return useMutation(patchNewCourse, {
         onSuccess: (data) => {
+            queryClient.invalidateQueries(["requestingStudents"]);
             return queryClient.invalidateQueries(["student", dni]).then(() => {
                 notificator?.setNotification("Comisión agregada correctamente!");
                 onAddCourse(data.solicitudes);
