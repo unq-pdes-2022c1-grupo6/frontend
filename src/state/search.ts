@@ -23,7 +23,7 @@ export const useSearch = () => {
 
 export const toStudentSearchDTO = (search: StudentSearch) => {
     const searchDTO1 = search.term === ""? {}: {dni: search.term};
-    let searchDTO2 = {
+    const searchDTO2 = {
         pendiente: search.filter === "Pendientes" || search.filter === "Todas",
         sinProcesar: search.filter === "Sin Procesar" || search.filter === "Todas",
     }

@@ -25,9 +25,9 @@ const RequestingStudentsTable = ({content, onClickRow}: RequestingStudentsTableP
         {property: "alumno.coeficiente", header: "Coeficiente", align: "end"},
         {property: "estadoFormulario", header: "Estado Solicitud", align: "center",
             render: ({estadoFormulario}) => <RequestStatusText state={estadoFormulario}/>},
-        {property: "cantComisionesInscripto", header: "Comisiones Solicitadas", render: (datum) =>
-                `${datum.cantComisionesInscripto} (${datum.cantSolicitudesPendientes} Pendientes
-                 y ${datum.cantSolicitudesAprobadas} Aprobadas)`}
+        {property: "cantSolicitudesPendientes", header: "Comisiones Pendientes", align: "end"},
+        {property: "cantSolicitudesAprobadas", header: "Comisiones Aprobadas", align: "end"},
+        {property: "cantComisionesInscripto", header: "Comisiones Inscripto", align: "end"},
     ]}
     />
 

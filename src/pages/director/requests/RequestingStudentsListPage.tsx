@@ -14,7 +14,6 @@ const RequestingStudentsListPage = () => {
     const searchRequestingStudentsQuery = useSearchRequestingStudentsQuery(search);
 
 
-
     return <Page kind="wide" pad="large" gap="large" align="center">
         <PageContent direction="row-responsive" gap="large">
             <RequestsSearchBar
@@ -26,7 +25,7 @@ const RequestingStudentsListPage = () => {
                 value={search.filter}
                 onChange={(value) => setSearch("filter", value)}
                 onCancel={() => deleteSearch("filter")}/>
-            {searchRequestingStudentsQuery.isLoading && <Spinner/>}
+            {searchRequestingStudentsQuery.isLoading && <Spinner size="medium"/>}
         </PageContent>
         <PageContent width="large">
             <RequestingStudentsTable

@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {Box, Button, Stack, TextInput} from "grommet";
 import {Close, Search} from "grommet-icons";
 
@@ -11,7 +11,11 @@ type RequestsSearchBarPropTypes = {
 
 const RequestsSearchBar = ({placeholder, searchTerm = "", onSearch: onSearch0, onCancel: onCancel0}:
                                RequestsSearchBarPropTypes) => {
-    const [value, setValue] = useState(searchTerm);
+    const [value, setValue] = useState("");
+
+    useEffect(() => {
+        setValue(searchTerm)
+    }, [searchTerm])
 
     const onCancel = () => {
         if (searchTerm !== "") {

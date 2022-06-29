@@ -14,7 +14,7 @@ const StudentInfo = ({nombre, dni, legajo, carrera, coeficiente}: StudentInfoPro
                           pairProps={{"direction": "column"}}>
         <NameValuePair name="DNI">{dni || "----"}</NameValuePair>
         <NameValuePair name="Legajo">{legajo || "----"}</NameValuePair>
-        <NameValuePair name="Nombre y Apellido">{nombre || "----"}</NameValuePair>
+        <NameValuePair name="Apellido Nombre">{nombre || "----"}</NameValuePair>
         <NameValuePair name="Carrera">{carrera || "----"}</NameValuePair>
         <NameValuePair name="Coeficiente">{coeficiente || "----"}</NameValuePair>
     </NameValueList>

@@ -25,7 +25,8 @@ interface SStudentInfo {
     dni: number,
     nombre: string,
     apellido: string,
-    correo: "jorge.arenales20@alu.edu.ar",
-    legajo: 12345,
-    coeficiente: 8.7
+    correo: string,
+    legajo: number,
+    coeficiente: number
 }
+
