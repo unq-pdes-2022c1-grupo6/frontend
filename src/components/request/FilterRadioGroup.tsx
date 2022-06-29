@@ -11,11 +11,13 @@ const FilterRadioGroup = (name: string, options: string[]) =>
     // eslint-disable-next-line
     ({value, onChange: onChange0, onCancel}: StatusRequestRadioGroupProps) => {
 
-        const onChange = (val: string) => {
-            val === options[0] ? onCancel() : onChange0(val)
-        }
-
         const getValue = () => value ? value : options[0]
+
+        const onChange = (val: string) => {
+            if (val !== getValue()) {
+                val === options[0] ? onCancel() : onChange0(val)
+            }
+        }
 
         return <RadioButtonGroup
             name={name}
@@ -28,3 +30,4 @@ const FilterRadioGroup = (name: string, options: string[]) =>
 
 export const StatusRequestRadioGroup = FilterRadioGroup("statusRadio", ["Todos", "Pendientes", "Asignados"]);
 export const CareerRadioGroup = FilterRadioGroup("careerRadio", ["Todas", "TPI", "LI", "Simultaneo"]);
+export const StatusRadioGroup = FilterRadioGroup("statusRadio", ["Todas", "Pendientes", "Sin Procesar"]);

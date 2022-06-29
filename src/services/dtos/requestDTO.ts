@@ -1,5 +1,5 @@
 import {RequestFormType} from "../requestService";
-import {TakenSubjectDTO} from "./studentDTO";
+import {TakenSubjectDTO} from "./subjectDTO";
 
 export interface RequestDTO {
     id: number,

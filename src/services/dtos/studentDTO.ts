@@ -1,4 +1,6 @@
 import {RequestWithCommentsDTO} from "./requestDTO";
+import {TakenSubjectDTO} from "./subjectDTO";
+
 
 export interface StudentDTO {
     nombre: string,
@@ -10,10 +12,20 @@ export interface StudentDTO {
     resumenCursadas: TakenSubjectDTO[]
 }
 
-export interface TakenSubjectDTO {
-    nombreMateria: string,
-    codigoMateria: string,
-    estado: "APROBADO" | "DESAPROBADO" | "PA"
-    fechaDeCarga: string,
-    cantidadDeVecesCursada: number
+export interface SearchedStudentDTO {
+    alumno: SStudentInfo,
+    formularioId: number,
+    estadoFormulario: "ABIERTO" | "CERRADO",
+    cantComisionesInscripto: number,
+    cantSolicitudesPendientes: number,
+    cantSolicitudesAprobadas: number
+}
+
+interface SStudentInfo {
+    dni: number,
+    nombre: string,
+    apellido: string,
+    correo: "jorge.arenales20@alu.edu.ar",
+    legajo: 12345,
+    coeficiente: 8.7
 }

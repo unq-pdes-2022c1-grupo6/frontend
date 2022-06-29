@@ -9,16 +9,22 @@ type RequestsSearchBarPropTypes = {
     onCancel: () => void
 }
 
-const RequestsSearchBar = ({placeholder, searchTerm = "", onSearch, onCancel: onCancel0}:
+const RequestsSearchBar = ({placeholder, searchTerm = "", onSearch: onSearch0, onCancel: onCancel0}:
                                RequestsSearchBarPropTypes) => {
     const [value, setValue] = useState(searchTerm);
 
     const onCancel = () => {
-        setValue("");
-        onCancel0();
+        if (searchTerm !== "") {
+            setValue("");
+            onCancel0();
+        }
     }
 
-    return <Box width="medium" >
+    const onSearch = () => {
+        if (searchTerm !== value) onSearch0(value);
+    }
+
+    return <Box width="medium">
         <Stack anchor="right">
             <TextInput
                 placeholder={placeholder}
@@ -26,7 +32,7 @@ const RequestsSearchBar = ({placeholder, searchTerm = "", onSearch, onCancel: on
                 onChange={(event) => setValue(event.target.value)}/>
             <Box align="center" justify="center" direction="row" background={{color: "brand"}}>
                 <Button
-                    onClick={() => onSearch(value)}
+                    onClick={onSearch}
                     icon={<Search/>}
                     hoverIndicator
                     tip="Buscar"/>
