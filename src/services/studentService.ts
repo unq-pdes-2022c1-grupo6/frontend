@@ -1,6 +1,6 @@
 import axiosInstance from "../utils/axios-instance";
 import {useQuery} from "react-query";
-import {SearchedStudentDTO, StudentDTO} from "./dtos/studentDTO";
+import {CourseRequesterDTO, SearchedStudentDTO, StudentDTO} from "./dtos/studentDTO";
 import {StudentSearch, toStudentSearchDTO} from "../state/search";
 
 
@@ -26,4 +26,16 @@ const getRequestingStudents = (search: StudentSearch): Promise<SearchedStudentDT
 export const useSearchRequestingStudentsQuery = (search: StudentSearch) => {
     return useQuery(["requestingStudents", search],
         () => getRequestingStudents(search));
+}
+
+export const getCourseRequesters = (subject: string, numero: number, filter: string): Promise<CourseRequesterDTO[]> => {
+    let filterDTO = filter === "Todos"? {} : {pendiente: "Pendiente" === filter};
+    const params = {numero, ...filterDTO};
+    return axiosInstance.get(`/materias/${subject}/solicitantes`, {params})
+        .then((response) => response.data);
+}
+
+export const useCourseRequestersQuery = (subject: string, course: number, filter: string) => {
+    return useQuery(["requests", "course", course, filter],
+        () => getCourseRequesters(subject, course, filter));
 }

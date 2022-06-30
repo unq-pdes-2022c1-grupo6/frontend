@@ -1,4 +1,4 @@
-import {RequestWithCommentsDTO} from "./requestDTO";
+import {CourseState, RequestWithCommentsDTO} from "./requestDTO";
 import {TakenSubjectDTO} from "./subjectDTO";
 
 
@@ -28,5 +28,18 @@ interface SStudentInfo {
     correo: string,
     legajo: number,
     coeficiente: number
+}
+
+
+export interface CourseRequesterDTO {
+    dni: number,
+    nombreApellido: string,
+    coeficiente: number,
+    cantidadDeAprobadas: number,
+    idSolicitud: number,
+    numeroComision: number,
+    codigoMateria: string,
+    idFormulario: number,
+    estado: CourseState
 }
 

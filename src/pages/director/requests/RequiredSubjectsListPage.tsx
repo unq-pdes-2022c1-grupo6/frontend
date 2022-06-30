@@ -3,6 +3,7 @@ import {Box, DataTable, Page, PageContent, Spinner} from "grommet";
 import {useNavigate} from "react-router-dom";
 import {useState} from "react";
 import RequestsSearchBar from "../../../components/request/RequestsSearchBar";
+import kebabCase from "lodash/kebabCase";
 
 const RequiredSubjectsListPage = () => {
     const navigate = useNavigate();
@@ -27,7 +28,7 @@ const RequiredSubjectsListPage = () => {
                 sortable
                 paginate
                 data={semesterSubjectsQuery.data}
-                onClickRow={(event) => navigate(`${event.datum.codigo}`)}
+                onClickRow={({datum}) => navigate(kebabCase(`${datum.nombre} ${datum.codigo}`))}
                 columns={[
                     {property: "nombre", header: "Materia", primary: true},
                     {property: "codigo", header: "Codigo"},

@@ -18,8 +18,8 @@ const RequestingStudentsTable = ({content, onClickRow}: RequestingStudentsTableP
     data={content}
     onClickRow={(event)  => onClickRow(event.datum.alumno.dni)}
     columns={[
-        {property: "alumno.legajo", header: "Legajo", primary: true},
-        {property: "alumno.dni", header: "DNI"},
+        {property: "alumno.dni", header: "DNI", primary: true},
+        {property: "alumno.legajo", header: "Legajo"},
         {property: "alumno.apellido", header: "Apellido Nombre", render: ({alumno}) =>
                 alumno.apellido + " " + alumno.nombre},
         {property: "alumno.coeficiente", header: "Coeficiente", align: "end"},
