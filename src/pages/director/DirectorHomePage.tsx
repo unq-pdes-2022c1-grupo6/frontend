@@ -23,8 +23,8 @@ const DirectorHomePage = () => {
                 title="Sistema de sobrecupos"
                 subtitle={<Paragraph fill>
                     {`Bienvenido al ${formatSemester(semester)} cuatrimestre de ${year}. Para iniciar un nuevo ciclo de inscripción,
-                    asegúrese de importar los datos necesarios y definir un plazo de inscripción.\n
-                    Para terminarlo, clickee el botón Terminar Inscripción, que cambiará el estado de todas las solicitudes a CERRADO.`}
+                    asegúrese de importar los datos necesarios y definir un plazo de inscripción.`}<br/>
+                    Para terminarlo, clickee el botón Cerrar todas las solicitudes, que cambiará el estado de todas las solicitudes a CERRADO.
                 </Paragraph>}/>
         </PageContent>
         <PageContent direction="row-responsive" justify="between" align="center">

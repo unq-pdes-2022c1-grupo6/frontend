@@ -20,7 +20,6 @@ export const useStudentQuery = (dni: number | undefined) => {
 
 const getRequestingStudents = (search: StudentSearch): Promise<SearchedStudentDTO[]> => {
     const params =  toStudentSearchDTO(search);
-    console.log(params);
     return axiosInstance.get("/alumnos/formulario", {params}).then((response) => response.data);
 };
 

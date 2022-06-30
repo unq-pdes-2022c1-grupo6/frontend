@@ -62,10 +62,10 @@ export const useUpdateSemesterQuery = (year: number, semester: string) => {
     const queryClient = useQueryClient();
 
     return useMutation(postSemester, {
-        onSuccess: () => queryClient.invalidateQueries(["enrollment", year, semester])
-            .then(() => {
-                notificator?.setNotification("Plazo fijado exitosamente!");
-            })
+        onSuccess: () => {
+            queryClient.invalidateQueries(["enrollment", year, semester]);
+            notificator?.setNotification("Plazo fijado exitosamente!");
+        }
     });
 }
 
