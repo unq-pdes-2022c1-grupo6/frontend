@@ -48,7 +48,7 @@ const App = () => {
                 <QueryClientProvider client={createQueryClient(onError)}>
                     <Outlet/>
                 </QueryClientProvider>
-                <Box pad="large">
+                <Box pad="small">
                 </Box>
             </Grommet>
         </AuthProvider>

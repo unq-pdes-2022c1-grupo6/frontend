@@ -15,15 +15,14 @@ export const useStudentSubjectsQuery = () => {
     );
 };
 
-const getSemesterSubjects= (anio: number, semestre: string): Promise<SemesterSubjectDTO[]> => {
-    const params = {anio, semestre};
-    return axiosInstance.get("/materias/solicitudes", {params})
+const getSemesterSubjects = (nombre: string): Promise<SemesterSubjectDTO[]> => {
+    return axiosInstance.get("/materias/solicitudes", {params: {nombre}})
         .then((response) => response.data)
 };
 
-export const useSemesterSubjectsQuery = (year: number, semester: string) => {
-    return useQuery(["subjects", year, semester],
-        () => getSemesterSubjects(year, semester),
+export const useSemesterSubjectsQuery = (search: string) => {
+    return useQuery(["subjects", search],
+        () => getSemesterSubjects(search),
         {initialData: []}
     );
 }

@@ -17,7 +17,10 @@ const WithConfirmationButton = ({dropButtonProps, onConfirm}: WithConfirmationBu
         dropContent={
             <Box pad="medium" direction="row" justify="between">
                 <Button label="Aceptar" plain hoverIndicator
-                        onClick={onConfirm}/>
+                        onClick={() => {
+                            onConfirm();
+                            setShowConfirmation(false)
+                        }}/>
                 <Button label="Cancelar" plain hoverIndicator
                         onClick={() => setShowConfirmation(false)}/>
             </Box>}
