@@ -20,12 +20,19 @@ export const useSearch = () => {
     return {search, setSearch, deleteSearch}
 }
 
-
 export const toStudentSearchDTO = (search: StudentSearch) => {
     const searchDTO1 = search.term === ""? {}: {dni: search.term};
-    const searchDTO2 = {
-        pendiente: search.filter === "Pendientes" || search.filter === "Todas",
-        sinProcesar: search.filter === "Sin Procesar" || search.filter === "Todas",
+    let searchDTO2 = {};
+    switch (search.filter) {
+        case "Todas Pendientes":
+            searchDTO2 = {procesamiento: "SIN_PROCESAR"};
+            break;
+        case "Alguna Pendiente":
+            searchDTO2 = {procesamiento: "FALTA_PROCESAR"};
+            break;
+        case "Solo Aprobadas y Rechazadas":
+            searchDTO2 = {procesamiento: "PROCESADO"};
+            break;
     }
     return {...searchDTO1, ...searchDTO2}
 }

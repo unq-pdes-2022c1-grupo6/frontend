@@ -24,10 +24,10 @@ const FilterRadioGroup = (name: string, options: string[]) =>
             value={getValue()}
             options={options}
             onChange={(event) => onChange(event.target.value)}
-            direction="row"
+            direction="row-responsive"
         />
     };
 
-export const StatusRequestRadioGroup = FilterRadioGroup("statusRadio", ["Todos", "Pendientes", "Asignados"]);
-export const CareerRadioGroup = FilterRadioGroup("careerRadio", ["Todas", "TPI", "LI", "Simultaneo"]);
-export const StatusRadioGroup = FilterRadioGroup("statusRadio", ["Todas", "Pendientes", "Sin Procesar"]);
+
+export const StatusRadioGroup = FilterRadioGroup("statusRadio", ["Todas", "Todas Pendientes", "Alguna Pendiente", "Solo Aprobadas y Rechazadas"]);
+
