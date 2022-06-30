@@ -4,12 +4,13 @@ import {RadioButtonGroup} from "grommet";
 type StatusRequestRadioGroupProps = {
     value: string | undefined,
     onChange: (value: string) => void,
-    onCancel: () => void
+    onCancel: () => void,
+    name?: string
 }
 
-const FilterRadioGroup = (name: string, options: string[]) =>
+const FilterRadioGroup = (options: string[]) =>
     // eslint-disable-next-line
-    ({value, onChange: onChange0, onCancel}: StatusRequestRadioGroupProps) => {
+    ({value, onChange: onChange0, onCancel, name}: StatusRequestRadioGroupProps) => {
 
         const getValue = () => value ? value : options[0]
 
@@ -19,16 +20,20 @@ const FilterRadioGroup = (name: string, options: string[]) =>
             }
         }
 
+        const getOptions = () => {
+            return options.map(o => ({label: o, value: o, id: (name || "radio") + o}))
+        }
+
         return <RadioButtonGroup
-            name={name}
+            name={name || "radio"}
             value={getValue()}
-            options={options}
+            options={getOptions()}
             onChange={(event) => onChange(event.target.value)}
             direction="row-responsive"
         />
     };
 
 
-export const StatusRadioGroup = FilterRadioGroup("statusRadio", ["Todas", "Todas Pendientes", "Alguna Pendiente", "Solo Aprobadas y Rechazadas"]);
+export const StatusRadioGroup = FilterRadioGroup(["Todas", "Todas Pendientes", "Alguna Pendiente", "Solo Aprobadas y Rechazadas"]);
 
-export const RequestersRadioGroup = FilterRadioGroup("requestersRadio", ["Todos", "Pendiente", "Aprobado y Rechazado"]);
+export const RequestersRadioGroup = FilterRadioGroup(["Todos", "Pendiente", "Aprobado y Rechazado"]);

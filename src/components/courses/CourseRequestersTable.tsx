@@ -14,6 +14,7 @@ const CourseRequestersTable = ({subject, course}: { subject: string, course: num
         <Box direction="row" gap="large">
         <RequestersRadioGroup
             value={filter}
+            name={`requesters-radio-${course}`}
             onChange={(value) => setFilter(value)}
             onCancel={() => setFilter("Todos")}/>
         {courseRequestersQuery.isLoading && <Spinner size="medium"/>}
