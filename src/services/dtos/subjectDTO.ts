@@ -23,6 +23,13 @@ export interface TakenSubjectDTO {
     cantidadDeVecesCursada: number
 }
 
+export interface SemesterSubjectDTO {
+    codigo: string,
+    nombre: string,
+    cantidadSolicitudes: number,
+    cantidadSolicitudesPendientes: number
+}
+
 export const formatSubjectCourse = (comision: number, modalidad: string | undefined, horarios: HourDTO[]) => {
     const mod = modalidad ? `(${capitalize(modalidad)}) ` : "";
     return `${comision} - ${mod}${formatHour(horarios)}`

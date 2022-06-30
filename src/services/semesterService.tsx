@@ -40,9 +40,11 @@ const getSemester = (anio: number, semestre: string): Promise<SemesterDTO> => {
 export const useSemesterQuery = (year: number, semester: string, setTerm: (term: string[]) => void) => {
     return useQuery(["enrollment", year, semester],
         () => getSemester(year, semester),
-        {onSuccess: (data) => {
+        {
+            onSuccess: (data) => {
                 setTerm([data.inicioInscripciones + ".000Z", data.finInscripciones + ".000Z"]);
-            }}
+            }
+        }
     )
 }
 
@@ -62,7 +64,24 @@ export const useUpdateSemesterQuery = (year: number, semester: string) => {
     return useMutation(postSemester, {
         onSuccess: () => queryClient.invalidateQueries(["enrollment", year, semester])
             .then(() => {
-            notificator?.setNotification("Plazo fijado exitosamente!");
-        })
+                notificator?.setNotification("Plazo fijado exitosamente!");
+            })
     });
+}
+
+const patchCloseAllRequest = (): Promise<void> => {
+    return axiosInstance.patch("/formulario/cerrar").then((response) => response.data)
+}
+
+//PATCH api/formulario/cerrar
+export const useCloseAllRequest = () => {
+    const queryClient = useQueryClient();
+    const notificator = useGlobalNotificator();
+
+    return useMutation(patchCloseAllRequest, {
+        onSuccess: () => {
+            queryClient.invalidateQueries(["subjects"]);
+            queryClient.invalidateQueries(["requestingStudents"]);
+            notificator?.setNotification("Se terminó la inscripción correctamente!");
+        }})
 }

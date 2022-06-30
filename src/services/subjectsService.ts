@@ -1,6 +1,6 @@
 import axiosInstance from "../utils/axios-instance";
 import {useQuery} from "react-query";
-import { SubjectDTO } from "./dtos/subjectDTO";
+import {SemesterSubjectDTO, SubjectDTO} from "./dtos/subjectDTO";
 
 
 const getStudentSubjects = (): Promise<SubjectDTO[]> => {
@@ -15,3 +15,14 @@ export const useStudentSubjectsQuery = () => {
     );
 };
 
+const getSemesterSubjects = (nombre: string): Promise<SemesterSubjectDTO[]> => {
+    return axiosInstance.get("/materias/solicitudes", {params: {nombre}})
+        .then((response) => response.data)
+};
+
+export const useSemesterSubjectsQuery = (search: string) => {
+    return useQuery(["subjects", search],
+        () => getSemesterSubjects(search),
+        {initialData: []}
+    );
+}

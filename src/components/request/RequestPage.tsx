@@ -4,11 +4,8 @@ import {useCloseRequest, useUpdateCourseState} from "../../services/requestServi
 import {useEffect, useState} from "react";
 import {Box, Button, Heading, Layer, Spinner} from "grommet";
 import AddCourseForm from "../courses/AddCourseForm";
+import WithConfirmationButton from "../WithConfirmationButton";
 
-// PATCH api/alumnos/{dni}/formulario agrega una --- solicitud de comision nueva
-// PATCH api/alumnos/{dni}/solicitudes/{id} ---- define estado de comision solicitada
-// PATCH api/formulario/{id}/cerrar ---- cierra formulario
-// GET /api/cuatrimestres/oferta  ---- comisiones con busqueda por nombre
 
 type RequestPageProps = {
     id?: number,
@@ -50,9 +47,19 @@ const RequestPage = ({id, dniAlumno, solicitudes = [], estado, excludingSubjects
     return <Box fill gap="small">
         <Box direction="row" align="center" gap="medium">
             {state && <Heading level="3" size="medium" margin="none">{`Estado:${state}`}</Heading>}
-            {state === "ABIERTO" && <Button disabled={loading} label="Cerrar" onClick={() => {
-                dniAlumno && id && closeRequest.mutate({dniAlumno, id})
-            }}/>}
+            {state === "ABIERTO" &&
+                <WithConfirmationButton
+                    dropButtonProps={{
+                        disabled: loading,
+                        label: "Cerrar",
+                        dropContent: <></>
+                    }}
+                    onConfirm ={() => {
+                        if (dniAlumno && id) {
+                            closeRequest.mutate({dniAlumno, id});
+                        }
+                    }}
+                />}
             <Button label="Agregar Comisión" onClick={() => {setShowModal(true)}}/>
             {loading && <Spinner size="medium"/>}
         </Box>
