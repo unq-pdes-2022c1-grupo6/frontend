@@ -1,43 +1,57 @@
 import React from "react";
 import {theme} from "./assets/theme";
-import {Grommet} from 'grommet';
-import {Routes, Route} from "react-router-dom";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import Subjects from "./pages/Subjects";
-import SubjectsRequest from "./pages/SubjectsRequest";
-import AcademicRecords from "./pages/AcademicRecords";
-import SubjectsRequestsPage from "./pages/SubjectsRequestsPage";
-import SubjectsAssignations from "./pages/SubjectsAssignations";
-import PublicWrapper from "./components/PublicWrapper";
-import ResponsiveHeader from "./components/ResponsiveHeader";
-import {
-    ACADEMIC_RECORDS_ROUTE, LOGIN_ROUTE, REGISTER_ROUTE, STUDENT_REQUEST_ROUTE,
-    SUBJECTS_ASSIGNATIONS_ROUTE, SUBJECTS_REQUEST_ROUTE,
-    SUBJECTS_REQUESTS_ROUTE,
-    SUBJECTS_ROUTE
-} from "./utils/routes";
-import StudentDetails from "./pages/StudentDetails";
+import {Box, Grommet} from 'grommet';
+import {Outlet} from "react-router-dom";
+import ResponsiveHeader from "./components/layouts/ResponsiveHeader";
+import {MutationCache, QueryCache, QueryClient, QueryClientProvider} from 'react-query'
+import {AxiosError} from "axios";
+import GlobalNotificator from "./components/GlobalNotificator";
+import {AuthProvider} from "./state/auth";
+import {handleGlobally} from "./utils/validators";
+import {useGlobalNotificator} from "./state/notificator";
+
+
+const createQueryClient = (onError: (error: unknown) => void) => {
+    return new QueryClient({
+        queryCache: new QueryCache({
+            onError: (error) => onError(error)
+        }),
+        mutationCache: new MutationCache({
+            onError: (error) => onError(error)
+        }),
+    })
+}
 
 
 const App = () => {
+    const notificator = useGlobalNotificator();
+
+    const onError = (error: unknown) => {
+        if (error instanceof AxiosError) {
+            if (error.response &&
+                error.response.status === 400 &&
+                error.response.data && handleGlobally(error)) {
+                const {error: err, message} = error.response.data;
+                notificator?.setNotification(`${err} : ${message}`, "critical");
+            }
+        }
+    }
 
     return (
-        <Grommet theme={theme} full>
-            <ResponsiveHeader/>
-                <Routes>
-                    <Route element={<PublicWrapper/>}>
-                        <Route path={LOGIN_ROUTE} element={<Login/>}/>
-                        <Route path={REGISTER_ROUTE} element={<Register/>}/>
-                    </Route>
-                    <Route path={SUBJECTS_REQUEST_ROUTE} element={<SubjectsRequest/>}/>
-                    <Route path={SUBJECTS_ROUTE} element={<Subjects/>}/>
-                    <Route path={ACADEMIC_RECORDS_ROUTE} element={<AcademicRecords/>}/>
-                    <Route path={SUBJECTS_REQUESTS_ROUTE} element={<SubjectsRequestsPage/>}/>
-                    <Route path={SUBJECTS_ASSIGNATIONS_ROUTE} element={<SubjectsAssignations/>}/>
-                    <Route path={STUDENT_REQUEST_ROUTE} element={<StudentDetails/>}/>
-                </Routes>
-        </Grommet>
+        <AuthProvider>
+            <Grommet theme={theme} full>
+                <ResponsiveHeader/>
+                <GlobalNotificator
+                    notification={notificator?.notification}
+                    onCloseNotification={notificator?.deleteNotification}
+                />
+                <QueryClientProvider client={createQueryClient(onError)}>
+                    <Outlet/>
+                </QueryClientProvider>
+                <Box pad="small">
+                </Box>
+            </Grommet>
+        </AuthProvider>
     );
 };
 
