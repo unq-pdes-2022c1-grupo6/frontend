@@ -4,16 +4,21 @@ import {minLength, validateEmail} from "../../utils/validators";
 import PasswordField from "../../components/PasswordField";
 import LoadingButton from "../../components/LoadingButton";
 import {useState} from "react";
-import {LOGIN_ROUTE} from "../../utils/routes";
-import {useNavigate} from "react-router-dom";
+import {HOME_ROUTE, LOGIN_ROUTE} from "../../utils/routes";
+import {Navigate, useNavigate} from "react-router-dom";
+import {useAuth} from "../../state/auth";
 
 const LoginDirectorPage = () => {
     const navigate = useNavigate();
     const [directorAccount, setDirectorAccount] = useState<Account>({
         user: "", password: ""
     });
+    const auth = useAuth();
     const login = useLoginDirector(directorAccount.user);
 
+    if (auth?.isLogged && auth?.rol === "Directivo") {
+        return <Navigate to={HOME_ROUTE}/>
+    }
 
     return <Box align="center" justify="center" margin={{top: "large"}}>
         <Box width="medium">

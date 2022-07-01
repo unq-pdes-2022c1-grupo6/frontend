@@ -1,18 +1,25 @@
 import {Anchor, Box, Form, FormField, Paragraph} from "grommet";
 import {minLength, validateDNI} from "../../utils/validators";
 import PasswordField from "../../components/PasswordField";
-import {CONFIRM_ROUTE, DIRECTOR_ROUTE, REGISTER_ROUTE} from "../../utils/routes";
-import {useNavigate} from "react-router-dom";
+import {CONFIRM_ROUTE, DIRECTOR_ROUTE, HOME_ROUTE, REGISTER_ROUTE} from "../../utils/routes";
+import {Navigate, useNavigate} from "react-router-dom";
 import {Account, useLoginStudent} from "../../services/authService";
 import {useState} from "react";
 import LoadingButton from "../../components/LoadingButton";
+import {useAuth} from "../../state/auth";
 
 const LoginStudentPage = () => {
     const [studentAccount, setStudentAccount] = useState(() => ({
         user: "", password: ""
     }))
     const navigate = useNavigate();
+    const auth = useAuth();
     const login = useLoginStudent(studentAccount.user);
+
+
+    if (auth?.isLogged && auth?.rol === "Alumno") {
+        return <Navigate to={HOME_ROUTE}/>
+    }
 
     return <Box align="center" justify="center" margin={{top: "large"}}>
         <Box width="medium">

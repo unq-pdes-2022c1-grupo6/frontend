@@ -17,7 +17,7 @@ export interface ConfirmationInfo {
 }
 
 const postLoginStudent = (newLogin: Account): Promise<AxiosResponseHeaders> => {
-    const data = {...newLogin, dni: parseInt(newLogin.user)};
+    const data = {contrasenia: newLogin.password, dni: parseInt(newLogin.user)};
     return  axiosInstance.post('/auth/alumno/login', data).then((response) => response.headers)
 };
 
@@ -34,8 +34,9 @@ export const useLoginStudent = (dni: string) => {
 };
 
 const postRegister = (newRegister: Account): Promise<void> => {
-    const data = {...newRegister,
+    const data = {
         dni: parseInt(newRegister.user),
+        contrasenia: newRegister.password,
         confirmacionContrasenia: newRegister.password};
     return  axiosInstance.post('/auth/alumno/registrar', data).then((response) => response.data)
 };

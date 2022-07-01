@@ -1,4 +1,4 @@
-import {createContext, useState, ReactNode, useContext} from "react";
+import {createContext, useState, ReactNode, useContext, useEffect} from "react";
 import {AxiosResponseHeaders} from "axios";
 
 
@@ -16,6 +16,15 @@ const AuthProvider = ({children}: { children: ReactNode }) => {
     const [user, setUser] = useState("");
     const [rol, setRol] = useState(""); // Directivo | Alumno | ""
     const [isLogged, setIsLogged] = useState(false);
+
+    useEffect(() => {
+        const login = JSON.parse(localStorage.getItem('login') || "null");
+        if (login && login.user && login.rol && login.token) {
+            setIsLogged(true);
+            setUser(login.user);
+            setRol(login.rol);
+        }
+    },[])
 
     const login = (user: string, headers: AxiosResponseHeaders) => {
         const token = headers.authorization;
