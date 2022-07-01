@@ -31,16 +31,6 @@ export const REQUESTING_STUDENT = ":dni"
 
 export const IMPORT_ROUTE = "importar"
 
-// deprecadas (?
-export const ACADEMIC_RECORDS_ROUTE = "/historial-academico"
-
-export const SUBJECTS_REQUESTS_ROUTE = "/solicitudes"
-
-export const SUBJECTS_ROUTE0 = "oferta-academica"
-
-export const SUBJECTS_ASSIGNATIONS_ROUTE = "/asignaciones"
-
-export const STUDENT_REQUEST_ROUTE = "/alumnos/:dni/solicitud";
 
 
 const privateStudentRoutes = [
@@ -75,6 +65,7 @@ const privateDirectorRoutes = [
         to: DIRECTOR_ROUTE + "/" + HOME_ROUTE,
         name: "Home"
     },
+/*
     {
         to: DIRECTOR_ROUTE + "/" + SUBJECTS_ROUTE,
         name: "Materias"
@@ -83,6 +74,7 @@ const privateDirectorRoutes = [
         to: DIRECTOR_ROUTE + "/" + STUDENTS_ROUTE,
         name: "Alumnos"
     },
+*/
     {
         to: DIRECTOR_ROUTE + "/" + REQUIRED_SUBJECTS,
         name: "Materias Solicitadas"

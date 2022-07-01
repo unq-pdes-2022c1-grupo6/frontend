@@ -1,4 +1,4 @@
-import {RequestWithCommentsDTO} from "./requestDTO";
+import {CourseState, RequestWithCommentsDTO} from "./requestDTO";
 import {TakenSubjectDTO} from "./subjectDTO";
 
 
@@ -30,3 +30,19 @@ interface SStudentInfo {
     coeficiente: number
 }
 
+
+export interface CourseRequesterDTO {
+    dni: number,
+    nombreApellido: string,
+    coeficiente: number,
+    cantidadDeAprobadas: number,
+    idSolicitud: number,
+    numeroComision: number,
+    codigoMateria: string,
+    idFormulario: number,
+    estado: CourseState
+}
+
+export const countApprovedRequesters = (requesters: CourseRequesterDTO[] | undefined = []) => {
+    return requesters.reduce((acc, r) => r.estado === CourseState.APROBADO? acc + 1: acc, 0);
+}

@@ -146,9 +146,35 @@ export const useAddCourseToRequest = (dni: number | undefined, onAddCourse: SetR
         onSuccess: (data) => {
             queryClient.invalidateQueries(["requestingStudents"]);
             return queryClient.invalidateQueries(["student", dni]).then(() => {
-                notificator?.setNotification("Comisión agregada correctamente!");
+                notificator?.setNotification("Comisión cambiada correctamente!");
                 onAddCourse(data.solicitudes);
             });
         }
     })
+}
+
+
+export const useUpdateCourseState2 = () => {
+    const queryClient = useQueryClient();
+    return useMutation(patchCourseState, {
+        onSuccess: () => {
+            return queryClient.invalidateQueries(["requests", "subject"]);
+        }
+    });
+}
+
+const patchRejectAllCourseRequesters = ({code, course}: {code: string, course: string}): Promise<void> => {
+    const query = course === "Todas"? "": `?numero=${course}`;
+    return axiosInstance.patch(`/materias/${code}/solicitudes/rechazar${query}`)
+        .then((response) => response.data)
+}
+
+export const useRejectAllCourseRequesters = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation(patchRejectAllCourseRequesters, {
+        onSuccess: () => {
+            return queryClient.invalidateQueries(["requests", "subject"]);
+        }
+    });
 }

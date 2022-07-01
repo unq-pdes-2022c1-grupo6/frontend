@@ -18,3 +18,17 @@ export const useAvailableCoursesQuery = (excluding: (string | number)[], year: n
             select: (data) => data.filter(c => !excluding.find(exc => c.id === exc || c.materia === exc))
         })
 }
+
+export const getSubjectCourses = (code: string | undefined): Promise<EnrolledCourse[]> => {
+    console.log("fetcheado materias");
+    return code?
+        axiosInstance.get(`/materias/${code}/comision`)
+            .then((response) => response.data):
+        Promise.reject(new Error("Materia no especificada en ruta"))
+}
+
+export const useSubjectCoursesQuery = (code: string | undefined) => {
+    return useQuery(["requests", "subject", code],
+        () => getSubjectCourses(code),{
+        enabled: Boolean(code)})
+}

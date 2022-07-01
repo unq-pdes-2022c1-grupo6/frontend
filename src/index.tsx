@@ -15,8 +15,6 @@ import {
     REQUESTING_STUDENTS,
     REQUIRED_SUBJECT,
     REQUIRED_SUBJECTS,
-    STUDENTS_ROUTE,
-    SUBJECTS_ROUTE,
 } from "./utils/routes";
 import LoginStudentPage from "./pages/student/LoginStudentPage";
 import RegisterPage from "./pages/student/RegisterPage";
@@ -30,8 +28,6 @@ import {GlobalNotificatorProvider} from "./state/notificator";
 import LoginDirectorPage from "./pages/director/LoginDirectorPage";
 import PrivateDirectorLayout from "./components/layouts/PrivateDirectorLayout";
 import DirectorHomePage from "./pages/director/DirectorHomePage";
-import SubjectsPage from "./pages/director/SubjectsPage";
-import StudentsPage from "./pages/director/StudentsPage";
 import ImportPage from "./pages/director/ImportPage";
 import RequiredSubjectsListPage from "./pages/director/requests/RequiredSubjectsListPage";
 import RequiredSubjectPage from "./pages/director/requests/RequiredSubjectPage";
@@ -60,8 +56,6 @@ root.render(
                             <Route index element={<LoginDirectorPage/>}/>
                             <Route element={<PrivateDirectorLayout/>}>
                                 <Route path={HOME_ROUTE} element={<DirectorHomePage/>}/>
-                                <Route path={SUBJECTS_ROUTE} element={<SubjectsPage/>}/>
-                                <Route path={STUDENTS_ROUTE} element={<StudentsPage/>}/>
                                 <Route path={IMPORT_ROUTE} element={<ImportPage/>}/>
                                 <Route path={REQUIRED_SUBJECTS} element={<ParentLayout/>}>
                                     <Route index element={<RequiredSubjectsListPage/>}/>
