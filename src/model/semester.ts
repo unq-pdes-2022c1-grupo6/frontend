@@ -25,8 +25,8 @@ export class Semester {
     constructor(semesterDTO: SemesterDTO) {
         this.year = semesterDTO.anio;
         this.semester = semesterDTO.semestre
-        this.start = new Date(semesterDTO.inicioInscripciones)
-        this.end = new Date(semesterDTO.finInscripciones)
+        this.start = new Date(semesterDTO.inicioInscripciones + ".000Z")
+        this.end = new Date(semesterDTO.finInscripciones + ".000Z")
     }
 
     getStart() {
