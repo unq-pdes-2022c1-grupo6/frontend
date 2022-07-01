@@ -39,7 +39,7 @@ const RequiredSubjectPage = () => {
     }
 
     return <Page kind="wide" pad="large" align="center" gap="medium">
-        <PageContent direction="row" gap="medium">
+        <PageContent direction="row-responsive" gap="medium">
             <Heading level="3" size="medium" margin="none">
                 {capitalize(startCase(params.materia))}
             </Heading>
@@ -54,7 +54,7 @@ const RequiredSubjectPage = () => {
             </Box>
             <Button
                 disabled={rejectAllCourseRequesters.isLoading || !courseNumber}
-                label="Rechazar solicitudes"
+                label="Rechazar solicitudes pendientes"
                 onClick={() => courseNumber &&
                     rejectAllCourseRequesters.mutate({code, course: courseNumber})}/>
             {subjectCoursesQuery.isLoading && <Spinner size="medium"/>}

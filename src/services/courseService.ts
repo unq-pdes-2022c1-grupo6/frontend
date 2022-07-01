@@ -20,7 +20,6 @@ export const useAvailableCoursesQuery = (excluding: (string | number)[], year: n
 }
 
 export const getSubjectCourses = (code: string | undefined): Promise<EnrolledCourse[]> => {
-    console.log("fetcheado materias");
     return code?
         axiosInstance.get(`/materias/${code}/comision`)
             .then((response) => response.data):

@@ -11,7 +11,7 @@ export const formatDate = (date: Date) => {
 export const getCurrentSemester = () => {
     const now = new Date();
     return {
-        semester: now.getMonth() <= 6 ? "S1" : "S2",
+        semester: now.getMonth() <= 7 ? "S1" : "S2",
         year: now.getFullYear()
     }
 }

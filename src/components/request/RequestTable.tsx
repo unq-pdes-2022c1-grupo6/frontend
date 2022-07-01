@@ -25,8 +25,8 @@ const RequestTable = ({content, onChangeCourseState}: RequestTableProps) => {
                     <Text weight={estado === "APROBADO" ? "bold" : "normal"}>
                         {formatSubjectCourse(comision.numero, comision.modalidad, comision.horarios)}
                     </Text>},
-            {property: "comision.sobrecuposTotales", header: "Sobrecupo Disp.", size: 'xsmall', align: 'end'},
-            {property: "comision.sobrecuposDisponibles", header: "Sobrecupo Total", size: 'xsmall', align: 'end'},
+            {property: "comision.sobrecuposDisponibles", header: "Sobrecupo Disp.", size: 'xsmall', align: 'end'},
+            {property: "comision.sobrecuposTotales", header: "Sobrecupo Total", size: 'xsmall', align: 'end'},
             {property: "estado", header: "Estado", size: 'xsmall', render: (row) =>
                     <CourseStatusText state={row.estado}/>},
             {property: "", header: "Acciones", size: 'small', render: (row) => {

@@ -1,4 +1,4 @@
-import {Box, DataTable, Spinner, Text} from "grommet";
+import {Anchor, Box, DataTable, Spinner, Text} from "grommet";
 import {useState} from "react";
 import {useCourseRequestersQuery} from "../../services/studentService";
 import {RequestersRadioGroup} from "../request/FilterRadioGroup";
@@ -6,6 +6,8 @@ import {CourseStatusText} from "../StatusText";
 import CourseActionButtons from "./CourseActionButtons";
 import {CourseState} from "../../services/dtos/requestDTO";
 import {countApprovedRequesters} from "../../services/dtos/studentDTO";
+import {DIRECTOR_ROUTE, REQUESTING_STUDENTS} from "../../utils/routes";
+import {useNavigate} from "react-router-dom";
 
 type CourseRequestersTableProps = {
     subject: string,
@@ -18,6 +20,7 @@ type CourseRequestersTableProps = {
 const CourseRequestersTable = ({subject, course, onChangeCourse, totalQuota}: CourseRequestersTableProps) => {
     const [filter, setFilter] = useState("Todos");
     const courseRequestersQuery = useCourseRequestersQuery(subject, course, filter);
+    const navigate = useNavigate();
 
     return <Box gap="small">
         <Box direction="row" gap="large">
@@ -38,7 +41,10 @@ const CourseRequestersTable = ({subject, course, onChangeCourse, totalQuota}: Co
                 paginate
                 data={courseRequestersQuery.data}
                 columns={[
-                    {property: "dni", header: "DNI", size: "xsmall", primary: true},
+                    {property: "dni", header: "DNI", size: "xsmall", primary: true, render: ({dni}) => {
+                        return <Anchor onClick={() => navigate("/" + DIRECTOR_ROUTE + "/" + REQUESTING_STUDENTS + "/" + dni)}
+                                       label={dni}
+                        />}},
                     {property: "nombreApellido", size: "small", header: "Nombre Apellido"},
                     {property: "coeficiente", header: "Coeficiente", size: "small", align: "end"},
                     {property: "cantidadDeAprobadas", header: "Solicitudes Aprobadas", align: "end"},
