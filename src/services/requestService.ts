@@ -162,3 +162,19 @@ export const useUpdateCourseState2 = () => {
         }
     });
 }
+
+const patchRejectAllCourseRequesters = ({code, course}: {code: string, course: string}): Promise<void> => {
+    const query = course === "Todas"? "": `?numero=${course}`;
+    return axiosInstance.patch(`/materias/${code}/solicitudes/rechazar${query}`)
+        .then((response) => response.data)
+}
+
+export const useRejectAllCourseRequesters = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation(patchRejectAllCourseRequesters, {
+        onSuccess: () => {
+            return queryClient.invalidateQueries(["requests", "subject"]);
+        }
+    });
+}
