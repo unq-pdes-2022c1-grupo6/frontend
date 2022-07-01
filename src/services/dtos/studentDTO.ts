@@ -43,3 +43,6 @@ export interface CourseRequesterDTO {
     estado: CourseState
 }
 
+export const countApprovedRequesters = (requesters: CourseRequesterDTO[] | undefined = []) => {
+    return requesters.reduce((acc, r) => r.estado === CourseState.APROBADO? acc + 1: acc, 0);
+}

@@ -31,7 +31,6 @@ export const useSearchRequestingStudentsQuery = (search: StudentSearch) => {
 export const getCourseRequesters = (subject: string, numero: number, filter: string): Promise<CourseRequesterDTO[]> => {
     let filterDTO = filter === "Todos"? {} : {pendiente: "Pendiente" === filter};
     const params = {numero, ...filterDTO};
-    console.log(params);
     return axiosInstance.get(`/materias/${subject}/solicitantes`, {params})
         .then((response) => response.data);
 }

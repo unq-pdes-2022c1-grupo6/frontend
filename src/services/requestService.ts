@@ -146,9 +146,19 @@ export const useAddCourseToRequest = (dni: number | undefined, onAddCourse: SetR
         onSuccess: (data) => {
             queryClient.invalidateQueries(["requestingStudents"]);
             return queryClient.invalidateQueries(["student", dni]).then(() => {
-                notificator?.setNotification("Comisión agregada correctamente!");
+                notificator?.setNotification("Comisión cambiada correctamente!");
                 onAddCourse(data.solicitudes);
             });
         }
     })
+}
+
+
+export const useUpdateCourseState2 = () => {
+    const queryClient = useQueryClient();
+    return useMutation(patchCourseState, {
+        onSuccess: () => {
+            return queryClient.invalidateQueries(["requests", "subject"]);
+        }
+    });
 }
