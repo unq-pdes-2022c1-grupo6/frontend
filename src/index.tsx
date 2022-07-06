@@ -28,7 +28,7 @@ import {GlobalNotificatorProvider} from "./state/notificator";
 import LoginDirectorPage from "./pages/director/LoginDirectorPage";
 import PrivateDirectorLayout from "./components/layouts/PrivateDirectorLayout";
 import DirectorHomePage from "./pages/director/DirectorHomePage";
-import ImportPage from "./pages/director/ImportPage";
+import ImportPage from "./pages/director/import/ImportPage";
 import RequiredSubjectsListPage from "./pages/director/requests/RequiredSubjectsListPage";
 import RequiredSubjectPage from "./pages/director/requests/RequiredSubjectPage";
 import RequestingStudentsListPage from "./pages/director/requests/RequestingStudentsListPage";

@@ -1,28 +1,70 @@
 import {RowType} from "../../components/import/ImportForm";
-import every from "lodash/every";
+import flatMap from "lodash/flatMap";
 
-export interface ValidatorI {
-    [column: string]: (value: string) => boolean
+
+export interface ErrorTypeI {
+    rowNumber: number,
+    type: "PARSEO" | "IMPORTACIÓN",
+    message: string
 }
 
-export class ValidatorBuilder {
-    result: ValidatorI
+type isValidType = (value: string) => boolean;
+type getMessageType = (value: string, rowNumber: number) => ErrorTypeI;
+
+export interface ValidatorsI {
+    [column: string]: {
+        isValid: isValidType,
+        getMessage: getMessageType
+    }
+}
+
+export class ValidatorsBuilder {
+    result: ValidatorsI
 
     constructor() {
         this.result = {}
     }
 
-    addVal(column: string, isValid: (value: string) => boolean = (value) => value !== "") {
-        this.result = {...this.result, [column]: isValid}
+    createEmptyRowMessage(column: string): getMessageType {
+        return (_, rowNumber) => ({
+            rowNumber,
+            type: "PARSEO",
+            message: `${column} no puede ser vacio/a`,
+        })
+    }
+
+    addVal(column: string,
+           isValid: isValidType = (value) => value !== "",
+           getMessage: getMessageType = this.createEmptyRowMessage(column)) {
+        this.result = {...this.result, [column]: {isValid, getMessage} }
         return this
     }
 
+    createInvalidNumberMessage(column: string): getMessageType {
+        return (value, rowNumber) => ({
+            rowNumber,
+            type: "PARSEO",
+            message: `${column} con valor ${value} no es un numero valido`,
+        })
+    }
+
     addNumberVal(column: string) {
-        return this.addVal(column, (value) => !isNaN(+value))
+        const getMessage = this.createInvalidNumberMessage(column);
+        return this.addVal(column, (value) => !isNaN(+value), getMessage)
+    }
+
+    createNotIncludedMessage(column: string, includesLs: string[]): getMessageType {
+        return (value, rowNumber) => ({
+            rowNumber,
+            type: "PARSEO",
+            message: `${column} con valor ${value} no es uno de los valores
+             permitidos, debe ser uno de estos: ${includesLs}`,
+        })
     }
 
     addIncludesVal(column: string, includesLs: string[]) {
-        return this.addVal(column, (value) => includesLs.includes(value))
+        const getMessage = this.createNotIncludedMessage(column, includesLs);
+        return this.addVal(column, (value) => includesLs.includes(value), getMessage)
     }
 
     getResult() {
@@ -32,9 +74,10 @@ export class ValidatorBuilder {
 }
 
 
-export const validateRow = (validator: ValidatorI) => (row: RowType) => {
-    return every(row, (value, key) => {
-        const isValidFn = validator[key];
-        return !isValidFn || isValidFn(value)
+export const validateRow = (validator: ValidatorsI) => (row: RowType, rowNumber: number): ErrorTypeI[] => {
+    return flatMap(row, (value, key) => {
+        const columnValidator = validator[key];
+        return columnValidator.isValid(value)? []: [columnValidator.getMessage(value, rowNumber)]
     })
 }
+

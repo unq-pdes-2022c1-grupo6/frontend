@@ -1,7 +1,9 @@
 import axiosInstance from "../utils/axios-instance";
-import {useQuery} from "react-query";
+import {useMutation, useQuery} from "react-query";
 import {CourseRequesterDTO, SearchedStudentDTO, StudentDTO} from "./dtos/studentDTO";
 import {StudentSearch, toStudentSearchDTO} from "../state/search";
+import {RowType} from "../components/import/ImportForm";
+import {convertToStudentsDTO} from "../utils/csv/student-mappings";
 
 
 const getStudent = (dni: number | undefined): Promise<StudentDTO> => {
@@ -39,3 +41,34 @@ export const useCourseRequestersQuery = (subject: string, course: number, filter
     return useQuery(["requests", "subject", subject, "course", course, filter],
         () => getCourseRequesters(subject, course, filter));
 }
+
+const postStudents = (studentsRows: RowType[]): Promise<void> => {
+    const studentsDTO = convertToStudentsDTO(studentsRows);
+    return axiosInstance.post("/alumnos", studentsDTO)
+        .then((response) => response.data)
+}
+
+export const useCreateStudents = () => {
+    return useMutation(postStudents)
+}
+
+/*
+const postEnrollments = (studentsRows: string[][]): Promise<void> => {
+    const enrollmentsDTO = convertToEnrollmentsDTO(studentsRows);
+    return axiosInstance.post("/alumnos/inscripciones", enrollmentsDTO)
+        .then((response) => response.data)
+}
+
+export const useCreateEnrollments = () => {
+    return useMutation(postEnrollments)
+}
+
+const postRecords = (recordsRows: string[][]): Promise<void> => {
+    const recordsDTO = convertToRecordsDTO(recordsRows);
+    return axiosInstance.post("/alumnos/historia-academica", recordsDTO)
+        .then((response) => response.data)
+}
+
+export const useCreateRecords = () => {
+    return useMutation(postRecords)
+}*/
