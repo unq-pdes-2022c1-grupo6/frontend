@@ -33,10 +33,3 @@ const recordsMapping = new MappingBuilder()
 
 export const convertToRecordsDTO = convertRowsToDTO(recordsMapping);
 
-
-const enrollmentsMapping = new MappingBuilder()
-    .add("Nro. Identificación", "dni", toDNI)
-    .add("Comisión", "comision")
-    .getResult()
-
-export const convertToEnrollmentsDTO = convertRowsToDTO(enrollmentsMapping);

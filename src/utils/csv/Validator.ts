@@ -4,8 +4,13 @@ import flatMap from "lodash/flatMap";
 
 export interface ErrorTypeI {
     rowNumber: number,
-    type: "PARSEO" | "IMPORTACIÓN",
+    type?: "PARSEO" | "IMPORTACIÓN",
     message: string
+}
+
+export interface ValidateInfoType  {
+    validRows: RowType[],
+    parsingErrors: ErrorTypeI[]
 }
 
 type isValidType = (value: string) => boolean;
@@ -57,8 +62,7 @@ export class ValidatorsBuilder {
         return (value, rowNumber) => ({
             rowNumber,
             type: "PARSEO",
-            message: `${column} con valor ${value} no es uno de los valores
-             permitidos, debe ser uno de estos: ${includesLs}`,
+            message: `${column} con valor ${value} debe ser uno de los siguientes valores: ${includesLs}`,
         })
     }
 
@@ -74,10 +78,21 @@ export class ValidatorsBuilder {
 }
 
 
-export const validateRow = (validator: ValidatorsI) => (row: RowType, rowNumber: number): ErrorTypeI[] => {
+export const validateRow = (validator: ValidatorsI, row: RowType, rowNumber: number): ErrorTypeI[] => {
     return flatMap(row, (value, key) => {
         const columnValidator = validator[key];
         return columnValidator.isValid(value)? []: [columnValidator.getMessage(value, rowNumber)]
     })
 }
 
+
+export const validateRows = (validator: ValidatorsI) => (rows: RowType[]) => {
+    return rows.reduce(
+        ({validRows, parsingErrors}: {validRows: RowType[], parsingErrors: ErrorTypeI[]},
+         row, index) => {
+            const rowErrors = validateRow(validator, row, index);
+            return rowErrors?
+                {validRows, parsingErrors: parsingErrors.concat(rowErrors)}:
+                {validRows: validRows.concat(row), parsingErrors};
+        }, {validRows: [], parsingErrors: []});
+}
