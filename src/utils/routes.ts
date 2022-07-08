@@ -65,19 +65,9 @@ const privateDirectorRoutes = [
         to: DIRECTOR_ROUTE + "/" + HOME_ROUTE,
         name: "Home"
     },
-/*
-    {
-        to: DIRECTOR_ROUTE + "/" + SUBJECTS_ROUTE,
-        name: "Materias"
-    },
-    {
-        to: DIRECTOR_ROUTE + "/" + STUDENTS_ROUTE,
-        name: "Alumnos"
-    },
-*/
     {
         to: DIRECTOR_ROUTE + "/" + REQUIRED_SUBJECTS,
-        name: "Materias Solicitadas"
+        name: "Materias Solicitables"
     },
     {
         to: DIRECTOR_ROUTE + "/" + REQUESTING_STUDENTS,
