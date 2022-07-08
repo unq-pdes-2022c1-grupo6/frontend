@@ -55,7 +55,7 @@ const ImportForm = ({label, validateFn, onImport, loading}: ImportFormProps) => 
                 onImport(validRows, onFinishImport);
                 setParsing(false);
             },
-            error: (err, _) => {
+            error: (err) => {
                 onFinishImport([{type: "PARSEO", messages: [err.message]}]);
                 setParsing(false);
             },
