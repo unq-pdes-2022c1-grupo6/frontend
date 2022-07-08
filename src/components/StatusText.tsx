@@ -29,3 +29,4 @@ const ThreeStatesText = ([status1, status2]: [string,string]) =>
 export const CourseStatusText = ThreeStatesText(["APROBADO", "RECHAZADO"]);
 export const StatusText = ThreeStatesText(["APROBADO", "DESAPROBADO"]);
 export const RequestStatusText = ThreeStatesText(["ABIERTO", "CERRRADO"]);
+export const ImportStatusText = ThreeStatesText(["", "IMPORTACIÓN"]);

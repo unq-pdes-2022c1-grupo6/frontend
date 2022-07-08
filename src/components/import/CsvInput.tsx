@@ -9,13 +9,13 @@ type CsvInputProps = {
     loading: boolean
 }
 
-type FileFormType = { csvinput: File[] | undefined }
+type FileFormType = { csvinput: File[] }
 
 const CsvInput = ({label, onSubmit, loading}: CsvInputProps) => {
     const [fileForm, setFileForm] = useState<FileFormType>();
 
     const onSubmit0 = (value: FileFormType) => {
-        if (value.csvinput && value.csvinput[0]) {
+        if (value.csvinput[0]) {
             onSubmit(value.csvinput[0])
         }
     }
@@ -26,7 +26,7 @@ const CsvInput = ({label, onSubmit, loading}: CsvInputProps) => {
         onChange={(value) => setFileForm(value)}
         messages={{required: "Requerido*"}}>
         <Box direction="row-responsive" align="center" gap="medium">
-            <FormField label={label} name="csvinput" required>
+            <FormField label={label} name="csvinput" required width="large">
                 <FileInput name="csvinput" accept="text/csv"
                            messages={{
                                browse: "Examinar",

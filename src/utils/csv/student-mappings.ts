@@ -8,6 +8,17 @@ export const toLocalDate = (value: string) => {
 
 export const toDNI = (value: string) => +(value.replace("DNI ", ""));
 
+export const studentColumns = [
+    "Apellido",
+    "Nombre",
+    "Documento",
+    "Propuesta",
+    "Plan",
+    "Estado Inscr.",
+    "Calidad",
+    "Regular",
+    "Locación"
+];
 
 const studentMapping = new MappingBuilder()
     .add("Apellido", "apellido")
@@ -17,11 +28,27 @@ const studentMapping = new MappingBuilder()
     .add("Plan", "plan")
     .add("Estado Inscr.", "estado")
     .add("Calidad", "calidad")
-    .add("Regular", "regular", (value) => value === "S")
+    .add("Regular", "regular")
     .getResult()
+
 
 export const convertToStudentsDTO = convertRowsToDTO(studentMapping);
 
+export const recordsColumns = [
+    "Legajo",
+    "DNI",
+    "Carrera",
+    "Materia",
+    "Nombre",
+    "Fecha",
+    "Resultado",
+    "Nota",
+    "Forma Aprobación",
+    "Crédito",
+    "Acta_Promo",
+    "Acta_examen",
+    "Plan"
+]
 
 const recordsMapping = new MappingBuilder()
     .addNumber("Legajo", "legajo")
@@ -32,4 +59,3 @@ const recordsMapping = new MappingBuilder()
     .getResult()
 
 export const convertToRecordsDTO = convertRowsToDTO(recordsMapping);
-

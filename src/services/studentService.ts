@@ -51,24 +51,3 @@ const postStudents = (studentsRows: RowType[]): Promise<void> => {
 export const useCreateStudents = () => {
     return useMutation(postStudents)
 }
-
-/*
-const postEnrollments = (studentsRows: string[][]): Promise<void> => {
-    const enrollmentsDTO = convertToEnrollmentsDTO(studentsRows);
-    return axiosInstance.post("/alumnos/inscripciones", enrollmentsDTO)
-        .then((response) => response.data)
-}
-
-export const useCreateEnrollments = () => {
-    return useMutation(postEnrollments)
-}
-
-const postRecords = (recordsRows: string[][]): Promise<void> => {
-    const recordsDTO = convertToRecordsDTO(recordsRows);
-    return axiosInstance.post("/alumnos/historia-academica", recordsDTO)
-        .then((response) => response.data)
-}
-
-export const useCreateRecords = () => {
-    return useMutation(postRecords)
-}*/

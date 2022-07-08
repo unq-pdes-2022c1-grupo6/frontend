@@ -3,18 +3,18 @@ import flatMap from "lodash/flatMap";
 
 
 export interface ErrorTypeI {
-    rowNumber: number,
-    type?: "PARSEO" | "IMPORTACIÓN",
-    message: string
+    rowNumber?: number,
+    type: "PARSEO" | "IMPORTACIÓN",
+    messages: string[]
 }
 
-export interface ValidateInfoType  {
+export interface ValidateInfoType {
     validRows: RowType[],
     parsingErrors: ErrorTypeI[]
 }
 
 type isValidType = (value: string) => boolean;
-type getMessageType = (value: string, rowNumber: number) => ErrorTypeI;
+type getMessageType = (value: string) => string;
 
 export interface ValidatorsI {
     [column: string]: {
@@ -31,26 +31,18 @@ export class ValidatorsBuilder {
     }
 
     createEmptyRowMessage(column: string): getMessageType {
-        return (_, rowNumber) => ({
-            rowNumber,
-            type: "PARSEO",
-            message: `${column} no puede ser vacio/a`,
-        })
+        return () => `${column} no puede ser vacio/a`;
     }
 
     addVal(column: string,
            isValid: isValidType = (value) => value !== "",
            getMessage: getMessageType = this.createEmptyRowMessage(column)) {
-        this.result = {...this.result, [column]: {isValid, getMessage} }
+        this.result = {...this.result, [column]: {isValid, getMessage}}
         return this
     }
 
     createInvalidNumberMessage(column: string): getMessageType {
-        return (value, rowNumber) => ({
-            rowNumber,
-            type: "PARSEO",
-            message: `${column} con valor ${value} no es un numero valido`,
-        })
+        return (value) => `${column} con valor ${value} no es un numero valido`;
     }
 
     addNumberVal(column: string) {
@@ -59,11 +51,8 @@ export class ValidatorsBuilder {
     }
 
     createNotIncludedMessage(column: string, includesLs: string[]): getMessageType {
-        return (value, rowNumber) => ({
-            rowNumber,
-            type: "PARSEO",
-            message: `${column} con valor ${value} debe ser uno de los siguientes valores: ${includesLs}`,
-        })
+        return (value) =>
+            `${column} con valor ${value || "vacio"} debe ser uno de los siguientes valores: ${includesLs}`
     }
 
     addIncludesVal(column: string, includesLs: string[]) {
@@ -78,21 +67,24 @@ export class ValidatorsBuilder {
 }
 
 
-export const validateRow = (validator: ValidatorsI, row: RowType, rowNumber: number): ErrorTypeI[] => {
-    return flatMap(row, (value, key) => {
+export const validateRow = (validator: ValidatorsI, row: RowType, rowNumber: number): ErrorTypeI => {
+    const errorMessages = flatMap(row, (value, key) => {
         const columnValidator = validator[key];
-        return columnValidator.isValid(value)? []: [columnValidator.getMessage(value, rowNumber)]
+        return columnValidator && !columnValidator.isValid(value as string) ?
+            [columnValidator.getMessage(value as string)] : []
     })
+    return {rowNumber, type: "PARSEO", messages: errorMessages}
 }
 
 
 export const validateRows = (validator: ValidatorsI) => (rows: RowType[]) => {
     return rows.reduce(
-        ({validRows, parsingErrors}: {validRows: RowType[], parsingErrors: ErrorTypeI[]},
+        ({validRows, parsingErrors}: ValidateInfoType,
          row, index) => {
             const rowErrors = validateRow(validator, row, index);
-            return rowErrors?
-                {validRows, parsingErrors: parsingErrors.concat(rowErrors)}:
-                {validRows: validRows.concat(row), parsingErrors};
+            return rowErrors.messages.length === 0 ?
+                {validRows: validRows.concat({rowNumber: index, ...row}), parsingErrors} :
+                {validRows, parsingErrors: parsingErrors.concat(rowErrors)};
         }, {validRows: [], parsingErrors: []});
 }
+

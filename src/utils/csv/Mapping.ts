@@ -34,7 +34,10 @@ export class MappingBuilder {
 
 export const convertRowsToDTO = (mapping0: MappingI) => (rows: RowType[]) => {
     return rows.map(row => reduce(row, (accObj, value, key) => {
-        const {mapping, convertFn} = mapping0[key];
-        return mapping && convertFn ? {...accObj, [mapping]: convertFn(value)} : accObj
-    }, {}))
+        if (mapping0[key]) {
+            const {mapping, convertFn} = mapping0[key];
+            return {...accObj, [mapping]: convertFn(value as string)}
+        }
+        return accObj
+    }, {fila: row.rowNumber}))
 }
