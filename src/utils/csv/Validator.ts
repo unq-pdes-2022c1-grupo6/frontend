@@ -83,7 +83,7 @@ export const validateRows = (validator: ValidatorsI) => (rows: RowType[]) => {
          row, index) => {
             const rowErrors = validateRow(validator, row, index);
             return rowErrors.messages.length === 0 ?
-                {validRows: validRows.concat({rowNumber: index, ...row}), parsingErrors} :
+                {validRows: validRows.concat({fila: index, ...row}), parsingErrors} :
                 {validRows, parsingErrors: parsingErrors.concat(rowErrors)};
         }, {validRows: [], parsingErrors: []});
 }

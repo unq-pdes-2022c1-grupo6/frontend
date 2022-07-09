@@ -14,7 +14,9 @@ export const coursesColumns = [
     "Banda Horaria y Aula"
 ]
 
-const toCorrelatives = (value: string) => lowerCase(value).split(" ")
+const toCorrelatives = (value: string) => {
+    return value !== ""? lowerCase(value).split(" "): [];
+}
 
 const ciclesMapping = [
     {mapping: "cc", columns: ["Complementarias", "Cursos Complementarios (CC)"]},

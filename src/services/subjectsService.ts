@@ -38,7 +38,14 @@ const postSubjects = ({rows, plan, cicle}: SubjectsForm): Promise<void> => {
         .then((response) => response.data)
 }
 
-export const useCreateSubjects = () => {
-    return useMutation(postSubjects);
+const useCreateSubjects = (plan: PlanType, cicle: CicleMappingType) => {
+    return useMutation(({rows}: {rows: RowType[]}) =>
+        postSubjects({rows, plan, cicle}));
 }
+
+export const useCreateLISubjects = () => useCreateSubjects("LI", "cicloLI")
+
+export const useCreateTPI2010Subjects = () => useCreateSubjects("TPI2010", "cicloTPI")
+
+export const useCreateTPI2015Subjects = () => useCreateSubjects("TPI2015", "cicloTPI")
 
