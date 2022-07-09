@@ -34,6 +34,7 @@ export const useSemesterSubjectsQuery = (search: string) => {
 
 const postSubjects = ({rows, plan, cicle}: SubjectsForm): Promise<void> => {
     const subjectsDTO = {plan, materias: convertToSubjectsDTO(rows, cicle)};
+    console.log(subjectsDTO);
     return  axiosInstance.post('/materias/carga', subjectsDTO)
         .then((response) => response.data)
 }

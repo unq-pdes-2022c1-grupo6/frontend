@@ -19,15 +19,15 @@ const toCorrelatives = (value: string) => {
 }
 
 const ciclesMapping = [
-    {mapping: "cc", columns: ["Complementarias", "Cursos Complementarios (CC)"]},
-    {mapping: "ci", columns: ["Ciclo Introductorio (CI)"]},
-    {mapping: "or", columns: ["Otros requisitos", "NOR-W Otros requerimientos"]},
-    {mapping: "nfh", columns: ["NFHW - Taller Formación Humanística"]},
-    {mapping: "nbw", columns: ["NBW - Nucleo Basico - Diplo - 180 créditos"]},
-    {mapping: "cb", columns: ["Cursos Básicos - 112 créditos"]},
-    {mapping: "ca", columns: ["Cursos Avanzados", "Cursos Avanzados (CA)"]},
-    {mapping: "sf", columns: ["Seminario Final"]},
-    {mapping: "co", columns: ["Cursos Obligatorios (CO)", "Cursos Orientados"]},
+    {mapping: "CC", columns: ["Complementarias", "Cursos Complementarios (CC)"]},
+    {mapping: "CI", columns: ["Ciclo Introductorio (CI)"]},
+    {mapping: "OR", columns: ["Otros requisitos", "NOR-W Otros requerimientos"]},
+    {mapping: "NFH", columns: ["NFHW - Taller Formación Humanística"]},
+    {mapping: "NBW", columns: ["NBW - Nucleo Basico - Diplo - 180 créditos"]},
+    {mapping: "CB", columns: ["Cursos Básicos - 112 créditos"]},
+    {mapping: "CA", columns: ["Cursos Avanzados", "Cursos Avanzados (CA)"]},
+    {mapping: "SF", columns: ["Seminario Final"]},
+    {mapping: "CO", columns: ["Cursos Obligatorios (CO)", "Cursos Orientados"]},
 ]
 
 const toCicle = (value: string) => {

@@ -85,7 +85,7 @@ export const validateRow = (validator: ValidatorsI, row: RowType, rowNumber: num
 
 export const validateRows = (validator: ValidatorsI, validColumns: string[]) =>
     (rows: RowType[], rowColums: string[]) => {
-        const hasValidColumns = difference(validColumns, rowColums).length == 0;
+        const hasValidColumns = difference(validColumns, rowColums).length === 0;
         let validationInfo:  {validRows: RowType[], parsingErrors: RowErrorTypeI[]} =
             { validRows: [], parsingErrors: []};
         if (hasValidColumns) {

@@ -4,7 +4,6 @@ import {useCreateLISubjects, useCreateTPI2010Subjects, useCreateTPI2015Subjects}
 import ImportForm from "../../../components/import/ImportForm";
 import {validateLISubjectRow, validateTPI2010SubjectRow, validateTPI2015SubjectRow}
     from "../../../utils/csv/subjects-validators";
-import {convertToSubjectsDTO} from "../../../utils/csv/subject-mappings";
 
 
 const ImportSubjectsPage = () => {
@@ -17,28 +16,25 @@ const ImportSubjectsPage = () => {
         <ImportForm
             label="TPI 2010"
             validateFn={validateTPI2010SubjectRow}
-            onImport={(rows, onFinishImport) => {
-                console.log(convertToSubjectsDTO(rows, "cicloTPI"))
-                onFinishImport([])
-            }}
+            onImport={(rows, onFinishImport) => createTPI2010Subjects.mutate({rows},{
+                onSuccess: () => onFinishImport([])
+            })}
             loading={createTPI2010Subjects.isLoading}
         />
         <ImportForm
             label="TPI 2015"
             validateFn={validateTPI2015SubjectRow}
-            onImport={(rows, onFinishImport) => {
-                console.log(convertToSubjectsDTO(rows, "cicloTPI"))
-                onFinishImport([])
-            }}
+            onImport={(rows, onFinishImport) => createTPI2015Subjects.mutate({rows},{
+                onSuccess: () => onFinishImport([])
+            })}
             loading={createTPI2015Subjects.isLoading}
         />
         <ImportForm
             label="LI"
             validateFn={validateLISubjectRow}
-            onImport={(rows, onFinishImport) => {
-                console.log(convertToSubjectsDTO(rows, "cicloLI"))
-                onFinishImport([])
-            }}
+            onImport={(rows, onFinishImport) => createLISubjects.mutate({rows},{
+                onSuccess: () => onFinishImport([])
+            })}
             loading={createLISubjects.isLoading}
         />
     </Box>
