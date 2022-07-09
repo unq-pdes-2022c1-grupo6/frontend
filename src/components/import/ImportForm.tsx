@@ -5,7 +5,7 @@ import {useState} from "react";
 import {ErrorTypeI, ValidateInfoType} from "../../utils/csv/Validator";
 import ImportErrorsTable from "./ImportErrorsTable";
 
-export type RowType = { [column: string]: string | number | undefined,  rowNumber?: number};
+export type RowType = { [column: string]: string | number | undefined,  fila?: number};
 
 type ImportFormProps = {
     label: string,

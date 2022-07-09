@@ -1,12 +1,14 @@
-
+import {Box} from "grommet";
+import {useCreateSubjects} from "../../../services/subjectsService";
 
 
 const ImportSubjectsPage = () => {
+    const createSubjects = useCreateSubjects();
 
-    return <div>
+    return <Box gap="medium" pad="medium">
 
-    </div>
 
+    </Box>
 
 };
 
