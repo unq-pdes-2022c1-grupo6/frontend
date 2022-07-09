@@ -2,7 +2,8 @@ import {Box, Heading} from "grommet";
 import {useCreateLISubjects, useCreateTPI2010Subjects, useCreateTPI2015Subjects}
     from "../../../services/subjectsService";
 import ImportForm from "../../../components/import/ImportForm";
-import {validateSubjectRow} from "../../../utils/csv/subjects-validators";
+import {validateLISubjectRow, validateTPI2010SubjectRow, validateTPI2015SubjectRow}
+    from "../../../utils/csv/subjects-validators";
 import {convertToSubjectsDTO} from "../../../utils/csv/subject-mappings";
 
 
@@ -15,7 +16,7 @@ const ImportSubjectsPage = () => {
         <Heading level="4" margin="none">Planes</Heading>
         <ImportForm
             label="TPI 2010"
-            validateFn={validateSubjectRow}
+            validateFn={validateTPI2010SubjectRow}
             onImport={(rows, onFinishImport) => {
                 console.log(convertToSubjectsDTO(rows, "cicloTPI"))
                 onFinishImport([])
@@ -24,7 +25,7 @@ const ImportSubjectsPage = () => {
         />
         <ImportForm
             label="TPI 2015"
-            validateFn={validateSubjectRow}
+            validateFn={validateTPI2015SubjectRow}
             onImport={(rows, onFinishImport) => {
                 console.log(convertToSubjectsDTO(rows, "cicloTPI"))
                 onFinishImport([])
@@ -33,7 +34,7 @@ const ImportSubjectsPage = () => {
         />
         <ImportForm
             label="LI"
-            validateFn={validateSubjectRow}
+            validateFn={validateLISubjectRow}
             onImport={(rows, onFinishImport) => {
                 console.log(convertToSubjectsDTO(rows, "cicloLI"))
                 onFinishImport([])
