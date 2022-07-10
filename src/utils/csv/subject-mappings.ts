@@ -20,7 +20,7 @@ const toCorrelatives = (value: string) => {
 
 const ciclesMapping = [
     {mapping: "CC", columns: ["Complementarias", "Cursos Complementarios (CC)"]},
-    {mapping: "CI", columns: ["Ciclo Introductorio (CI)"]},
+    {mapping: "CI", columns: ["Ciclo Introductorio (CI)", "Ciclo Introductorio"]},
     {mapping: "OR", columns: ["Otros requisitos", "NOR-W Otros requerimientos"]},
     {mapping: "NFH", columns: ["NFHW - Taller Formación Humanística"]},
     {mapping: "NBW", columns: ["NBW - Nucleo Basico - Diplo - 180 créditos"]},
