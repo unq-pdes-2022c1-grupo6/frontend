@@ -8,7 +8,7 @@ const ImportPage = () => {
     const [activeTab, setActiveTab] = useState(0);
 
 
-    return <Page kind="narrow" pad="large" align="center">
+    return <Page kind="narrow" pad="medium" align="center">
         <PageContent>
             <Tabs alignControls="start" justify="start" activeIndex={activeTab} onActive={setActiveTab}>
                 <Tab title="Importación Materias">

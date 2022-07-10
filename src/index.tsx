@@ -43,7 +43,6 @@ root.render(
             <BrowserRouter>
                 <Routes>
                     <Route path="/" element={<App/>}>
-                        <Route path={IMPORT_ROUTE} element={<ImportPage/>}/>
                         <Route index element={<LoginStudentPage/>}/>
                         <Route path={REGISTER_ROUTE} element={<RegisterPage/>}/>
                         <Route path={CONFIRM_ROUTE} element={<ConfirmPage/>}/>

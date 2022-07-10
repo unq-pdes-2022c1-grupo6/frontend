@@ -1,5 +1,6 @@
 import {RowType} from "../../components/import/ImportForm";
 import flatMap from "lodash/flatMap";
+import difference from "lodash/difference";
 
 
 export interface ErrorTypeI {
@@ -8,9 +9,14 @@ export interface ErrorTypeI {
     messages: string[]
 }
 
+export interface RowErrorTypeI extends ErrorTypeI {
+    rowNumber: number,
+}
+
 export interface ValidateInfoType {
+    hasValidColumns: boolean,
     validRows: RowType[],
-    parsingErrors: ErrorTypeI[]
+    parsingErrors: RowErrorTypeI[]
 }
 
 type isValidType = (value: string) => boolean;
@@ -67,7 +73,7 @@ export class ValidatorsBuilder {
 }
 
 
-export const validateRow = (validator: ValidatorsI, row: RowType, rowNumber: number): ErrorTypeI => {
+export const validateRow = (validator: ValidatorsI, row: RowType, rowNumber: number): RowErrorTypeI => {
     const errorMessages = flatMap(row, (value, key) => {
         const columnValidator = validator[key];
         return columnValidator && !columnValidator.isValid(value as string) ?
@@ -77,14 +83,21 @@ export const validateRow = (validator: ValidatorsI, row: RowType, rowNumber: num
 }
 
 
-export const validateRows = (validator: ValidatorsI) => (rows: RowType[]) => {
-    return rows.reduce(
-        ({validRows, parsingErrors}: ValidateInfoType,
-         row, index) => {
-            const rowErrors = validateRow(validator, row, index);
-            return rowErrors.messages.length === 0 ?
-                {validRows: validRows.concat({rowNumber: index, ...row}), parsingErrors} :
-                {validRows, parsingErrors: parsingErrors.concat(rowErrors)};
-        }, {validRows: [], parsingErrors: []});
-}
+export const validateRows = (validator: ValidatorsI, validColumns: string[]) =>
+    (rows: RowType[], rowColums: string[]) => {
+        const hasValidColumns = difference(validColumns, rowColums).length === 0;
+        let validationInfo:  {validRows: RowType[], parsingErrors: RowErrorTypeI[]} =
+            { validRows: [], parsingErrors: []};
+        if (hasValidColumns) {
+            validationInfo = rows.reduce(
+                ({validRows, parsingErrors}: {validRows: RowType[], parsingErrors: RowErrorTypeI[]},
+                 row, index) => {
+                    const rowErrors = validateRow(validator, row, index);
+                    return rowErrors.messages.length === 0 ?
+                        {validRows: validRows.concat({fila: index, ...row}), parsingErrors} :
+                        {validRows, parsingErrors: parsingErrors.concat(rowErrors)};
+                }, {validRows: [], parsingErrors: []});
+        }
+        return {hasValidColumns, ...validationInfo};
+    }
 

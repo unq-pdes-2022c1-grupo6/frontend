@@ -4,7 +4,7 @@ import reduce from "lodash/reduce";
 export interface MappingI {
     [column: string]: {
         mapping: string,
-        convertFn: (value: string) => string | boolean | number;
+        convertFn: (value: string) => string | number | string[];
     }
 }
 
@@ -16,13 +16,13 @@ export class MappingBuilder {
     }
 
     add(column: string, mapping: string,
-        convertFn: (value: string) => string | boolean | number = (value) => value) {
+        convertFn: (value: string) => string | number | string[] = (value) => value) {
         this.result = {...this.result, [column]: {mapping, convertFn}}
         return this
     }
 
     addNumber(column: string, mapping: string) {
-        return this.add(column, mapping, (value) => +value)
+        return this.add(column, mapping, (value) => value === "" ? 0 : +value)
     }
 
     getResult() {
@@ -32,12 +32,12 @@ export class MappingBuilder {
 }
 
 
-export const convertRowsToDTO = (mapping0: MappingI) => (rows: RowType[]) => {
+export const convertRowsToDTO = (mapping0: MappingI) => (rows: RowType[]): RowType[] => {
     return rows.map(row => reduce(row, (accObj, value, key) => {
         if (mapping0[key]) {
             const {mapping, convertFn} = mapping0[key];
             return {...accObj, [mapping]: convertFn(value as string)}
         }
         return accObj
-    }, {fila: row.rowNumber}))
+    }, {fila: row.fila}))
 }
