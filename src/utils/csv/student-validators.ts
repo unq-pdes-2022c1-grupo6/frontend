@@ -1,7 +1,8 @@
 import {validateRows, ValidatorsBuilder} from "./Validator";
+import {toDNI, toLocalDate} from "./student-mappings";
 
-//const isValidDNI = (value: string) => !isNaN(toDNI(value))
-//const isValidDate = (value: string) => !isNaN(new Date(toLocalDate(value)).getTime());
+const isValidDNI = (value: string) => !isNaN(toDNI(value))
+const isValidDate = (value: string) => !isNaN(new Date(toLocalDate(value)).getTime());
 
 const studentValidator = new ValidatorsBuilder()
     .addVal("Apellido")
@@ -28,11 +29,19 @@ export const studentColumns = [
 
 export const validateStudentRow = validateRows(studentValidator, studentColumns);
 
-/*const recordValidator = new ValidatorsBuilder()
-    .addNumberVal("Legajo")
+const recordValidator = new ValidatorsBuilder()
     .addVal("DNI", isValidDNI)
     .addNumberVal("Materia")
     .addVal("Fecha", isValidDate)
     .addIncludesVal("Resultado", ["A",  "E",  "N", "P", "U", "R", "V", "Vacia"])
-    .getResult()*/
+    .getResult()
 
+
+const recordsColumns = [
+    "DNI",
+    "Materia",
+    "Fecha",
+    "Resultado"
+]
+
+export const validateRecordsRows = validateRows(recordValidator, recordsColumns);
