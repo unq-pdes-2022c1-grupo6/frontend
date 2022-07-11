@@ -4,13 +4,23 @@ import reduce from "lodash/reduce";
 export interface MappingI {
     [column: string]: {
         mapping: string,
-        convertFn: (value: string) => string | number | string[];
+        convertFn: (value: string) => unknown;
     }
 }
 
 export interface EnumMapping {
     mapping: string,
     columns: string[]
+}
+
+export const convertToEnumFn = (enumMappings: EnumMapping[]) => (value: string) => {
+    let enumm = "";
+    if (value !== "") {
+        const trimmed = value.trim();
+        const enumMapping = enumMappings.find(em => em.columns.includes(trimmed));
+        enumm = enumMapping? enumMapping.mapping: ""
+    }
+    return enumm
 }
 
 export class MappingBuilder {
@@ -21,7 +31,7 @@ export class MappingBuilder {
     }
 
     add(column: string, mapping: string,
-        convertFn: (value: string) => string | number | string[] = (value) => value) {
+        convertFn: (value: string) => unknown = (value) => value) {
         this.result = {...this.result, [column]: {mapping, convertFn}}
         return this
     }
@@ -31,16 +41,7 @@ export class MappingBuilder {
     }
 
     addEnum(column: string, mapping: string, enumMappings: EnumMapping[]) {
-        const convertToEnumFn = (value: string) => {
-            let enumm = "";
-            if (value !== "") {
-                const trimmed = value.trim();
-                const enumMapping = enumMappings.find(em => em.columns.includes(trimmed));
-                enumm = enumMapping? enumMapping.mapping: ""
-            }
-            return enumm
-        };
-        return this.add(column, mapping, convertToEnumFn)
+        return this.add(column, mapping, convertToEnumFn(enumMappings))
     }
 
     getResult() {
