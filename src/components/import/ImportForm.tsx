@@ -54,7 +54,6 @@ const ImportForm = ({label, validateFn, onImport, loading}: ImportFormProps) => 
         Papa.parse(file, {
             complete: (results: ParseResult<RowType>) => {
                 const {hasValidColumns, validRows, parsingErrors} = validateFn(results.data, results.meta.fields || []);
-                console.log(results.data);
                 setData(results.data);
                 if (hasValidColumns) {
                     setRowErrors(parsingErrors);
