@@ -1,20 +1,21 @@
 import {Box} from "grommet";
-import {useCreateStudents} from "../../../services/studentService";
+import {useCreateRecords} from "../../../services/studentService";
 import ImportForm from "../../../components/import/ImportForm";
-import {validateStudentRow} from "../../../utils/csv/student-validators";
-import {convertToStudentsDTO} from "../../../utils/csv/student-mappings";
+import {validateRecordsRows} from "../../../utils/csv/student-validators";
+import {convertToRecordsDTO} from "../../../utils/csv/student-mappings";
 
 
 const ImportStudentsPage = () => {
-    const createStudents = useCreateStudents();
+    //const createStudents = useCreateStudents();
+    const createRecords = useCreateRecords();
 
     return <Box gap="medium" pad="medium">
         <ImportForm
-            label="Alumnos"
-            loading={createStudents.isLoading}
-            validateFn={validateStudentRow}
+            label="Historia Académica"
+            loading={createRecords.isLoading}
+            validateFn={validateRecordsRows}
             onImport={(validRows, onFinishImport) => {
-                console.log(convertToStudentsDTO(validRows));
+                console.log(convertToRecordsDTO(validRows));
                 onFinishImport([])
             }}/>
     </Box>

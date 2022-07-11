@@ -30,19 +30,8 @@ const ciclesMapping = [
     {mapping: "CO", columns: ["Cursos Obligatorios (CO)", "Cursos Orientados"]},
 ]
 
-const toCicle = (value: string) => {
-    let cicle = "";
-    if (value !== "") {
-        const trimmed = value.trim();
-        const cicleMapping = ciclesMapping.find(cm => cm.columns.includes(trimmed));
-        cicle = cicleMapping? cicleMapping.mapping: ""
-    }
-    return cicle
-}
-
-
 export const subjectsMapping = (cicleMapping: CicleMappingType) => new MappingBuilder()
-    .add("Plan TPI 2010", cicleMapping, toCicle)
+    .addEnum("Plan TPI 2010", cicleMapping, ciclesMapping)
     .add("Código Materia", "codigo")
     .addNumber("Créditos", "creditos")
     .add("Materia", "materia")

@@ -8,6 +8,11 @@ export interface MappingI {
     }
 }
 
+export interface EnumMapping {
+    mapping: string,
+    columns: string[]
+}
+
 export class MappingBuilder {
     result: MappingI
 
@@ -23,6 +28,19 @@ export class MappingBuilder {
 
     addNumber(column: string, mapping: string) {
         return this.add(column, mapping, (value) => value === "" ? 0 : +value)
+    }
+
+    addEnum(column: string, mapping: string, enumMappings: EnumMapping[]) {
+        const convertToEnumFn = (value: string) => {
+            let enumm = "";
+            if (value !== "") {
+                const trimmed = value.trim();
+                const enumMapping = enumMappings.find(em => em.columns.includes(trimmed));
+                enumm = enumMapping? enumMapping.mapping: ""
+            }
+            return enumm
+        };
+        return this.add(column, mapping, convertToEnumFn)
     }
 
     getResult() {

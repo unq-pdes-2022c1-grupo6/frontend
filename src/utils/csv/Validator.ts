@@ -63,7 +63,10 @@ export class ValidatorsBuilder {
 
     addIncludesVal(column: string, includesLs: string[]) {
         const getMessage = this.createNotIncludedMessage(column, includesLs);
-        return this.addVal(column, (value) => includesLs.includes(value), getMessage)
+        return this.addVal(column, (value) => {
+            const trimmed = value.trim();
+            return includesLs.includes(trimmed);
+        }, getMessage)
     }
 
     getResult() {

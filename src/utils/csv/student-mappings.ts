@@ -50,12 +50,18 @@ export const recordsColumns = [
     "Plan"
 ]
 
+const resultsMapping = [
+    {mapping: "APROBADO", columns: ["A", "P"]},
+    {mapping: "PA", columns: ["E", "V"]},
+    {mapping: "DESAPROBADO", columns: ["N", "R"]},
+    {mapping: "AUSENTE", columns: ["U", "Vacia"]},
+]
+
 const recordsMapping = new MappingBuilder()
-    .addNumber("Legajo", "legajo")
     .add("DNI", "dni", toDNI)
     .add("Materia", "codigo")
-    .add("Fecha", "fechaDeCarga", toLocalDate)
-    .add("Resultado", "resultado")
+    .add("Fecha", "fecha", toLocalDate)
+    .addEnum("Resultado", "resultado", resultsMapping)
     .getResult()
 
 export const convertToRecordsDTO = convertRowsToDTO(recordsMapping);
