@@ -50,7 +50,7 @@ export const useCreateStudents = () => {
 }
 
 const postRecords = ({rows}: { rows: DTORowType[] }): Promise<void> => {
-    return axiosInstance.post("/alumnos/historia-academica", rows)
+    return axiosInstance.patch("/alumnos/historia-academica", rows)
         .then((response) => response.data)
 }
 

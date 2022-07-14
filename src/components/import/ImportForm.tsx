@@ -14,8 +14,8 @@ type ImportFormProps = {
     label: string,
     convertToDTOsFn: (rows: ParsedRowType[]) => ConvertedRowsInfoType,
     requiredColumns: string[],
-    onImport:  (variables: {rows: DTORowType[]},
-                options?: (MutateOptions<void, unknown, {rows: DTORowType[]}, unknown> | undefined)) => void,
+    onImport: (variables: { rows: DTORowType[] },
+               options?: (MutateOptions<void, unknown, { rows: DTORowType[] }, unknown> | undefined)) => void,
     loading: boolean
 }
 
@@ -45,8 +45,7 @@ const ImportForm = ({label, convertToDTOsFn, requiredColumns, onImport, loading}
                         messages: [c.mensaje]
                     }));
                     setRowErrors(prevState => prevState.concat(newRowErrors));
-                }
-                else {
+                } else {
                     setGeneralErrors([{type: "IMPORTACIÓN", messages: ["Error en la importación"]}]);
                 }
                 setImportFinished(true);
@@ -101,13 +100,13 @@ const ImportForm = ({label, convertToDTOsFn, requiredColumns, onImport, loading}
     }
 
     const successfulRows = useMemo(() => {
-        return rowErrors.length !== 0 && generalErrors.length === 0? data.length - rowErrors.length: 0
-    },[rowErrors, generalErrors, data])
+        return generalErrors.length !== 0 ? 0 : data.length - rowErrors.length;
+    }, [rowErrors, generalErrors, data])
 
     const loadingLabel = useMemo(() => {
-        if (loading) return "Importando"
-        if (parsing) return "Parseando"
-        return "Cargando"
+        if (loading) return "Importando";
+        if (parsing) return "Parseando";
+        return "Cargando";
     }, [parsing, loading])
 
     return <Box>
