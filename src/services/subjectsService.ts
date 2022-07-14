@@ -1,6 +1,6 @@
 import axiosInstance from "../utils/axios-instance";
 import {useMutation, useQuery} from "react-query";
-import {ConflictDTO, SemesterSubjectDTO, SubjectDTO} from "./dtos/subjectDTO";
+import {SemesterSubjectDTO, SubjectDTO} from "./dtos/subjectDTO";
 import {DTORowType} from "../utils/csv/Mapping";
 import {CicleMappingType, fillPlanToSubjectsDTO, PlanType} from "../utils/csv/subjects-mappings";
 
@@ -32,7 +32,7 @@ export const useSemesterSubjectsQuery = (search: string) => {
     );
 }
 
-const postSubjects = ({rows, plan, cicle}: SubjectsForm): Promise<ConflictDTO[]> => {
+const postSubjects = ({rows, plan, cicle}: SubjectsForm): Promise<void> => {
     const subjectsDTO = {plan, materias: fillPlanToSubjectsDTO(rows, cicle)};
     return  axiosInstance.post('/materias', subjectsDTO)
         .then((response) => response.data)

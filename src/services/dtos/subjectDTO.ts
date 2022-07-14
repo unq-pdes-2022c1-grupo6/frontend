@@ -44,3 +44,7 @@ const formatHour = (hour: HourDTO[]) => {
     return hour.reduce((acc, {dia, inicio, fin}) =>
         `${acc}- ${capitalize(dia)} ${inicio} a ${fin} `, "").substring(2);
 }
+
+export const isConflictArray = (value: unknown): value is ConflictDTO[] => (
+    Array.isArray(value) && value.every(element => element.fila && element.mensaje)
+);

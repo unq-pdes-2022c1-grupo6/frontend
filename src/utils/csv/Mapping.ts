@@ -60,12 +60,12 @@ export class MappingBuilder {
 const convertRowToDTO = (mappings: MappingI[], row: ParsedRowType, rowNumber: number) => {
     return mappings.reduce((acc: { dto: DTORowType, errors: string[] },
                      {column, mapping, convertFn, validator}) => {
-        const value = convertFn(row[column]);
+        const value = convertFn(row[column] || "");
         const isValid = validator.isValid(value);
         const newErrors = isValid ? acc.errors : acc.errors.concat(validator.getMessage(column, value));
 
         return newErrors.length === 0 ?
-            {dto: {[mapping]: value, ...acc.dto}, errors: acc.errors} :
+            {dto: {...acc.dto, [mapping]: value}, errors: acc.errors} :
             {dto: acc.dto, errors: newErrors}
 
     }, {dto: {fila: rowNumber}, errors: []})

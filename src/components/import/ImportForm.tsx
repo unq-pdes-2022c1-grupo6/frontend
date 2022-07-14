@@ -6,7 +6,8 @@ import ImportErrorsTable from "./ImportErrorsTable";
 import {ConvertedRowsInfoType, DTORowType, ParsedRowType} from "../../utils/csv/Mapping";
 import {MutateOptions} from "react-query";
 import {ErrorTypeI, notValidColumns, RowErrorTypeI} from "../../utils/csv/Validator";
-import {ConflictDTO} from "../../services/dtos/subjectDTO";
+import {AxiosError} from "axios";
+import {isConflictArray} from "../../services/dtos/subjectDTO";
 
 
 type ImportFormProps = {
@@ -14,7 +15,7 @@ type ImportFormProps = {
     convertToDTOsFn: (rows: ParsedRowType[]) => ConvertedRowsInfoType,
     requiredColumns: string[],
     onImport:  (variables: {rows: DTORowType[]},
-                options?: (MutateOptions<ConflictDTO[], unknown, {rows: DTORowType[]}, unknown> | undefined)) => void,
+                options?: (MutateOptions<void, unknown, {rows: DTORowType[]}, unknown> | undefined)) => void,
     loading: boolean
 }
 
@@ -32,6 +33,22 @@ const ImportForm = ({label, convertToDTOsFn, requiredColumns, onImport, loading}
     const onFinishImport = (rows: DTORowType[]) => {
         onImport({rows}, {
             onSuccess: () => {
+                setImportFinished(true);
+            },
+            onError: (error) => {
+                let newRowErrors: RowErrorTypeI[] = [];
+                if (error instanceof AxiosError && error.response?.status === 409 &&
+                    isConflictArray(error.response?.data)) {
+                    newRowErrors = error.response?.data.map(c => ({
+                        fila: c.fila,
+                        type: "IMPORTACIÓN",
+                        messages: [c.mensaje]
+                    }));
+                    setRowErrors(prevState => prevState.concat(newRowErrors));
+                }
+                else {
+                    setGeneralErrors([{type: "IMPORTACIÓN", messages: ["Error en la importación"]}]);
+                }
                 setImportFinished(true);
             }
         });
@@ -60,9 +77,9 @@ const ImportForm = ({label, convertToDTOsFn, requiredColumns, onImport, loading}
         setParsing(true);
         Papa.parse(file, {
             complete: (results: ParseResult<ParsedRowType>) => {
+                setData(results.data);
                 if (notValidColumns.isValid(requiredColumns, results.meta.fields || [])) {
                     const {dtos, errors} = convertToDTOsFn(results.data);
-                    setData(results.data);
                     setRowErrors(errors);
                     onFinishImport(dtos);
                 } else {

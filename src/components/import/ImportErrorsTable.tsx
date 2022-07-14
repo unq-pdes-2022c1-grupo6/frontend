@@ -13,9 +13,9 @@ const ImportErrorsTable = ({content}: {content: ErrorTypeI[]}) => {
             paginate
             data={content}
             columns={[
-                {property: "fila", header: <Text>{`Fila (${content.length} Totales)`}</Text>,
+                {property: "fila", header: <Text>{`Fila (${content.length} Total/es)`}</Text>, align: "end",
                     size: "xsmall", render: ({fila}) => <Text weight="bold">{fila}</Text>},
-                {property: "type", header: "Tipo de Error", size: "xsmall",
+                {property: "type", header: "Tipo de Error", size: "small",
                     render: ({type}) => <ImportStatusText state={type}/>},
                 {property: "messages", align:"start", sortable: false, header: "Mensajes de Error",
                 render: ({messages}) => <Paragraph maxLines={4}>{`${messages}`}</Paragraph>},

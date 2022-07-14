@@ -24,7 +24,7 @@ const toCorrelatives = (value: string): string[] => {
 }
 
 const subjectsMapping = (cicleMapping: CicleMappingType) => new MappingBuilder()
-    .addEnum("Plan TPI 2010", cicleMapping, ciclesMapping)
+    .addEnum("Plan TPI 2010", cicleMapping, ciclesMapping, alwaysValid)
     .add("Código Materia", "codigo")
     .addNumber("Créditos", "creditos", alwaysValid)
     .add("Materia", "materia")
@@ -95,7 +95,7 @@ const toHours = (value: string): HourDTO[] => {
     if (value !== "") {
         const splitted = value.split("/");
         hours = splitted.flatMap(s => {
-            const [dia, inicio, _, fin] = s.split(" ");
+            const [dia, inicio, , fin] = s.split(" ");
             return dia && inicio && fin? [{dia, inicio, fin}]: [];
         })
     }
