@@ -1,10 +1,11 @@
 import {Box, Button, ButtonType, Spinner, Text} from "grommet";
 
 interface LoadingButtonProps extends ButtonType {
-    loading: boolean
+    loading: boolean,
+    loadingLabel?: string
 }
 
-const LoadingButton = ({loading, label, ...props}: LoadingButtonProps) => {
+const LoadingButton = ({loading, label, loadingLabel = "Cargando", ...props}: LoadingButtonProps) => {
 
     return <Button
         {...props}
@@ -12,7 +13,7 @@ const LoadingButton = ({loading, label, ...props}: LoadingButtonProps) => {
         label={loading ?
             <Box align="center" direction="row" gap="small" pad="none">
                 <Spinner color="white" size="small"/>
-                <Text>Cargando...</Text>
+                <Text>{`${loadingLabel}...`}</Text>
             </Box>
             : label}
     />

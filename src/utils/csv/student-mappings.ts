@@ -1,4 +1,6 @@
 import {convertRowsToDTO, MappingBuilder} from "./Mapping";
+import {betweenTwo} from "./Validator";
+import {locationMapping} from "./subjects-mappings";
 
 
 export const toLocalDate = (value: string) => {
@@ -20,15 +22,24 @@ export const studentColumns = [
     "Locación"
 ];
 
+const statusMapping = [
+    {mapping: "Pendiente", columns: ["Pendiente", "Rechazado"]},
+    {mapping: "Aceptado", columns: ["Aceptado"]}
+]
+
+const toCorreo = (value: unknown) => value === "Romero"? process.env.REACT_APP_EMAIL: undefined;
+
 const studentMapping = new MappingBuilder()
-    .add("Apellido", "apellido")
-    .add("Nombre", "nombre")
     .addNumber("Documento", "dni")
-    .add("Propuesta", "propuesta")
-    .add("Plan", "plan")
-    .add("Estado Inscr.", "estado")
-    .add("Calidad", "calidad")
-    .add("Regular", "regular")
+    .addString("Nombre", "nombre")
+    .add("Apellido", "correo", toCorreo)
+    .addString("Apellido", "apellido")
+    .addString("Propuesta", "propuesta", betweenTwo("P", "W"))
+    .addNumber("Plan", "plan")
+    .addEnum("Estado Inscr.", "estado", statusMapping)
+    .addString("Calidad", "calidad", betweenTwo("Activo", "Pasivo"))
+    .addString("Regular", "regular", betweenTwo("S","N"))
+    .addEnum("Locación", "locacion", locationMapping)
     .getResult()
 
 

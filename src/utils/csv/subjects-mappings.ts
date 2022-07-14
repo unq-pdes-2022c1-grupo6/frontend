@@ -64,7 +64,7 @@ const removeLettersAndConvertToNumber = (value: string) => {
 }
 
 
-const locationMapping = [
+export const locationMapping = [
     {mapping: "Bernal", columns: ["Bernal"]},
     {mapping: "Berazategui", columns: ["Berazategui"]},
     {mapping: "General_Belgrano", columns: ["General Belgrano"]}

@@ -7,7 +7,7 @@ import {ConflictDTO} from "./dtos/subjectDTO";
 
 
 const getStudent = (dni: number | undefined): Promise<StudentDTO> => {
-    return dni?
+    return dni ?
         axiosInstance.get(`/alumnos/${dni}`)
             .then((response) => response.data)
         : Promise.reject(new Error("DNI no especificado"))
@@ -21,7 +21,7 @@ export const useStudentQuery = (dni: number | undefined) => {
 }
 
 const getRequestingStudents = (search: StudentSearch): Promise<SearchedStudentDTO[]> => {
-    const params =  toStudentSearchDTO(search);
+    const params = toStudentSearchDTO(search);
     return axiosInstance.get("/alumnos/formulario", {params}).then((response) => response.data);
 };
 
@@ -31,7 +31,7 @@ export const useSearchRequestingStudentsQuery = (search: StudentSearch) => {
 }
 
 export const getCourseRequesters = (subject: string, numero: number, filter: string): Promise<CourseRequesterDTO[]> => {
-    const filterDTO = filter === "Todos"? {} : {pendiente: "Pendiente" === filter};
+    const filterDTO = filter === "Todos" ? {} : {pendiente: "Pendiente" === filter};
     const params = {numero, ...filterDTO};
     return axiosInstance.get(`/materias/${subject}/solicitantes`, {params})
         .then((response) => response.data);
@@ -42,9 +42,8 @@ export const useCourseRequestersQuery = (subject: string, course: number, filter
         () => getCourseRequesters(subject, course, filter));
 }
 
-const postStudents = (rows: DTORowType[]): Promise<ConflictDTO[]> => {
-    return axiosInstance.post("/alumnos", rows)
-        .then((response) => response.data)
+const postStudents = ({rows}: { rows: DTORowType[] }): Promise<void> => {
+    return axiosInstance.post("/alumnos", rows).then((response) => response.data)
 }
 
 export const useCreateStudents = () => {

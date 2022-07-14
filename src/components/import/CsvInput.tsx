@@ -6,12 +6,13 @@ import LoadingButton from "../LoadingButton";
 type CsvInputProps = {
     label: string,
     onSubmit: (file: File) => void,
-    loading: boolean
+    loading: boolean,
+    loadingLabel: string,
 }
 
 type FileFormType = { csvinput: File[] }
 
-const CsvInput = ({label, onSubmit, loading}: CsvInputProps) => {
+const CsvInput = ({label, onSubmit, loading, loadingLabel}: CsvInputProps) => {
     const [fileForm, setFileForm] = useState<FileFormType>();
 
     const onSubmit0 = (value: FileFormType) => {
@@ -39,7 +40,7 @@ const CsvInput = ({label, onSubmit, loading}: CsvInputProps) => {
                            }}
                 />
             </FormField>
-            <LoadingButton loading={loading} label="Importar" type="submit" primary/>
+            <LoadingButton loading={loading} loadingLabel={loadingLabel} label="Importar" type="submit" primary/>
         </Box>
     </Form>
 
