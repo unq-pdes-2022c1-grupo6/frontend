@@ -21,7 +21,7 @@ export const alwaysValid: ValidatorI = {
 }
 
 export const notNumber: ValidatorI = {
-    isValid: (value) => typeof value === "number",
+    isValid: (value) => typeof value === "number" && !isNaN(value),
     getMessage: (column, value) => `${column} con valor ${value || "vacio"} no es un numero valido`
 }
 

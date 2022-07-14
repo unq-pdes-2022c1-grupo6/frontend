@@ -1,5 +1,5 @@
-import {convertRowsToDTO, MappingBuilder} from "./Mapping";
-import {betweenTwo} from "./Validator";
+import {convertRowsToDTO, convertToEnumFn, MappingBuilder} from "./Mapping";
+import {betweenTwo, notEmpty, notNumber} from "./Validator";
 import {locationMapping} from "./subjects-mappings";
 
 
@@ -8,19 +8,9 @@ export const toLocalDate = (value: string) => {
     return `${year}-${month}-${day}`
 }
 
-export const toDNI = (value: string) => +(value.replace("DNI ", ""));
-
-export const studentColumns = [
-    "Apellido",
-    "Nombre",
-    "Documento",
-    "Propuesta",
-    "Plan",
-    "Estado Inscr.",
-    "Calidad",
-    "Regular",
-    "Locación"
-];
+export const toDNI = (value: string) => {
+    return +(value.replace("DNI ", ""));
+};
 
 const statusMapping = [
     {mapping: "Pendiente", columns: ["Pendiente", "Rechazado"]},
@@ -45,34 +35,27 @@ const studentMapping = new MappingBuilder()
 
 export const convertToStudentsDTO = convertRowsToDTO(studentMapping);
 
-export const recordsColumns = [
-    "Legajo",
-    "DNI",
-    "Carrera",
-    "Materia",
-    "Nombre",
-    "Fecha",
-    "Resultado",
-    "Nota",
-    "Forma Aprobación",
-    "Crédito",
-    "Acta_Promo",
-    "Acta_examen",
-    "Plan"
-]
-
 const resultsMapping = [
     {mapping: "APROBADO", columns: ["A", "P"]},
     {mapping: "PA", columns: ["E", "V"]},
     {mapping: "DESAPROBADO", columns: ["N", "R"]},
-    {mapping: "AUSENTE", columns: ["U", "Vacia"]},
+    {mapping: "AUSENTE", columns: ["U", "Vacia", ""]},
 ]
 
+const toCode = (value: unknown) => {
+    const newValue =  +(value as string);
+    return !isNaN(newValue)? String(newValue): ""
+}
+
+const toResult = (value: unknown) => {
+    return value !== ""? convertToEnumFn(resultsMapping)(value as string): "AUSENTE"
+}
+
 const recordsMapping = new MappingBuilder()
-    .add("DNI", "dni", toDNI)
-    .add("Materia", "codigo")
+    .add("DNI", "dni", toDNI, notNumber)
+    .add("Materia", "codigo", toCode, notEmpty)
     .add("Fecha", "fecha", toLocalDate)
-    .addEnum("Resultado", "resultado", resultsMapping)
+    .add("Resultado", "resultado", toResult)
     .getResult()
 
 export const convertToRecordsDTO = convertRowsToDTO(recordsMapping);
