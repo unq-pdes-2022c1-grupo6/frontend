@@ -1,4 +1,3 @@
-import {validateRows, ValidatorsBuilder} from "./Validator";
 
 export const plan2010Columns = [
     "Plan TPI 2010",
@@ -33,13 +32,10 @@ export const planliColumns = [
     "Secuencialidad CB  (W15BO) - créditos"
 ]
 
-
-export const subjectValidator = new ValidatorsBuilder().getResult();
-
-export const validateTPI2010SubjectRow = validateRows(subjectValidator, plan2010Columns);
-
-export const validateTPI2015SubjectRow = validateRows(subjectValidator, plan2015Columns);
-
-export const validateLISubjectRow = validateRows(subjectValidator, planliColumns);
-
-
+export const courseColumns = [
+    'Código',
+    'Actividad',
+    'Comisión',
+    'Ubicacion',
+    'Banda Horaria y Aula'
+]

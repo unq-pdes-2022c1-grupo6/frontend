@@ -1,3 +1,4 @@
+/*
 import {validateRows, ValidatorsBuilder} from "./Validator";
 import {toDNI, toLocalDate} from "./student-mappings";
 
@@ -44,4 +45,6 @@ const recordsColumns = [
     "Resultado"
 ]
 
-export const validateRecordsRows = validateRows(recordValidator, recordsColumns);
+export const validateRecordsRows = validateRows(recordValidator, recordsColumns);*/
+
+export {}

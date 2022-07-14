@@ -2,22 +2,27 @@ import CsvInput from "./CsvInput";
 import {Box, Button, Layer, Text} from "grommet";
 import Papa, {ParseResult} from "papaparse";
 import {useMemo, useState} from "react";
-import {ErrorTypeI, RowErrorTypeI, ValidateInfoType} from "../../utils/csv/Validator";
 import ImportErrorsTable from "./ImportErrorsTable";
+import {ConvertedRowsInfoType, DTORowType, ParsedRowType} from "../../utils/csv/Mapping";
+import {MutateOptions} from "react-query";
+import {ErrorTypeI, notValidColumns, RowErrorTypeI} from "../../utils/csv/Validator";
+import {AxiosError} from "axios";
+import {isConflictArray} from "../../services/dtos/subjectDTO";
 
-export type RowType = { [column: string]: string | number | undefined, fila?: number };
 
 type ImportFormProps = {
     label: string,
-    validateFn: (rows: RowType[], rowColums: string[]) => ValidateInfoType,
-    onImport: (rows: RowType[], onFinishImport: (importErrors: RowErrorTypeI[]) => void) => void,
+    convertToDTOsFn: (rows: ParsedRowType[]) => ConvertedRowsInfoType,
+    requiredColumns: string[],
+    onImport:  (variables: {rows: DTORowType[]},
+                options?: (MutateOptions<void, unknown, {rows: DTORowType[]}, unknown> | undefined)) => void,
     loading: boolean
 }
 
 
-const ImportForm = ({label, validateFn, onImport, loading}: ImportFormProps) => {
+const ImportForm = ({label, convertToDTOsFn, requiredColumns, onImport, loading}: ImportFormProps) => {
     const [parsing, setParsing] = useState(false);
-    const [data, setData] = useState<RowType[]>([]);
+    const [data, setData] = useState<ParsedRowType[]>([]);
     const [rowErrors, setRowErrors] = useState<RowErrorTypeI[]>([]);
     const [generalErrors, setGeneralErrors] = useState<ErrorTypeI[]>([]);
     const [importFinished, setImportFinished] = useState(false);
@@ -25,13 +30,32 @@ const ImportForm = ({label, validateFn, onImport, loading}: ImportFormProps) => 
 
     const onCloseErrorsModal = () => setShowErrorsModal(false);
 
-    const onFinishImport = (importErrors: RowErrorTypeI[]) => {
-        setRowErrors(prevState => prevState.concat(importErrors));
-        setImportFinished(true);
+    const onFinishImport = (rows: DTORowType[]) => {
+        onImport({rows}, {
+            onSuccess: () => {
+                setImportFinished(true);
+            },
+            onError: (error) => {
+                let newRowErrors: RowErrorTypeI[] = [];
+                if (error instanceof AxiosError && error.response?.status === 409 &&
+                    isConflictArray(error.response?.data)) {
+                    newRowErrors = error.response?.data.map(c => ({
+                        fila: c.fila,
+                        type: "IMPORTACIÓN",
+                        messages: [c.mensaje]
+                    }));
+                    setRowErrors(prevState => prevState.concat(newRowErrors));
+                }
+                else {
+                    setGeneralErrors([{type: "IMPORTACIÓN", messages: ["Error en la importación"]}]);
+                }
+                setImportFinished(true);
+            }
+        });
     }
 
     const exportErrorRows = () => {
-        const csv = Papa.unparse(rowErrors.map(e => data[e.rowNumber]));
+        const csv = Papa.unparse(rowErrors.map(e => data[e.fila]));
         const csvData = new Blob([csv], {type: 'text/csv;charset=utf-8;'});
         const csvURL = window.URL.createObjectURL(csvData);
 
@@ -52,16 +76,16 @@ const ImportForm = ({label, validateFn, onImport, loading}: ImportFormProps) => 
         resetForm();
         setParsing(true);
         Papa.parse(file, {
-            complete: (results: ParseResult<RowType>) => {
-                const {hasValidColumns, validRows, parsingErrors} = validateFn(results.data, results.meta.fields || []);
+            complete: (results: ParseResult<ParsedRowType>) => {
                 setData(results.data);
-                if (hasValidColumns) {
-                    setRowErrors(parsingErrors);
-                    onImport(validRows, onFinishImport);
+                if (notValidColumns.isValid(requiredColumns, results.meta.fields || [])) {
+                    const {dtos, errors} = convertToDTOsFn(results.data);
+                    setRowErrors(errors);
+                    onFinishImport(dtos);
                 } else {
                     setGeneralErrors([{
                         type: "PARSEO",
-                        messages: [`Archivo equivocado, columnas no coinciden con las de ${label}`]
+                        messages: [notValidColumns.getMessage(label)]
                     }]);
                     setImportFinished(true);
                 }
@@ -77,8 +101,8 @@ const ImportForm = ({label, validateFn, onImport, loading}: ImportFormProps) => 
     }
 
     const successfulRows = useMemo(() => {
-        return rowErrors.length !== 0? data.length - rowErrors.length: 0
-    },[rowErrors, data])
+        return rowErrors.length !== 0 && generalErrors.length === 0? data.length - rowErrors.length: 0
+    },[rowErrors, generalErrors, data])
 
     return <Box>
         <CsvInput

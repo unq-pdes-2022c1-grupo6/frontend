@@ -1,11 +1,11 @@
 import axiosInstance from "../utils/axios-instance";
 import {useMutation, useQuery} from "react-query";
 import {SemesterSubjectDTO, SubjectDTO} from "./dtos/subjectDTO";
-import {RowType} from "../components/import/ImportForm";
-import {CicleMappingType, convertToSubjectsDTO, PlanType} from "../utils/csv/subject-mappings";
+import {DTORowType} from "../utils/csv/Mapping";
+import {CicleMappingType, fillPlanToSubjectsDTO, PlanType} from "../utils/csv/subjects-mappings";
 
 
-type SubjectsForm =  {rows: RowType[], plan: PlanType, cicle: CicleMappingType};
+type SubjectsForm =  {rows: DTORowType[], plan: PlanType, cicle: CicleMappingType};
 
 
 const getStudentSubjects = (): Promise<SubjectDTO[]> => {
@@ -33,13 +33,13 @@ export const useSemesterSubjectsQuery = (search: string) => {
 }
 
 const postSubjects = ({rows, plan, cicle}: SubjectsForm): Promise<void> => {
-    const subjectsDTO = {plan, materias: convertToSubjectsDTO(rows, cicle)};
+    const subjectsDTO = {plan, materias: fillPlanToSubjectsDTO(rows, cicle)};
     return  axiosInstance.post('/materias', subjectsDTO)
         .then((response) => response.data)
 }
 
 const useCreateSubjects = (plan: PlanType, cicle: CicleMappingType) => {
-    return useMutation(({rows}: {rows: RowType[]}) =>
+    return useMutation(({rows}: {rows: DTORowType[]}) =>
         postSubjects({rows, plan, cicle}));
 }
 
@@ -49,3 +49,11 @@ export const useCreateTPI2010Subjects = () => useCreateSubjects("TPI2010", "cicl
 
 export const useCreateTPI2015Subjects = () => useCreateSubjects("TPI2015", "cicloTPI")
 
+const postCourses = ({rows}: {rows: DTORowType[]}): Promise<void> => {
+    const body = {comisionesACargar: rows};
+    return  axiosInstance.post("/comisiones/oferta", body).then((response) => response.data)
+}
+
+export const useCreateCourses = () => {
+    return useMutation(postCourses);
+}
