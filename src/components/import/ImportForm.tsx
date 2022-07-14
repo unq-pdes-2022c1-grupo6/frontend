@@ -101,8 +101,8 @@ const ImportForm = ({label, convertToDTOsFn, requiredColumns, onImport, loading}
     }
 
     const successfulRows = useMemo(() => {
-        return rowErrors.length !== 0? data.length - rowErrors.length: 0
-    },[rowErrors, data])
+        return rowErrors.length !== 0 && generalErrors.length === 0? data.length - rowErrors.length: 0
+    },[rowErrors, generalErrors, data])
 
     return <Box>
         <CsvInput

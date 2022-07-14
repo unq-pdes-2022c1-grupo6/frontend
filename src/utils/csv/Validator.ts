@@ -21,19 +21,19 @@ export const alwaysValid: ValidatorI = {
 }
 
 export const notNumber: ValidatorI = {
-    isValid: (value) => value === undefined,
-    getMessage: (column, value) => `${column} con valor ${value} no es un numero valido`
+    isValid: (value) => typeof value === "number",
+    getMessage: (column, value) => `${column} con valor ${value || "vacio"} no es un numero valido`
 }
 
 export const notEmpty: ValidatorI = {
-    isValid: (value) => value === "",
-    getMessage: (column) => `${column} no puede ser vacio/a`,
+    isValid: (value) => value !== "",
+    getMessage: (column) => `${column} no tiene un valor valido`,
 }
 
 export const notEnum: ValidatorI = {
-    isValid: (value) => value === "",
-    getMessage: (column, value, includesLs = []) =>
-        `${column} con valor ${value || "vacio"} debe ser uno de los siguientes valores: ${includesLs}`
+    isValid: (value) => value !== "",
+    getMessage: (column, value) =>
+        `${column} con valor ${value || "vacio"} no es valido`
 }
 
 

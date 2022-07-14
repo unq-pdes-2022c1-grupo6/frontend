@@ -1,6 +1,6 @@
 import {convertRowsToDTO, convertToEnumFn, DTORowType, MappingBuilder} from "./Mapping";
 import lowerCase from "lodash/lowerCase";
-import {alwaysValid} from "./Validator";
+import {alwaysValid, notEmpty, notNumber} from "./Validator";
 import {HourDTO} from "../../services/dtos/requestDTO";
 
 export type PlanType = "TPI2010" | "TPI2015" | "LI";
@@ -59,7 +59,8 @@ export const fillPlanToSubjectsDTO = (rows: DTORowType[], cicle: CicleMappingTyp
 
 
 const removeLettersAndConvertToNumber = (value: string) => {
-    return +value.replace(/\D/g, "")
+    const newValue = value === "8003N"? 80003: +value.replace(/\D/g, "");
+    return isNaN(newValue) || newValue === 0? "": newValue
 }
 
 
@@ -69,26 +70,26 @@ const locationMapping = [
     {mapping: "General_Belgrano", columns: ["General Belgrano"]}
 ]
 
+
 const toCourseNumber = (value: string) => {
-    if (value !== "8003N") {
-        const course = value.split("-").at(-2)
-        return removeLettersAndConvertToNumber(course || "")
-    } else {
-        return 80003
-    }
+    const course = value.split("-").at(-2);
+    return removeLettersAndConvertToNumber(course || "")
 }
 
-const modelMappings = [
+
+const modeMappings = [
     {mapping: "PRESENCIAL", columns: ["Presencial"]},
     {mapping: "VIRTUAL_SINCRONICA", columns: ["Vitual Sincrónica", "Virtual Sincrónica"]},
     {mapping: "VIRTUAL_ASINCRONICA", columns: ["Virtual Asincrónica"]},
     {mapping: "SEMIPRESENCIAL", columns: ["Semipresencial"]},
 ];
 
+
 const toMode = (value: string) => {
     const valueToMap = value.match(/\((.*)\)/)?.pop() || "";
-    return convertToEnumFn(modelMappings)(valueToMap);
+    return convertToEnumFn(modeMappings)(valueToMap);
 }
+
 
 const toHours = (value: string): HourDTO[] => {
     let hours: HourDTO[] = [];
@@ -103,11 +104,13 @@ const toHours = (value: string): HourDTO[] => {
 }
 
 export const coursesMapping = new MappingBuilder()
-    .add("Código", "codigo", removeLettersAndConvertToNumber)
-    .add("Actividad", "actividad")
+    .add("Código", "codigo", removeLettersAndConvertToNumber, notNumber)
+    .addString("Actividad", "actividad")
     .addEnum("Ubicacion", "locacion", locationMapping)
-    .add("Comisión", "comision", toCourseNumber)
-    .add("Comisión", "modalidad", toMode)
+    .add("Comisión", "comision", toCourseNumber, notNumber)
+    .add("Comisión", "modalidad", toMode, notEmpty)
     .add("Banda Horaria y Aula", "horarios", toHours)
     .addNumber("Sobrecupos Totales", "sobrecuposTotales")
     .getResult()
+
+export const convertToCoursesDTO = convertRowsToDTO(coursesMapping);

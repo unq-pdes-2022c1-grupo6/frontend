@@ -49,3 +49,11 @@ export const useCreateTPI2010Subjects = () => useCreateSubjects("TPI2010", "cicl
 
 export const useCreateTPI2015Subjects = () => useCreateSubjects("TPI2015", "cicloTPI")
 
+const postCourses = ({rows}: {rows: DTORowType[]}): Promise<void> => {
+    const body = {comisionesACargar: rows};
+    return  axiosInstance.post("/comisiones/oferta", body).then((response) => response.data)
+}
+
+export const useCreateCourses = () => {
+    return useMutation(postCourses);
+}

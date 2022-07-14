@@ -1,18 +1,35 @@
 import {Box, Heading} from "grommet";
-import {useCreateLISubjects, useCreateTPI2010Subjects, useCreateTPI2015Subjects}
+import {useCreateCourses, useCreateLISubjects, useCreateTPI2010Subjects, useCreateTPI2015Subjects}
     from "../../../services/subjectsService";
 import ImportForm from "../../../components/import/ImportForm";
-import {convertToLISubjectsDTO, convertToTPISubjectsDTO} from "../../../utils/csv/subjects-mappings";
-import {plan2010Columns, plan2015Columns, planliColumns} from "../../../utils/csv/subjects-valid-columns";
+import {
+    convertToCoursesDTO,
+    convertToLISubjectsDTO,
+    convertToTPISubjectsDTO
+} from "../../../utils/csv/subjects-mappings";
+import {
+    courseColumns,
+    plan2010Columns,
+    plan2015Columns,
+    planliColumns
+} from "../../../utils/csv/subjects-valid-columns";
 
 
 const ImportSubjectsPage = () => {
+    const createCourses = useCreateCourses();
     const createTPI2010Subjects = useCreateTPI2010Subjects();
     const createTPI2015Subjects = useCreateTPI2015Subjects();
     const createLISubjects = useCreateLISubjects();
 
 
     return <Box gap="medium" pad="medium">
+        <ImportForm
+            label="Comisiones"
+            convertToDTOsFn={convertToCoursesDTO}
+            requiredColumns={courseColumns}
+            onImport={createCourses.mutate}
+            loading={createCourses.isLoading}
+        />
         <Heading level="4" margin="none">Planes</Heading>
         <ImportForm
             label="TPI 2010"

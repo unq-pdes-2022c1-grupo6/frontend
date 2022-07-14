@@ -1,5 +1,4 @@
 
-
 export const plan2010Columns = [
     "Plan TPI 2010",
     "Código Materia",
@@ -31,4 +30,12 @@ export const planliColumns = [
     "Secuencialidad CI - créditos",
     "Secuencialidad NBW (Núcleo Básico) - créditos",
     "Secuencialidad CB  (W15BO) - créditos"
+]
+
+export const courseColumns = [
+    'Código',
+    'Actividad',
+    'Comisión',
+    'Ubicacion',
+    'Banda Horaria y Aula'
 ]

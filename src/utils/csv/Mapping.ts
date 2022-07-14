@@ -1,4 +1,5 @@
 import {alwaysValid, notEmpty, notEnum, notNumber, RowErrorTypeI, ValidatorI} from "./Validator";
+import lowerCase from "lodash/lowerCase";
 
 export interface MappingI {
     column: string,
@@ -16,7 +17,7 @@ export const convertToEnumFn = (enumMappings: EnumMapping[]) => (value: string) 
     let enumm = "";
     if (value !== "") {
         const trimmed = value.trim();
-        const enumMapping = enumMappings.find(em => em.columns.includes(trimmed));
+        const enumMapping = enumMappings.find(em => em.columns.some(c => lowerCase(trimmed).includes(lowerCase(c))));
         enumm = enumMapping? enumMapping.mapping: ""
     }
     return enumm
@@ -68,7 +69,7 @@ const convertRowToDTO = (mappings: MappingI[], row: ParsedRowType, rowNumber: nu
             {dto: {...acc.dto, [mapping]: value}, errors: acc.errors} :
             {dto: acc.dto, errors: newErrors}
 
-    }, {dto: {fila: rowNumber}, errors: []})
+    }, {dto: {fila: rowNumber+2}, errors: []})
 }
 
 export type ParsedRowType = {[column: string]: string};
