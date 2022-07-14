@@ -3,7 +3,6 @@ import {useMutation, useQuery} from "react-query";
 import {CourseRequesterDTO, SearchedStudentDTO, StudentDTO} from "./dtos/studentDTO";
 import {StudentSearch, toStudentSearchDTO} from "../state/search";
 import {DTORowType} from "../utils/csv/Mapping";
-import {ConflictDTO} from "./dtos/subjectDTO";
 
 
 const getStudent = (dni: number | undefined): Promise<StudentDTO> => {
@@ -50,7 +49,7 @@ export const useCreateStudents = () => {
     return useMutation(postStudents)
 }
 
-const postRecords = (rows: DTORowType[]): Promise<ConflictDTO[]> => {
+const postRecords = ({rows}: { rows: DTORowType[] }): Promise<void> => {
     return axiosInstance.post("/alumnos/historia-academica", rows)
         .then((response) => response.data)
 }
