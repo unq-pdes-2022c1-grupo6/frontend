@@ -1,6 +1,6 @@
 import {Box, DataTable, Paragraph, Text} from "grommet";
-import {ErrorTypeI} from "../../utils/csv/Validator";
 import {ImportStatusText} from "../StatusText";
+import {ErrorTypeI} from "../../utils/csv/Validator";
 
 
 const ImportErrorsTable = ({content}: {content: ErrorTypeI[]}) => {
@@ -13,8 +13,8 @@ const ImportErrorsTable = ({content}: {content: ErrorTypeI[]}) => {
             paginate
             data={content}
             columns={[
-                {property: "rowNumber", header: <Text>{`Fila (${content.length} Totales)`}</Text>,
-                    size: "xsmall", render: ({rowNumber}) => <Text weight="bold">{rowNumber}</Text>},
+                {property: "fila", header: <Text>{`Fila (${content.length} Totales)`}</Text>,
+                    size: "xsmall", render: ({fila}) => <Text weight="bold">{fila}</Text>},
                 {property: "type", header: "Tipo de Error", size: "xsmall",
                     render: ({type}) => <ImportStatusText state={type}/>},
                 {property: "messages", align:"start", sortable: false, header: "Mensajes de Error",

@@ -2,8 +2,8 @@ import axiosInstance from "../utils/axios-instance";
 import {useMutation, useQuery} from "react-query";
 import {CourseRequesterDTO, SearchedStudentDTO, StudentDTO} from "./dtos/studentDTO";
 import {StudentSearch, toStudentSearchDTO} from "../state/search";
-import {RowType} from "../components/import/ImportForm";
-import {convertToRecordsDTO, convertToStudentsDTO} from "../utils/csv/student-mappings";
+import {DTORowType} from "../utils/csv/Mapping";
+import {ConflictDTO} from "./dtos/subjectDTO";
 
 
 const getStudent = (dni: number | undefined): Promise<StudentDTO> => {
@@ -42,9 +42,8 @@ export const useCourseRequestersQuery = (subject: string, course: number, filter
         () => getCourseRequesters(subject, course, filter));
 }
 
-const postStudents = (studentsRows: RowType[]): Promise<void> => {
-    const studentsDTO = convertToStudentsDTO(studentsRows);
-    return axiosInstance.post("/alumnos", studentsDTO)
+const postStudents = (rows: DTORowType[]): Promise<ConflictDTO[]> => {
+    return axiosInstance.post("/alumnos", rows)
         .then((response) => response.data)
 }
 
@@ -52,9 +51,8 @@ export const useCreateStudents = () => {
     return useMutation(postStudents)
 }
 
-const postRecords = (recordsRows: RowType[]): Promise<void> => {
-    const recordsDTO = convertToRecordsDTO(recordsRows);
-    return axiosInstance.post("/alumnos/historia-academica", recordsDTO)
+const postRecords = (rows: DTORowType[]): Promise<ConflictDTO[]> => {
+    return axiosInstance.post("/alumnos/historia-academica", rows)
         .then((response) => response.data)
 }
 

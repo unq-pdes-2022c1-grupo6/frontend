@@ -1,23 +1,11 @@
-import {RowType} from "../../components/import/ImportForm";
-import {convertRowsToDTO, convertToEnumFn, MappingBuilder} from "./Mapping";
+import {convertRowsToDTO, convertToEnumFn, DTORowType, MappingBuilder} from "./Mapping";
 import lowerCase from "lodash/lowerCase";
+import {alwaysValid} from "./Validator";
 import {HourDTO} from "../../services/dtos/requestDTO";
 
 export type PlanType = "TPI2010" | "TPI2015" | "LI";
 export type CicleMappingType = "cicloTPI" | "cicloLI";
 
-export const coursesColumns = [
-    "Código",
-    "Actividad",
-    "Comisión",
-    "Modalidad",
-    "Ubicacion",
-    "Banda Horaria y Aula"
-]
-
-const toCorrelatives = (value: string) => {
-    return value !== "" ? lowerCase(value).split(" ") : [];
-}
 
 const ciclesMapping = [
     {mapping: "CC", columns: ["Complementarias", "Cursos Complementarios (CC)"]},
@@ -31,30 +19,33 @@ const ciclesMapping = [
     {mapping: "CO", columns: ["Cursos Obligatorios (CO)", "Cursos Orientados"]},
 ]
 
+const toCorrelatives = (value: string): string[] => {
+    return value !== "" ? lowerCase(value).split(" ") : [];
+}
+
 const subjectsMapping = (cicleMapping: CicleMappingType) => new MappingBuilder()
     .addEnum("Plan TPI 2010", cicleMapping, ciclesMapping)
     .add("Código Materia", "codigo")
-    .addNumber("Créditos", "creditos")
+    .addNumber("Créditos", "creditos", alwaysValid)
     .add("Materia", "materia")
     .add("Correlatividades", "correlativas", toCorrelatives)
     // li
-    .addNumber("Secuencialidad CI - créditos", "ci")
-    .addNumber("Secuencialidad NBW (Núcleo Básico) - créditos", "nbw")
-    .addNumber("Secuencialidad CB  (W15BO) - créditos", "cb")
+    .addNumber("Secuencialidad CI - créditos", "ci", alwaysValid)
+    .addNumber("Secuencialidad NBW (Núcleo Básico) - créditos", "nbw", alwaysValid)
+    .addNumber("Secuencialidad CB  (W15BO) - créditos", "cb", alwaysValid)
     // tpi
-    .addNumber("Secuencialidad CO - créditos", "co")
-    .addNumber("Secuencialidad CA - créditos", "ca")
-    .addNumber("Secuencialidad CC - créditos", "cc")
+    .addNumber("Secuencialidad CO - créditos", "co", alwaysValid)
+    .addNumber("Secuencialidad CA - créditos", "ca", alwaysValid)
+    .addNumber("Secuencialidad CC - créditos", "cc", alwaysValid)
     .getResult()
 
 
-export const convertToSubjectsDTO = (rows: RowType[], cicle: CicleMappingType) => {
-    const mappedSubjects = convertRowsToDTO(subjectsMapping(cicle))(rows);
-    return fillPlanToSubjectsDTO(mappedSubjects, cicle);
-}
+export const convertToTPISubjectsDTO = convertRowsToDTO(subjectsMapping("cicloTPI"))
 
-export const fillPlanToSubjectsDTO = (rows: RowType[], cicle: CicleMappingType) => {
-    return rows.reduce((acc: { plan: string, filled: RowType[] }, row) => {
+export const convertToLISubjectsDTO = convertRowsToDTO(subjectsMapping("cicloLI"))
+
+export const fillPlanToSubjectsDTO = (rows: DTORowType[], cicle: CicleMappingType) => {
+    return rows.reduce((acc: { plan: string, filled: DTORowType[] }, row) => {
         const newPlanRow = row[cicle] !== "" ? row[cicle] as string : acc.plan;
         const isSubjectRow = row["codigo"] !== "";
         return {
@@ -65,6 +56,7 @@ export const fillPlanToSubjectsDTO = (rows: RowType[], cicle: CicleMappingType) 
         }
     }, {plan: "", filled: []}).filled
 }
+
 
 const removeLettersAndConvertToNumber = (value: string) => {
     return +value.replace(/\D/g, "")
@@ -102,9 +94,9 @@ const toHours = (value: string): HourDTO[] => {
     let hours: HourDTO[] = [];
     if (value !== "") {
         const splitted = value.split("/");
-        hours = splitted.map(s => {
-            const [dia, inicio, a, fin, ...rest] = s.split(" ");
-            return {dia, inicio, fin};
+        hours = splitted.flatMap(s => {
+            const [dia, inicio, _, fin] = s.split(" ");
+            return dia && inicio && fin? [{dia, inicio, fin}]: [];
         })
     }
     return hours;

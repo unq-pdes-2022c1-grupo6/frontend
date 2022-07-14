@@ -1,11 +1,11 @@
 import axiosInstance from "../utils/axios-instance";
 import {useMutation, useQuery} from "react-query";
-import {SemesterSubjectDTO, SubjectDTO} from "./dtos/subjectDTO";
-import {RowType} from "../components/import/ImportForm";
-import {CicleMappingType, convertToSubjectsDTO, PlanType} from "../utils/csv/subject-mappings";
+import {ConflictDTO, SemesterSubjectDTO, SubjectDTO} from "./dtos/subjectDTO";
+import {DTORowType} from "../utils/csv/Mapping";
+import {CicleMappingType, fillPlanToSubjectsDTO, PlanType} from "../utils/csv/subjects-mappings";
 
 
-type SubjectsForm =  {rows: RowType[], plan: PlanType, cicle: CicleMappingType};
+type SubjectsForm =  {rows: DTORowType[], plan: PlanType, cicle: CicleMappingType};
 
 
 const getStudentSubjects = (): Promise<SubjectDTO[]> => {
@@ -32,14 +32,14 @@ export const useSemesterSubjectsQuery = (search: string) => {
     );
 }
 
-const postSubjects = ({rows, plan, cicle}: SubjectsForm): Promise<void> => {
-    const subjectsDTO = {plan, materias: convertToSubjectsDTO(rows, cicle)};
+const postSubjects = ({rows, plan, cicle}: SubjectsForm): Promise<ConflictDTO[]> => {
+    const subjectsDTO = {plan, materias: fillPlanToSubjectsDTO(rows, cicle)};
     return  axiosInstance.post('/materias', subjectsDTO)
         .then((response) => response.data)
 }
 
 const useCreateSubjects = (plan: PlanType, cicle: CicleMappingType) => {
-    return useMutation(({rows}: {rows: RowType[]}) =>
+    return useMutation(({rows}: {rows: DTORowType[]}) =>
         postSubjects({rows, plan, cicle}));
 }
 

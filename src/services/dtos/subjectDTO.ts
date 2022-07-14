@@ -1,6 +1,11 @@
 import {HourDTO} from "./requestDTO";
 import capitalize from "lodash/capitalize";
 
+export interface ConflictDTO {
+    fila: number,
+    mensaje: string
+}
+
 export interface SubjectDTO {
     codigo: number,
     nombre: string,
