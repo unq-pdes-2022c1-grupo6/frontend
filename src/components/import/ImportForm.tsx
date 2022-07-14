@@ -104,10 +104,17 @@ const ImportForm = ({label, convertToDTOsFn, requiredColumns, onImport, loading}
         return rowErrors.length !== 0 && generalErrors.length === 0? data.length - rowErrors.length: 0
     },[rowErrors, generalErrors, data])
 
+    const loadingLabel = useMemo(() => {
+        if (loading) return "Importando"
+        if (parsing) return "Parseando"
+        return "Cargando"
+    }, [parsing, loading])
+
     return <Box>
         <CsvInput
             label={label}
             loading={loading || parsing}
+            loadingLabel={loadingLabel}
             onSubmit={onSubmit}/>
         {importFinished &&
             <Box direction="row-responsive" gap="small">

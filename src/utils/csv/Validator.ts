@@ -46,3 +46,9 @@ export const notValidColumns: ValidatorI = {
     },
     getMessage: (label) => `Archivo equivocado, columnas no coinciden con las de ${label}`
 }
+
+
+export const betweenTwo = (one: string, two: string) : ValidatorI => ({
+    isValid: (value) => value === one || value === two,
+    getMessage: (column, value) => `${column} con valor ${value || "vacio"} no es ${one} o ${two}`
+})
