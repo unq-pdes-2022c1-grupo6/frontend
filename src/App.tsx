@@ -30,9 +30,11 @@ const App = () => {
 
     const onError = (error: unknown) => {
         if (error instanceof AxiosError) {
-            if (error.response && handleGlobally(error)) {
-                handle400Errors(error.response, notificator?.setNotification, navigate);
-                handle401or403Errors(error.response, notificator?.setNotification, navigate);
+            if (error.response) {
+                if (handleGlobally(error)) {
+                    handle400Errors(error.response, notificator?.setNotification, navigate);
+                    handle401or403Errors(error.response, notificator?.setNotification, navigate);
+                }
             } else if (error.request) {
                 notificator?.setNotification("La petición fue hecha pero no se recibió respuesta",
                     "warning")
