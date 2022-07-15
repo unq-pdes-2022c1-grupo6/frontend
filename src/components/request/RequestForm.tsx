@@ -70,9 +70,9 @@ const RequestForm = ({selections, options = [], loading, onSubmit, onCancel}: Re
                     gap="medium">
                     {options.map((m) => {
                         return <AccordionPanel label={`${m.nombre} (${m.codigo})`} key={m.codigo}>
-                            <Box height="xsmall">
+                            <Box height="small" gap="medium" overflow="auto" pad={{vertical: "small"}}>
                                 {m.comisiones.map(c => {
-                                    return <Box direction="row" gap="medium" margin={{vertical: "small"}} key={c.id}>
+                                    return <Box direction="row" align="center" gap="medium" key={c.id}>
                                         <CheckBoxGroup
                                             name="radio"
                                             direction="row"
