@@ -20,7 +20,7 @@ const AddCourseForm = ({excluding, dni, onAddCourse}: AddCourseFormProps) => {
     const addCourseToRequest = useAddCourseToRequest(dni, onAddCourse);
 
 
-    return <Box pad="medium" height="medium" overflow="auto" gap="medium">
+    return <Box pad="medium" gap="medium">
         <RequestsSearchBar
             placeholder={"Buscar por Nombre de Materia...."}
             searchTerm={search}

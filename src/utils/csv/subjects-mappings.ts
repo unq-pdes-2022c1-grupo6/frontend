@@ -103,6 +103,8 @@ const toHours = (value: string): HourDTO[] => {
     return hours;
 }
 
+const toOptional = (value: string) => value === ""? undefined: +value
+
 export const coursesMapping = new MappingBuilder()
     .add("Código", "codigo", removeLettersAndConvertToNumber, notNumber)
     .addString("Actividad", "actividad")
@@ -110,7 +112,7 @@ export const coursesMapping = new MappingBuilder()
     .add("Comisión", "comision", toCourseNumber, notNumber)
     .add("Comisión", "modalidad", toMode, notEmpty)
     .add("Banda Horaria y Aula", "horarios", toHours)
-    .addNumber("Sobrecupos Totales", "sobrecuposTotales")
+    .add("Sobrecupos Totales", "sobrecuposTotales", toOptional)
     .getResult()
 
 export const convertToCoursesDTO = convertRowsToDTO(coursesMapping);

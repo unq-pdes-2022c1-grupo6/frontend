@@ -9,6 +9,7 @@ import {useRejectAllCourseRequesters,useUpdateCourseState2} from "../../../servi
 import startCase from "lodash/startCase";
 import last from "lodash/last";
 import capitalize from "lodash/capitalize";
+import uniqBy from "lodash/uniqBy";
 
 
 
@@ -66,7 +67,7 @@ const RequiredSubjectPage = () => {
                     onActive={(newActiveIndex) => setOpenedAccordions(newActiveIndex)}
                     multiple
                     gap="small">
-                    {(subjectCoursesQuery.data || []).map((c, index) => {
+                    {uniqBy((subjectCoursesQuery.data || []), "numero").map((c, index) => {
                         return <AccordionPanel label={`${formatSubjectCourse(c.numero, undefined, c.horarios)}`}
                                                key={index}>
                             <Box pad="xsmall">
