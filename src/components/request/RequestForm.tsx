@@ -14,6 +14,8 @@ import {
 import {formatSubjectCourse, SubjectDTO} from "../../services/dtos/subjectDTO";
 import {RequestFormType} from "../../services/requestService";
 import LoadingButton from "../LoadingButton";
+import FormErrorMessage from "../FormErrorMessage";
+import uniqBy from "lodash/uniqBy";
 
 type RequestFormProps = {
     selections: RequestFormType;
@@ -30,6 +32,7 @@ const RequestForm = ({selections, options = [], loading, onSubmit, onCancel}: Re
     const [selectionsS, setSelectionsS] = useState(selections[1]);
     const requestForm: RequestFormType = [selectionsG, selectionsS];
     const [openedAccordions, setOpenedAccordions] = useState([0]);
+    const [error, setError] = useState("");
 
 
     const getSelection = (id: number) => {
@@ -39,6 +42,7 @@ const RequestForm = ({selections, options = [], loading, onSubmit, onCancel}: Re
     }
 
     const setSelection = (option: string | CheckBoxProps, id: number) => {
+        error !== "" && setError("");
         if (typeof option !== "string") {
             const [setAdd, setDelete] = option.label === "G" ? [setSelectionsG, setSelectionsS] : [setSelectionsS, setSelectionsG];
             setAdd(prevState => {
@@ -54,12 +58,23 @@ const RequestForm = ({selections, options = [], loading, onSubmit, onCancel}: Re
         }
     }
 
+    const onSubmit0 = () => {
+        let message = "";
+        if (selectionsS.size === 0) {
+            message = "No ha solicitado ninguna comisión!";
+        }
+        if (selectionsS.size > 10) {
+            message = "Maximo 10 comisiones a solicitar";
+        }
+        message === ""? onSubmit(requestForm): setError(message);
+    }
+
     return <Page kind="narrow" margin={{vertical: "medium"}}>
         <PageContent gap="medium" justify="center">
             <Paragraph fill>
                 Elija las comisiones que <b>pueda cursar este cuatrimestre</b>. Puede elegir <b>más de una comisión</b> en una misma
                 materia. También, confirme <b>las comisiones inscriptas por el Guaraní</b>. Serán usadas para chequear conflicto
-                de horarios y serán verificadas en el sistema de Guaraní.
+                de horarios y serán verificadas en el sistema de Guaraní. Comisiones a solicitar minimo 1, maximo 10.
             </Paragraph>
             <Text color="neutral-1"> G: Comisiones inscriptas por el Guaraní S: Comisiones solicitando sobrecupo </Text>
             <Box gap="medium">
@@ -71,8 +86,9 @@ const RequestForm = ({selections, options = [], loading, onSubmit, onCancel}: Re
                     {options.map((m) => {
                         return <AccordionPanel label={`${m.nombre} (${m.codigo})`} key={m.codigo}>
                             <Box height="small" gap="medium" overflow="auto" pad={{vertical: "small"}}>
-                                {m.comisiones.map(c => {
-                                    return <Box direction="row" align="center" gap="medium" key={c.id}>
+                                {uniqBy(m.comisiones, "comision").map(c => {
+                                    return <Box direction="row" align="center" margin={{vertical: "small"}}
+                                                gap="medium" key={c.id}>
                                         <CheckBoxGroup
                                             name="radio"
                                             direction="row"
@@ -86,9 +102,10 @@ const RequestForm = ({selections, options = [], loading, onSubmit, onCancel}: Re
                         </AccordionPanel>
                     })}
                 </Accordion>
+                <FormErrorMessage message={error}/>
                 {options &&
                 <Box direction="row" justify="center" gap="large">
-                    <LoadingButton onClick={() => onSubmit(requestForm)}
+                    <LoadingButton onClick={onSubmit0}
                                    loading={loading}
                                    label={creating? "Crear": "Editar"}
                                    primary/>

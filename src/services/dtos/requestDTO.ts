@@ -45,12 +45,13 @@ export interface HourDTO {
 }
 
 export interface RequestedCourse extends CourseDTO {
-    modalidad: "PRESENCIAL" | "VIRTUAL" | "SEMIPRESENCIAL",
+    modalidad: string,
     sobrecuposTotales: number,
     sobrecuposDisponibles: number,
 }
 
 export interface EnrolledCourse extends CourseDTO {
+    locacion: string,
     cuposTotales: number,
     sobreCuposTotales: number,
     cuposDisponibles: number,

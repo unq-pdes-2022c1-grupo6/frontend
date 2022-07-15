@@ -1,10 +1,11 @@
-import {Form, FormField, FileInput, Box} from "grommet";
+import {Form, FormField, FileInput, Box, Text} from "grommet";
 import {useState} from "react";
 import LoadingButton from "../LoadingButton";
 
 
 type CsvInputProps = {
     label: string,
+    helpLabel: string,
     onSubmit: (file: File) => void,
     loading: boolean,
     loadingLabel: string,
@@ -12,7 +13,7 @@ type CsvInputProps = {
 
 type FileFormType = { csvinput: File[] }
 
-const CsvInput = ({label, onSubmit, loading, loadingLabel}: CsvInputProps) => {
+const CsvInput = ({label, onSubmit, loading, loadingLabel, helpLabel}: CsvInputProps) => {
     const [fileForm, setFileForm] = useState<FileFormType>();
 
     const onSubmit0 = (value: FileFormType) => {
@@ -27,7 +28,11 @@ const CsvInput = ({label, onSubmit, loading, loadingLabel}: CsvInputProps) => {
         onChange={(value) => setFileForm(value)}
         messages={{required: "Requerido*"}}>
         <Box direction="row-responsive" align="center" gap="medium">
-            <FormField label={label} name="csvinput" required width="large">
+            <FormField label={label}
+                       name="csvinput"
+                       required
+                       width="large"
+                       help={<Text weight="lighter" size="small">{helpLabel}</Text>}>
                 <FileInput name="csvinput" accept="text/csv"
                            messages={{
                                browse: "Examinar",
