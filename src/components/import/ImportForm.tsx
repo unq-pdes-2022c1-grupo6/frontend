@@ -8,6 +8,7 @@ import {MutateOptions} from "react-query";
 import {ErrorTypeI, notValidColumns, RowErrorTypeI} from "../../utils/csv/Validator";
 import {AxiosError} from "axios";
 import {isConflictArray} from "../../services/dtos/subjectDTO";
+import join from "lodash/join";
 
 
 type ImportFormProps = {
@@ -29,6 +30,7 @@ const ImportForm = ({label, convertToDTOsFn, requiredColumns, onImport, loading}
     const [showErrorsModal, setShowErrorsModal] = useState(false);
 
     const onCloseErrorsModal = () => setShowErrorsModal(false);
+
 
     const onFinishImport = (rows: DTORowType[]) => {
         onImport({rows}, {
@@ -114,6 +116,7 @@ const ImportForm = ({label, convertToDTOsFn, requiredColumns, onImport, loading}
             label={label}
             loading={loading || parsing}
             loadingLabel={loadingLabel}
+            helpLabel={`Columnas necesarias: ${join(requiredColumns, ", ")}`}
             onSubmit={onSubmit}/>
         {importFinished &&
             <Box direction="row-responsive" gap="small">
