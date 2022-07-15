@@ -1,6 +1,6 @@
 # Sistema para la asignación de cupos - Frontend
 
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://unque-front-grupo6.herokuapp.com/
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://unque-front-grupo6.herokuapp.com/)
 
 
 Repositorio del proyecto de la materia Práctica del Desarrollo de Software, Universidad Nacional de Quilmes, 2022.
