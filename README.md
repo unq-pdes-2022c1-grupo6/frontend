@@ -3,7 +3,7 @@
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://unque-front-grupo6.herokuapp.com/)
 
 
-Repositorio del proyecto de la materia Práctica del Desarrollo de Software, Universidad Nacional de Quilmes, 2022.
+Repositorio del proyecto de la materia Práctica del Desarrollo de Software, Universidad Nacional de Quilmes para el primer cuatrimestre de 2022.
 
 ## Integrantes
 [Lisa Romero](https://github.com/lisar01)
