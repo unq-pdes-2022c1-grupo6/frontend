@@ -2,12 +2,24 @@ import {CourseState, RequestWithCommentsDTO} from "./requestDTO";
 import {TakenSubjectDTO} from "./subjectDTO";
 
 
+export interface RequestRecord {
+    nombreMateria: string,
+    cuatrimestre: {
+        anio: number,
+        semestre: "S1" | "S2",
+        inicio: string,
+        fin: string
+    }
+    estado: CourseState
+}
+
 export interface StudentDTO {
     nombre: string,
     dni: number,
     carrera: "P" | "W" | "PW",
     formulario: RequestWithCommentsDTO,
-    resumenCursadas: TakenSubjectDTO[]
+    resumenCursadas: TakenSubjectDTO[],
+    solicitudesAntiguas: RequestRecord[]
 }
 
 export interface SearchedStudentDTO {
