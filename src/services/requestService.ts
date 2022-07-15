@@ -35,7 +35,7 @@ export const useRequestQuery = () => {
 
 export const isRequestNotFound = (error: unknown) => {
     return error instanceof AxiosError && isEqual(error.response?.data, {
-        error: "ExcepcionUNQUE",
+        exception: "ErrorDeNegocio",
         message: "No se encontró ningun formulario para el cuatrimestre dado"
     });
 }

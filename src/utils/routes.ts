@@ -93,8 +93,4 @@ export const getUserNav = (path: string, loggedRol: string | undefined) => {
     return routes[loggedRol === rolRoute ? "private" : "public"]
 }
 
-export const GET_AVAILABLE_SUBJECTS_URL = "/alumnos/materias/";
-export const GET_REQUEST_URL = "/alumnos/";
-export const POST_REQUEST_FORM_URL = "/alumnos/solicitudes/";
-
 
