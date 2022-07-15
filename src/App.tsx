@@ -9,6 +9,7 @@ import GlobalNotificator from "./components/GlobalNotificator";
 import {AuthProvider} from "./state/auth";
 import {useGlobalNotificator} from "./state/notificator";
 import {handle400Errors, handle401or403Errors, handleGlobally} from "./utils/axios-error-handler";
+import ErrorBoundary from "./state/ErrorBoundary";
 
 
 const createQueryClient = (onError: (error: unknown) => void) => {
@@ -45,18 +46,20 @@ const App = () => {
 
     return (
         <AuthProvider>
-            <Grommet theme={theme} full>
-                <ResponsiveHeader/>
-                <GlobalNotificator
-                    notification={notificator?.notification}
-                    onCloseNotification={notificator?.deleteNotification}
-                />
-                <QueryClientProvider client={createQueryClient(onError)}>
-                    <Outlet/>
-                </QueryClientProvider>
-                <Box pad="small">
-                </Box>
-            </Grommet>
+            <ErrorBoundary>
+                <Grommet theme={theme} full>
+                    <ResponsiveHeader/>
+                    <GlobalNotificator
+                        notification={notificator?.notification}
+                        onCloseNotification={notificator?.deleteNotification}
+                    />
+                    <QueryClientProvider client={createQueryClient(onError)}>
+                        <Outlet/>
+                    </QueryClientProvider>
+                    <Box pad="small">
+                    </Box>
+                </Grommet>
+            </ErrorBoundary>
         </AuthProvider>
     );
 };
