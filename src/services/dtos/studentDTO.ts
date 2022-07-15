@@ -5,9 +5,7 @@ import {TakenSubjectDTO} from "./subjectDTO";
 export interface StudentDTO {
     nombre: string,
     dni: number,
-    legajo: number,
-    carrera: "TPI" | "LI" | "SIMULTANEIDAD",
-    coeficiente: number,
+    carrera: "P" | "W" | "PW",
     formulario: RequestWithCommentsDTO,
     resumenCursadas: TakenSubjectDTO[]
 }
@@ -26,15 +24,17 @@ interface SStudentInfo {
     nombre: string,
     apellido: string,
     correo: string,
-    legajo: number,
-    coeficiente: number
+    cantidadAprobadas: number,
+    locacion: string,
+    regular: "S" | "N",
+    calidad: "Activo" | "Pasivo",
+    estado: "Aceptado" | "Pendiente"
 }
 
 
 export interface CourseRequesterDTO {
     dni: number,
     nombreApellido: string,
-    coeficiente: number,
     cantidadDeAprobadas: number,
     idSolicitud: number,
     numeroComision: number,
