@@ -26,8 +26,8 @@ export const useCurrentSemesterQuery = () => {
 
 export const isSemesterNotFound = (error: unknown) => {
     return error instanceof AxiosError && isEqual(error.response?.data, {
-        error: "ExcepcionUNQUE",
-        message: "No se ha encontrado el cuatrimestre"
+        exception: "ErrorDeNegocio",
+        message: "El cuatrimestre no existe"
     });
 }
 
@@ -73,7 +73,7 @@ const patchCloseAllRequest = (): Promise<void> => {
     return axiosInstance.patch("/formulario/cerrar").then((response) => response.data)
 }
 
-//PATCH api/formulario/cerrar
+
 export const useCloseAllRequest = () => {
     const queryClient = useQueryClient();
     const notificator = useGlobalNotificator();

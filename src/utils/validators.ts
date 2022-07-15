@@ -1,6 +1,3 @@
-import {isRequestNotFound} from "../services/requestService";
-import {isSemesterNotFound} from "../services/semesterService";
-
 export const minLength = (min: number) => (word: string) => {
     return (word && word.length < min) ? `Minimo ${min} caracteres` : undefined;
 }
@@ -23,7 +20,3 @@ export const validateNumber = {regexp: /^\d+$/, message: "Codigo Invalido"};
 
 export const validateEmail = {regexp: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/, message: "Email Invalido"};
 
-export const handleGlobally = (error: unknown) => {
-    const handleLocallyCheckers =  [isRequestNotFound, isSemesterNotFound];
-    return !handleLocallyCheckers.some(checker =>  checker(error))
-}
