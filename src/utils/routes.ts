@@ -65,19 +65,9 @@ const privateDirectorRoutes = [
         to: DIRECTOR_ROUTE + "/" + HOME_ROUTE,
         name: "Home"
     },
-/*
-    {
-        to: DIRECTOR_ROUTE + "/" + SUBJECTS_ROUTE,
-        name: "Materias"
-    },
-    {
-        to: DIRECTOR_ROUTE + "/" + STUDENTS_ROUTE,
-        name: "Alumnos"
-    },
-*/
     {
         to: DIRECTOR_ROUTE + "/" + REQUIRED_SUBJECTS,
-        name: "Materias Solicitadas"
+        name: "Materias Solicitables"
     },
     {
         to: DIRECTOR_ROUTE + "/" + REQUESTING_STUDENTS,
@@ -102,9 +92,5 @@ export const getUserNav = (path: string, loggedRol: string | undefined) => {
     const [routes, rolRoute] = path.startsWith("/director") ? [directorRoutes, "Directivo"] : [studentRoutes, "Alumno"];
     return routes[loggedRol === rolRoute ? "private" : "public"]
 }
-
-export const GET_AVAILABLE_SUBJECTS_URL = "/alumnos/materias/";
-export const GET_REQUEST_URL = "/alumnos/";
-export const POST_REQUEST_FORM_URL = "/alumnos/solicitudes/";
 
 

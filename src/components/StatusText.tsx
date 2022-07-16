@@ -27,5 +27,16 @@ const ThreeStatesText = ([status1, status2]: [string,string]) =>
 };
 
 export const CourseStatusText = ThreeStatesText(["APROBADO", "RECHAZADO"]);
+
 export const StatusText = ThreeStatesText(["APROBADO", "DESAPROBADO"]);
-export const RequestStatusText = ThreeStatesText(["ABIERTO", "CERRRADO"]);
+
+export const RequestStatusText = ThreeStatesText(["ABIERTO", "CERRADO"]);
+
+export const ImportStatusText = ThreeStatesText(["", "IMPORTACIÓN"]);
+
+export const RegularStatusText = ThreeStatesText(["S", "N"]);  //regular: "S" | "N",
+
+export const QualityStatusText = ThreeStatesText(["Activo", ""]);  //calidad: "Activo" | "Pasivo",
+
+export const OtherStatusText = ThreeStatesText(["Aceptado", ""]);  //estado: "Aceptado" | "Pendiente"
+

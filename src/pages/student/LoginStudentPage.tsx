@@ -21,6 +21,10 @@ const LoginStudentPage = () => {
         return <Navigate to={HOME_ROUTE}/>
     }
 
+    if (auth?.isLogged && auth?.rol === "Directivo") {
+        return <Navigate to={DIRECTOR_ROUTE + "/" + HOME_ROUTE}/>
+    }
+
     return <Box align="center" justify="center" margin={{top: "large"}}>
         <Box width="medium">
             <Form<Account>

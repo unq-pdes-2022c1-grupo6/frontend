@@ -7,6 +7,7 @@ import TakenSubjectsTable from "../../../components/student/TakenSubjectsTable";
 import RequestPage from "../../../components/request/RequestPage";
 import EnrolledCoursesTable from "../../../components/courses/EnrolledCoursesTable";
 import {getApprovedSubjects} from "../../../services/dtos/requestDTO";
+import RequestRecordsTable from "../../../components/request/RequestRecordsTable";
 
 
 const RequestingStudentPage = () => {
@@ -18,8 +19,8 @@ const RequestingStudentPage = () => {
     const getStudentInfo = () => {
         let studentInfo = {};
         if (studentQuery.data) {
-            const {formulario, resumenCursadas, ...rest} = studentQuery.data;
-            studentInfo = rest
+            const {dni, nombre, carrera} = studentQuery.data;
+            studentInfo = {dni, nombre, carrera}
         }
         return studentInfo;
     }
@@ -50,6 +51,11 @@ const RequestingStudentPage = () => {
                 <Tab title="Comisiones Inscriptas en Guaraní">
                     <Box width="large" margin={{top: "medium"}}>
                         <EnrolledCoursesTable data={studentQuery.data?.formulario.comisionesInscripto}/>
+                    </Box>
+                </Tab>
+                <Tab title="Solicitudes Historicas">
+                    <Box width="large" margin={{top: "medium"}}>
+                        <RequestRecordsTable content={studentQuery.data?.solicitudesAntiguas}/>
                     </Box>
                 </Tab>
                 <Tab title="Historia Académica">

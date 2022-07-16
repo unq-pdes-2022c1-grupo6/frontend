@@ -1,6 +1,11 @@
 import {HourDTO} from "./requestDTO";
 import capitalize from "lodash/capitalize";
 
+export interface ConflictDTO {
+    fila: number,
+    mensaje: string
+}
+
 export interface SubjectDTO {
     codigo: number,
     nombre: string,
@@ -39,3 +44,5 @@ const formatHour = (hour: HourDTO[]) => {
     return hour.reduce((acc, {dia, inicio, fin}) =>
         `${acc}- ${capitalize(dia)} ${inicio} a ${fin} `, "").substring(2);
 }
+
+export const isConflictArray = (value: unknown): value is ConflictDTO[] => Array.isArray(value);
