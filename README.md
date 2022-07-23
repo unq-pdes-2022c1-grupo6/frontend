@@ -1,6 +1,8 @@
 # Sistema para la asignación de cupos - Frontend
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://unque-front-grupo6.herokuapp.com/)
+![code grade](https://api.codiga.io/project/32833/status/svg)
+![code quality score](https://api.codiga.io/project/32833/score/svg)
 
 
 Repositorio del proyecto de la materia Práctica del Desarrollo de Software, Universidad Nacional de Quilmes para el primer cuatrimestre de 2022.
