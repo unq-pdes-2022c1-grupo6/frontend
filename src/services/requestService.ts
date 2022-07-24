@@ -7,6 +7,8 @@ import {REQUEST_ROUTE} from "../utils/routes";
 import {useNavigate} from "react-router-dom";
 import {useRequest} from "../components/layouts/PrivateStudentLayout";
 import {useGlobalNotificator} from "../state/notificator";
+import {studentsKeys} from "../utils/query-keys";
+import {useAuth} from "../state/auth";
 
 
 export type RequestFormType = [Set<number>, Set<number>];
@@ -26,10 +28,20 @@ const getRequest = (): Promise<RequestDTO> => {
 
 export const useRequestQuery = () => {
     const [, setRequest] = useRequest();
+    const queryClient = useQueryClient();
+    const auth = useAuth();
 
-    return useQuery(["request"],
-        () => getRequest(),
-        {onSuccess: (data) => setRequest(data), retry: 1}
+
+    return useQuery(studentsKeys.request(auth?.user), getRequest,
+        {
+            retry: 1,
+            onSuccess: (data) => setRequest(data),
+            onError: (err) => {
+                if (isRequestNotFound(err)) {
+                    queryClient.setQueryData(studentsKeys.request(auth?.user), {} as RequestDTO);
+                    setRequest({} as RequestDTO)
+                }
+            }}
     )
 }
 
@@ -46,12 +58,13 @@ export const useCreateUpdateRequest = (
 ) => {
     const queryClient = useQueryClient();
     const navigate = useNavigate();
+    const auth = useAuth();
     const [, setRequest] = useRequest();
     const notificator = useGlobalNotificator();
 
     return useMutation(axiosRequest, {
         onSuccess: (data) => {
-            queryClient.setQueryData(["request"], data);
+            queryClient.setQueryData(studentsKeys.request(auth?.user), data);
             setRequest(data);
             navigate("/" + REQUEST_ROUTE);
             notificator?.setNotification(successMessage);
@@ -82,16 +95,16 @@ const deleteRequest = (): Promise<void> => {
 }
 
 export const useDeleteRequest = () => {
+    const auth = useAuth();
     const queryClient = useQueryClient();
     const [, setRequest] = useRequest();
     const notificator = useGlobalNotificator();
 
     return useMutation(deleteRequest, {
         onSuccess: () => {
-            queryClient.removeQueries(["request"]);
-            queryClient.refetchQueries(["request"]);
-            setRequest(undefined);
+            setRequest({} as RequestDTO);
             notificator?.setNotification("Solicitud borrada correctamente!");
+            queryClient.setQueryData(studentsKeys.request(auth?.user), {} as RequestDTO);
         }
     })
 }

@@ -9,7 +9,7 @@ const EnrolledCoursesTable = ({data = []}: {data?: EnrolledCourse[]}) => {
     return <GenericTable<EnrolledCourse>
         data={data}
         columns={[
-            {label: 'Materia', format: (c) => <Text weight="bold">{c.materia}</Text>},
+            {label: 'Materia', format: (c) => <Text>{c.materia}</Text>},
             {label: 'Ubicación', format: (c) => <Text>{startCase(c.locacion)}</Text>},
             {label: 'Comisión', format: (c) =>
                     <Text>{formatSubjectCourse(c.numero, undefined, c.horarios)}</Text>}
