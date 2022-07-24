@@ -18,6 +18,7 @@ const RequestingStudentsListPage = () => {
         <PageContent direction="row-responsive" gap="large">
             <RequestsSearchBar
                 placeholder="Buscar por DNI..."
+                inputProps={{ type: "number", min: 0 }}
                 searchTerm={search.term}
                 onSearch={(searchTerm) => setSearch("term", searchTerm)}
                 onCancel={() => deleteSearch("term")}/>
@@ -30,7 +31,7 @@ const RequestingStudentsListPage = () => {
         <PageContent width="large">
             <RequestingStudentsTable
                 content={searchRequestingStudentsQuery.data || []}
-                onClickRow={(dni) => navigate(`${dni}`)}
+                onClickRow={(dni) => navigate(+dni)}
             />
         </PageContent>
     </Page>

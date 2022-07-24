@@ -1,9 +1,9 @@
 import axiosInstance from "../utils/axios-instance";
-import {useMutation, useQuery} from "react-query";
-import {SemesterSubjectDTO, SubjectDTO} from "./dtos/subjectDTO";
+import {useMutation, useQuery, useQueryClient} from "react-query";
+import {RequestedSubjectDTO, SubjectDTO} from "./dtos/subjectDTO";
 import {DTORowType} from "../utils/csv/Mapping";
 import {CicleMappingType, fillPlanToSubjectsDTO, PlanType} from "../utils/csv/subjects-mappings";
-import {studentsKeys} from "../utils/query-keys";
+import {studentsKeys, subjectsKeys} from "../utils/query-keys";
 import {useAuth} from "../state/auth";
 
 
@@ -11,8 +11,7 @@ type SubjectsForm =  {rows: DTORowType[], plan: PlanType, cicle: CicleMappingTyp
 
 
 const getStudentSubjects = (): Promise<SubjectDTO[]> => {
-    return axiosInstance.get("/alumno/materias")
-        .then((response) => response.data)
+    return axiosInstance.get("/alumno/materias").then((response) => response.data)
 };
 
 export const useStudentSubjectsQuery = () => {
@@ -24,16 +23,14 @@ export const useStudentSubjectsQuery = () => {
         });
 };
 
-const getSemesterSubjects = (nombre: string): Promise<SemesterSubjectDTO[]> => {
+const getRequestedSubjects = (nombre: string): Promise<RequestedSubjectDTO[]> => {
     return axiosInstance.get("/materias/solicitudes", {params: {nombre}})
         .then((response) => response.data)
 };
 
-export const useSemesterSubjectsQuery = (search: string) => {
-    return useQuery(["subjects", search],
-        () => getSemesterSubjects(search),
-        {initialData: []}
-    );
+export const useRequestedSubjectsQuery = (search: string) => {
+    return useQuery(subjectsKeys.requests(search), () => getRequestedSubjects(search),
+        {initialData: []});
 }
 
 const postSubjects = ({rows, plan, cicle}: SubjectsForm): Promise<void> => {
@@ -43,8 +40,12 @@ const postSubjects = ({rows, plan, cicle}: SubjectsForm): Promise<void> => {
 }
 
 const useCreateSubjects = (plan: PlanType, cicle: CicleMappingType) => {
+    const queryClient = useQueryClient();
+
     return useMutation(({rows}: {rows: DTORowType[]}) =>
-        postSubjects({rows, plan, cicle}));
+        postSubjects({rows, plan, cicle}), {
+        onSuccess: () => queryClient.invalidateQueries(subjectsKeys.allRequests)
+    });
 }
 
 export const useCreateLISubjects = () => useCreateSubjects("LI", "cicloLI")
@@ -59,5 +60,8 @@ const postCourses = ({rows}: {rows: DTORowType[]}): Promise<void> => {
 }
 
 export const useCreateCourses = () => {
-    return useMutation(postCourses);
+    const queryClient = useQueryClient();
+    return useMutation(postCourses, {
+        onSuccess: () => queryClient.invalidateQueries(subjectsKeys.allCourses)
+    });
 }

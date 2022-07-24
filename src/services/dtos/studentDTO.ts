@@ -22,7 +22,7 @@ export interface StudentDTO {
     solicitudesAntiguas: RequestRecord[]
 }
 
-export interface SearchedStudentDTO {
+export interface RequestingStudentDTO {
     alumno: SStudentInfo,
     formularioId: number,
     estadoFormulario: "ABIERTO" | "CERRADO",

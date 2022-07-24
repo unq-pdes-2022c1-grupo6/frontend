@@ -1,8 +1,9 @@
 import axiosInstance from "../utils/axios-instance";
 import {useMutation, useQuery} from "react-query";
-import {CourseRequesterDTO, SearchedStudentDTO, StudentDTO} from "./dtos/studentDTO";
+import {CourseRequesterDTO, RequestingStudentDTO, StudentDTO} from "./dtos/studentDTO";
 import {StudentSearch, toStudentSearchDTO} from "../state/search";
 import {DTORowType} from "../utils/csv/Mapping";
+import {studentsKeys} from "../utils/query-keys";
 
 
 const getStudent = (dni: number | undefined): Promise<StudentDTO> => {
@@ -19,14 +20,14 @@ export const useStudentQuery = (dni: number | undefined) => {
     );
 }
 
-const getRequestingStudents = (search: StudentSearch): Promise<SearchedStudentDTO[]> => {
+const getRequestingStudents = (search: StudentSearch): Promise<RequestingStudentDTO[]> => {
     const params = toStudentSearchDTO(search);
-    return axiosInstance.get("/alumnos/formulario", {params}).then((response) => response.data);
+    return axiosInstance.get("/alumnos/formulario", {params})
+        .then((response) => response.data);
 };
 
 export const useSearchRequestingStudentsQuery = (search: StudentSearch) => {
-    return useQuery(["requestingStudents", search],
-        () => getRequestingStudents(search));
+    return useQuery(studentsKeys.requests(search), () => getRequestingStudents(search));
 }
 
 export const getCourseRequesters = (subject: string, numero: number, filter: string): Promise<CourseRequesterDTO[]> => {
