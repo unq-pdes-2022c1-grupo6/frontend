@@ -4,7 +4,7 @@ import {Semester} from "../model/semester";
 import {useGlobalNotificator} from "../state/notificator";
 import {AxiosError} from "axios";
 import isEqual from "lodash/isEqual";
-import {enrollmentKeys} from "../utils/query-keys";
+import {enrollmentKeys, requestsKeys} from "../utils/query-keys";
 
 export interface SemesterDTO {
     id: number,
@@ -19,8 +19,7 @@ const getCurrentSemester = (): Promise<SemesterDTO> => {
 }
 
 export const useCurrentSemesterQuery = () => {
-    return useQuery(["currentSemester"],
-        () => getCurrentSemester(), {
+    return useQuery(enrollmentKeys.current, getCurrentSemester, {
             select: (data) => new Semester(data)
         })
 }
@@ -82,8 +81,7 @@ export const useCloseAllRequest = () => {
 
     return useMutation(patchCloseAllRequest, {
         onSuccess: () => {
-            queryClient.invalidateQueries(["subjects"]);
-            queryClient.invalidateQueries(["requestingStudents"]);
             notificator?.setNotification("Se terminó la inscripción correctamente!");
+            return queryClient.invalidateQueries(requestsKeys.all)
         }})
 }
