@@ -3,6 +3,8 @@ import {useMutation, useQuery} from "react-query";
 import {SemesterSubjectDTO, SubjectDTO} from "./dtos/subjectDTO";
 import {DTORowType} from "../utils/csv/Mapping";
 import {CicleMappingType, fillPlanToSubjectsDTO, PlanType} from "../utils/csv/subjects-mappings";
+import {studentsKeys} from "../utils/query-keys";
+import {useAuth} from "../state/auth";
 
 
 type SubjectsForm =  {rows: DTORowType[], plan: PlanType, cicle: CicleMappingType};
@@ -14,10 +16,12 @@ const getStudentSubjects = (): Promise<SubjectDTO[]> => {
 };
 
 export const useStudentSubjectsQuery = () => {
-    return useQuery(["studentSubjects"],
-        () => getStudentSubjects(),
-        {initialData: []}
-    );
+    const auth = useAuth();
+    return useQuery(studentsKeys.subjects(auth?.user), getStudentSubjects,
+        {
+            initialData: [],
+            staleTime: Infinity
+        });
 };
 
 const getSemesterSubjects = (nombre: string): Promise<SemesterSubjectDTO[]> => {

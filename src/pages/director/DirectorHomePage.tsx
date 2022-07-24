@@ -32,9 +32,9 @@ const DirectorHomePage = () => {
                 <TermForm
                     term={term}
                     onSubmit={(newTerm) => {
-                        updateSemester.mutate(newTerm, {onSuccess: () => {
-                                setTerm(newTerm);
-                            }});
+                        updateSemester.mutate(newTerm, {
+                            onSuccess: () =>  setTerm(newTerm)
+                        });
                     }}
                     loading={semesterQuery.isLoading || updateSemester.isLoading}/>
             </Box>
