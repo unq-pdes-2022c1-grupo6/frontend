@@ -38,7 +38,8 @@ const RequestPage = ({dni}: { dni?: number }) => {
                         }
                     }}
                 />}
-            <Button label="Agregar Comisión" onClick={() => {setShowModal(true)}}/>
+            {request?.estado === "ABIERTO" &&
+            <Button label="Agregar Comisión" onClick={() => {setShowModal(true)}}/>}
             {loading && <Spinner size="medium"/>}
         </Box>
         <RequestTable

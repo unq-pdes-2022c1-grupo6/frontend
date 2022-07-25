@@ -145,9 +145,7 @@ export const useCloseRequest = (dni: number | undefined, student?: StudentDTO) =
     return useMutation(patchCloseRequest, {
         onSuccess: (data) => {
             let newStudent = {} as StudentDTO;
-            if (student) {
-                newStudent = {...student, formulario: data};
-            }
+            if (student) newStudent = {...student, formulario: data};
             queryClient.setQueryData<StudentDTO>(studentsKeys.detail(dni + ""), newStudent);
             notificator?.setNotification("Solicitud cerrada, no se pueden hacer más modificaciones", "warning");
         }
