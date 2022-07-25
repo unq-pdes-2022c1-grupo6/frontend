@@ -138,18 +138,17 @@ const patchCloseRequest = ({dni, id}: { dni: number, id: number }): Promise<Requ
         .then((response) => response.data)
 }
 
-export const useCloseRequest = (dni: number | undefined) => {
+export const useCloseRequest = (dni: number | undefined, student?: StudentDTO) => {
     const queryClient = useQueryClient();
     const notificator = useGlobalNotificator();
 
     return useMutation(patchCloseRequest, {
         onSuccess: (data) => {
-            queryClient.setQueryData<StudentDTO>(studentsKeys.detail(dni + ""),
-                (prevState) => {
-                    if (prevState) prevState.formulario = data;
-                    return prevState
-                }
-            );
+            let newStudent = {} as StudentDTO;
+            if (student) {
+                newStudent = {...student, formulario: data};
+            }
+            queryClient.setQueryData<StudentDTO>(studentsKeys.detail(dni + ""), newStudent);
             notificator?.setNotification("Solicitud cerrada, no se pueden hacer más modificaciones", "warning");
         }
     })

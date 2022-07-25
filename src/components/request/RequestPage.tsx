@@ -13,7 +13,7 @@ const RequestPage = ({dni}: { dni?: number }) => {
     const studentQuery = useStudentQuery(dni);
     const request = studentQuery.data?.formulario;
     const updateCourseState = useUpdateCourseState(dni, studentQuery.data);
-    const closeRequest = useCloseRequest(dni);
+    const closeRequest = useCloseRequest(dni, studentQuery.data);
     const loading = updateCourseState.isLoading || closeRequest.isLoading;
 
     const onCloseModal = () => setShowModal(false);
@@ -25,9 +25,10 @@ const RequestPage = ({dni}: { dni?: number }) => {
             </Heading>
             {request?.estado === "ABIERTO" &&
                 <WithConfirmationButton
+                    loading={loading}
                     dropButtonProps={{
-                        disabled: loading,
                         label: "Cerrar",
+                        dropAlign:{top:"bottom"},
                         dropContent: <></>
                     }}
                     onConfirm ={() => {

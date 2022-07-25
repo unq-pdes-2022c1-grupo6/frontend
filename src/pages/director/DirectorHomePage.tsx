@@ -4,7 +4,6 @@ import {getCurrentSemester, formatSemester} from "../../model/semester";
 import {useCloseAllRequest, useSemesterQuery, useUpdateSemesterQuery} from "../../services/semesterService";
 import TermForm from "../../components/TermForm";
 import {useState} from "react";
-import LoadingButton from "../../components/LoadingButton";
 import WithConfirmationButton from "../../components/WithConfirmationButton";
 
 
@@ -38,15 +37,14 @@ const DirectorHomePage = () => {
                     }}
                     loading={semesterQuery.isLoading || updateSemester.isLoading}/>
             </Box>
-            {closeAllRequest.isLoading ?
-                <LoadingButton loading={closeAllRequest.isLoading}/> :
-                <WithConfirmationButton
-                    dropButtonProps={{
-                        label: "Cerrar todas las solicitudes",
-                        dropProps: {align: {top: "bottom"}},
-                        dropContent: <></>
-                    }}
-                    onConfirm={closeAllRequest.mutate}/>}
+            <WithConfirmationButton
+                loading={closeAllRequest.isLoading}
+                dropButtonProps={{
+                    label: "Cerrar todas las solicitudes",
+                    dropProps: {align: {top: "bottom"}},
+                    dropContent: <></>
+                }}
+                onConfirm={closeAllRequest.mutate}/>
         </PageContent>
     </Page>
 
