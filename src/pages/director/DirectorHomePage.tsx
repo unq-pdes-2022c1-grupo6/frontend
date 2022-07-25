@@ -27,19 +27,19 @@ const DirectorHomePage = () => {
                     Para terminarlo, clickee el botón Cerrar todas las solicitudes, que cambiará el estado de todas las solicitudes a CERRADO.
                 </Paragraph>}/>
         </PageContent>
-        <PageContent direction="row-responsive" justify="between" align="center">
+        <PageContent direction="row-responsive" justify="between" gap="large" align="center">
             <Box width="medium">
                 <TermForm
                     term={term}
                     onSubmit={(newTerm) => {
                         updateSemester.mutate(newTerm, {
-                            onSuccess: () =>  setTerm(newTerm)
+                            onSuccess: () => setTerm(newTerm)
                         });
                     }}
                     loading={semesterQuery.isLoading || updateSemester.isLoading}/>
             </Box>
-            {closeAllRequest.isLoading?
-                <LoadingButton loading={closeAllRequest.isLoading}/>:
+            {closeAllRequest.isLoading ?
+                <LoadingButton loading={closeAllRequest.isLoading}/> :
                 <WithConfirmationButton
                     dropButtonProps={{
                         label: "Cerrar todas las solicitudes",

@@ -5,11 +5,11 @@ import {formatSubjectCourse} from "../../services/dtos/subjectDTO";
 import CourseActionButtons from "../courses/CourseActionButtons";
 
 type RequestTableProps = {
-    content: RequestCourseDTO[];
+    content?: RequestCourseDTO[];
     onChangeCourseState: (state: CourseState, id: number) => void;
 }
 
-const RequestTable = ({content, onChangeCourseState}: RequestTableProps) => {
+const RequestTable = ({content = [], onChangeCourseState}: RequestTableProps) => {
 
 
     return <DataTable

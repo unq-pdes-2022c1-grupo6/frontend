@@ -14,9 +14,8 @@ const getStudent = (dni: number | undefined): Promise<StudentDTO> => {
 };
 
 export const useStudentQuery = (dni: number | undefined) => {
-    return useQuery(["student", dni],
-        () => getStudent(dni),
-        {enabled: Boolean(dni)}
+    return useQuery(studentsKeys.detail(dni + ""),
+        () => getStudent(dni), {enabled: Boolean(dni)}
     );
 }
 

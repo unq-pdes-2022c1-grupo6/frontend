@@ -76,7 +76,7 @@ const RequiredSubjectPage = () => {
                                     course={c.numero}
                                     totalQuota={c.sobreCuposTotales}
                                     onChangeCourse={(courseId, id, state, dniAlumno) => {
-                                        updateCourseState.mutate({courseId, id, state, dniAlumno})
+                                        updateCourseState.mutate({courseId, id, state, dni: dniAlumno})
                                     }}
                                 />
                             </Box>

@@ -31,7 +31,7 @@ const RequestingStudentsListPage = () => {
         <PageContent width="large">
             <RequestingStudentsTable
                 content={searchRequestingStudentsQuery.data || []}
-                onClickRow={(dni) => navigate(+dni)}
+                onClickRow={(dni) => navigate(dni + "")}
             />
         </PageContent>
     </Page>

@@ -1,7 +1,6 @@
 import {useState} from "react";
-import {useAvailableCoursesQuery} from "../../services/courseService";
-import {SetRequestFn, useAddCourseToRequest} from "../../services/requestService";
-import {getCurrentSemester} from "../../model/semester";
+import {useOfferedCoursesQuery} from "../../services/courseService";
+import {useAddCourseToRequest} from "../../services/requestService";
 import {Box} from "grommet";
 import RequestsSearchBar from "../request/RequestsSearchBar";
 import AvailableCoursesTable from "./AvailableCoursesTable";
@@ -9,20 +8,19 @@ import AvailableCoursesTable from "./AvailableCoursesTable";
 type AddCourseFormProps = {
     excluding: (string | number)[],
     dni?: number,
-    onAddCourse: SetRequestFn
+    onCloseModal: () => void
 }
 
 
-const AddCourseForm = ({excluding, dni, onAddCourse}: AddCourseFormProps) => {
-    const {year, semester} = getCurrentSemester();
+const AddCourseForm = ({excluding, dni, onCloseModal}: AddCourseFormProps) => {
     const [search, setSearch] = useState("");
-    const availableCoursesQuery = useAvailableCoursesQuery(excluding, year, semester, search);
-    const addCourseToRequest = useAddCourseToRequest(dni, onAddCourse);
+    const availableCoursesQuery = useOfferedCoursesQuery(excluding, search);
+    const addCourseToRequest = useAddCourseToRequest(dni);
 
 
     return <Box pad="medium" gap="medium">
         <RequestsSearchBar
-            placeholder={"Buscar por Nombre de Materia...."}
+            placeholder="Buscar por Nombre de Materia...."
             searchTerm={search}
             onSearch={(value) => setSearch(value)}
             onCancel={() => setSearch("")}/>
@@ -30,7 +28,9 @@ const AddCourseForm = ({excluding, dni, onAddCourse}: AddCourseFormProps) => {
             <AvailableCoursesTable
                 content={availableCoursesQuery.data || []}
                 onClickRow={(id) => {
-                    dni && addCourseToRequest.mutate({dni, id})
+                    dni && addCourseToRequest.mutate({dni, id}, {
+                        onSettled: () => onCloseModal()
+                    })
                 }}
             />
         </Box>

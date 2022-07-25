@@ -9,12 +9,13 @@ import {useRequest} from "../components/layouts/PrivateStudentLayout";
 import {useGlobalNotificator} from "../state/notificator";
 import {studentsKeys} from "../utils/query-keys";
 import {useAuth} from "../state/auth";
+import {StudentDTO} from "./dtos/studentDTO";
 
 
 export type RequestFormType = [Set<number>, Set<number>];
 
 type UpdateCourseDTO = {
-    dniAlumno: number,
+    dni: number,
     id: number,
     state: CourseState,
     courseId: number
@@ -109,38 +110,40 @@ export const useDeleteRequest = () => {
     })
 }
 
-const patchCourseState = ({dniAlumno, id, state, courseId}: UpdateCourseDTO): Promise<RequestCourseDTO> => {
+const patchCourseState = ({dni, id, state, courseId}: UpdateCourseDTO): Promise<RequestCourseDTO> => {
     return axiosInstance
-        .patch(`/alumnos/${dniAlumno}/solicitudes/${courseId}?formularioId=${id}&estado=${state}`)
+        .patch(`/alumnos/${dni}/solicitudes/${courseId}?formularioId=${id}&estado=${state}`)
         .then((response) => response.data)
 }
 
-export const useUpdateCourseState = (dni: number | undefined, updateCourse: (data: RequestCourseDTO) => void) => {
+export const useUpdateCourseState = (dni: number | undefined, student?: StudentDTO) => {
     const queryClient = useQueryClient();
 
     return useMutation(patchCourseState, {
         onSuccess: (data) => {
-            updateCourse(data);
-            queryClient.invalidateQueries(["requestingStudents"]);
-            return queryClient.invalidateQueries(["student", dni]);
+            let newStudent = {} as StudentDTO;
+            if (student) {
+                newStudent = {...student};
+                newStudent.formulario.solicitudes = student.formulario.solicitudes.map(
+                    (s) => s.id === data.id? data: s);
+            }
+            queryClient.setQueryData<StudentDTO>(studentsKeys.detail(dni + ""), newStudent);
         }
     })
 }
 
-const patchCloseRequest = ({dniAlumno, id}: { dniAlumno: number, id: number }): Promise<RequestWithCommentsDTO> => {
+const patchCloseRequest = ({dni, id}: { dni: number, id: number }): Promise<RequestWithCommentsDTO> => {
     return axiosInstance
-        .patch(`/formulario/${id}/cerrar?dni=${dniAlumno}`)
+        .patch(`/formulario/${id}/cerrar?dni=${dni}`)
         .then((response) => response.data)
 }
 
-export const useCloseRequest = (dni: number | undefined, close: SetRequestFn) => {
+export const useCloseRequest = (dni: number | undefined) => {
     const queryClient = useQueryClient();
 
     return useMutation(patchCloseRequest, {
         onSuccess: (data) => {
-            close(data.solicitudes, data.estado);
-            queryClient.invalidateQueries(["requestingStudents"]);
-            return queryClient.invalidateQueries(["student", dni]);
+            queryClient.setQueryData(studentsKeys.detail(dni + ""), data);
         }
     })
 }
@@ -151,17 +154,14 @@ const patchNewCourse = ({dni, id}: { dni: number, id: number }): Promise<Request
         .then((response) => response.data)
 }
 
-export const useAddCourseToRequest = (dni: number | undefined, onAddCourse: SetRequestFn) => {
+export const useAddCourseToRequest = (dni: number | undefined) => {
     const queryClient = useQueryClient();
     const notificator = useGlobalNotificator();
 
     return useMutation(patchNewCourse, {
         onSuccess: (data) => {
-            queryClient.invalidateQueries(["requestingStudents"]);
-            return queryClient.invalidateQueries(["student", dni]).then(() => {
-                notificator?.setNotification("Comisión cambiada correctamente!");
-                onAddCourse(data.solicitudes);
-            });
+            queryClient.setQueryData(studentsKeys.detail(dni + ""), data);
+            notificator?.setNotification("Comisión cambiada correctamente!");
         }
     })
 }
