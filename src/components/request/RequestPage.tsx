@@ -12,8 +12,8 @@ const RequestPage = ({dni}: { dni?: number }) => {
     const [showModal, setShowModal] = useState(false);
     const studentQuery = useStudentQuery(dni);
     const request = studentQuery.data?.formulario;
-    const updateCourseState = useUpdateCourseState(dni, studentQuery.data);
-    const closeRequest = useCloseRequest(dni, studentQuery.data);
+    const updateCourseState = useUpdateCourseState(dni);
+    const closeRequest = useCloseRequest(dni);
     const loading = updateCourseState.isLoading || closeRequest.isLoading;
 
     const onCloseModal = () => setShowModal(false);

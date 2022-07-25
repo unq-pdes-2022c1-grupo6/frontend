@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {theme} from "./assets/theme";
 import {Box, Grommet} from 'grommet';
 import {Outlet, useNavigate} from "react-router-dom";
@@ -12,23 +12,9 @@ import {handle400Errors, handle401or403Errors, handleGlobally} from "./utils/axi
 import ErrorBoundary from "./state/ErrorBoundary";
 
 
-
-const createQueryClient = (onError: (error: unknown) => void) => {
-    return new QueryClient({
-        queryCache: new QueryCache({
-            onError: (error) => onError(error)
-        }),
-        mutationCache: new MutationCache({
-            onError: (error) => onError(error)
-        }),
-    })
-}
-
-
 const App = () => {
     const notificator = useGlobalNotificator();
     const navigate = useNavigate();
-
     const onError = (error: unknown) => {
         if (error instanceof AxiosError) {
             if (error.response) {
@@ -46,6 +32,11 @@ const App = () => {
             }
         }
     }
+    const [queryClient] = useState(() => new QueryClient({
+        queryCache: new QueryCache({ onError: onError }),
+        mutationCache: new MutationCache({ onError: onError }),
+    }));
+
 
     return (
         <AuthProvider>
@@ -56,7 +47,7 @@ const App = () => {
                         notification={notificator?.notification}
                         onCloseNotification={notificator?.deleteNotification}
                     />
-                    <QueryClientProvider client={createQueryClient(onError)}>
+                    <QueryClientProvider client={queryClient}>
                         <Outlet/>
                     </QueryClientProvider>
                     <Box pad="small">

@@ -116,18 +116,19 @@ const patchCourseState = ({dni, id, state, courseId}: UpdateCourseDTO): Promise<
         .then((response) => response.data)
 }
 
-export const useUpdateCourseState = (dni: number | undefined, student?: StudentDTO) => {
+export const useUpdateCourseState = (dni: number | undefined) => {
     const queryClient = useQueryClient();
 
     return useMutation(patchCourseState, {
         onSuccess: (data) => {
-            let newStudent = {} as StudentDTO;
-            if (student) {
-                newStudent = {...student};
-                newStudent.formulario.solicitudes = student.formulario.solicitudes.map(
-                    (s) => s.id === data.id? data: s);
-            }
-            queryClient.setQueryData<StudentDTO>(studentsKeys.detail(dni + ""), newStudent);
+            queryClient.setQueryData<StudentDTO>(studentsKeys.detail(dni + ""),
+                (prevState) => {
+                    if (prevState) {
+                        prevState.formulario.solicitudes = prevState.formulario.solicitudes.map(
+                            (s) => s.id === data.id? data: s);
+                    }
+                    return prevState;
+            });
         }
     })
 }
@@ -138,15 +139,18 @@ const patchCloseRequest = ({dni, id}: { dni: number, id: number }): Promise<Requ
         .then((response) => response.data)
 }
 
-export const useCloseRequest = (dni: number | undefined, student?: StudentDTO) => {
+export const useCloseRequest = (dni: number | undefined) => {
     const queryClient = useQueryClient();
     const notificator = useGlobalNotificator();
 
     return useMutation(patchCloseRequest, {
         onSuccess: (data) => {
-            let newStudent = {} as StudentDTO;
-            if (student) newStudent = {...student, formulario: data};
-            queryClient.setQueryData<StudentDTO>(studentsKeys.detail(dni + ""), newStudent);
+            queryClient.setQueryData<StudentDTO>(studentsKeys.detail(dni + ""),
+                (prevState) => {
+                    if (prevState) prevState.formulario = data;
+                    return prevState
+                }
+            );
             notificator?.setNotification("Solicitud cerrada, no se pueden hacer más modificaciones", "warning");
         }
     })
