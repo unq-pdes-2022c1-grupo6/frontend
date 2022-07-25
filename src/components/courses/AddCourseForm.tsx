@@ -22,7 +22,7 @@ const AddCourseForm = ({excluding, dni, onCloseModal}: AddCourseFormProps) => {
         <RequestsSearchBar
             placeholder="Buscar por Nombre de Materia...."
             searchTerm={search}
-            onSearch={(value) => setSearch(value)}
+            onSearch={setSearch}
             onCancel={() => setSearch("")}/>
         <Box width="large">
             <AvailableCoursesTable

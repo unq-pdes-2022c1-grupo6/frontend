@@ -1,5 +1,5 @@
 import axiosInstance from "../utils/axios-instance";
-import {useMutation, useQuery} from "react-query";
+import {useMutation, useQuery} from "@tanstack/react-query";
 import {CourseRequesterDTO, RequestingStudentDTO, StudentDTO} from "./dtos/studentDTO";
 import {StudentSearch, toStudentSearchDTO} from "../state/search";
 import {DTORowType} from "../utils/csv/Mapping";

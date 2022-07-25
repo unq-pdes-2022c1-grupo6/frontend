@@ -1,4 +1,4 @@
-import {useQuery} from "react-query";
+import {useQuery} from "@tanstack/react-query";
 import axiosInstance from "../utils/axios-instance";
 import {EnrolledCourse} from "./dtos/requestDTO";
 import {getCurrentSemester} from "../model/semester";

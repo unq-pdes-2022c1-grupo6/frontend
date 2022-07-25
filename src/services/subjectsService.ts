@@ -1,5 +1,5 @@
 import axiosInstance from "../utils/axios-instance";
-import {useMutation, useQuery, useQueryClient} from "react-query";
+import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {RequestedSubjectDTO, SubjectDTO} from "./dtos/subjectDTO";
 import {DTORowType} from "../utils/csv/Mapping";
 import {CicleMappingType, fillPlanToSubjectsDTO, PlanType} from "../utils/csv/subjects-mappings";

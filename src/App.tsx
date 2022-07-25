@@ -3,13 +3,14 @@ import {theme} from "./assets/theme";
 import {Box, Grommet} from 'grommet';
 import {Outlet, useNavigate} from "react-router-dom";
 import ResponsiveHeader from "./components/layouts/ResponsiveHeader";
-import {MutationCache, QueryCache, QueryClient, QueryClientProvider} from 'react-query'
+import {MutationCache, QueryCache, QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import {AxiosError} from "axios";
 import GlobalNotificator from "./components/GlobalNotificator";
 import {AuthProvider} from "./state/auth";
 import {useGlobalNotificator} from "./state/notificator";
 import {handle400Errors, handle401or403Errors, handleGlobally} from "./utils/axios-error-handler";
 import ErrorBoundary from "./state/ErrorBoundary";
+
 
 
 const createQueryClient = (onError: (error: unknown) => void) => {

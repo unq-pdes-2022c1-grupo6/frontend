@@ -1,4 +1,4 @@
-import {useMutation, useQuery, useQueryClient} from "react-query";
+import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import axiosInstance from "../utils/axios-instance";
 import {CourseState, RequestCourseDTO, RequestDTO, RequestWithCommentsDTO} from "./dtos/requestDTO";
 import {AxiosError} from "axios";
@@ -140,10 +140,17 @@ const patchCloseRequest = ({dni, id}: { dni: number, id: number }): Promise<Requ
 
 export const useCloseRequest = (dni: number | undefined) => {
     const queryClient = useQueryClient();
+    const notificator = useGlobalNotificator();
 
     return useMutation(patchCloseRequest, {
         onSuccess: (data) => {
-            queryClient.setQueryData(studentsKeys.detail(dni + ""), data);
+            queryClient.setQueryData<StudentDTO>(studentsKeys.detail(dni + ""),
+                (prevState) => {
+                    if (prevState) prevState.formulario = data;
+                    return prevState
+                }
+            );
+            notificator?.setNotification("Solicitud cerrada, no se pueden hacer más modificaciones", "warning");
         }
     })
 }
@@ -160,8 +167,13 @@ export const useAddCourseToRequest = (dni: number | undefined) => {
 
     return useMutation(patchNewCourse, {
         onSuccess: (data) => {
-            queryClient.setQueryData(studentsKeys.detail(dni + ""), data);
-            notificator?.setNotification("Comisión cambiada correctamente!");
+            queryClient.setQueryData<StudentDTO>(studentsKeys.detail(dni + ""),
+                (prevState) => {
+                    if (prevState) prevState.formulario = data;
+                    return prevState
+                }
+            );
+            notificator?.setNotification("Comisión agregada correctamente!");
         }
     })
 }

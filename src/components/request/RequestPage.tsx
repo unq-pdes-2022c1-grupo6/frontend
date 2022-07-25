@@ -11,20 +11,19 @@ import {getExcludingCourses} from "../../services/dtos/studentDTO";
 const RequestPage = ({dni}: { dni?: number }) => {
     const [showModal, setShowModal] = useState(false);
     const studentQuery = useStudentQuery(dni);
-    const getRequest = () => studentQuery.data? studentQuery.data.formulario: undefined;
+    const request = studentQuery.data?.formulario;
     const updateCourseState = useUpdateCourseState(dni, studentQuery.data);
     const closeRequest = useCloseRequest(dni);
     const loading = updateCourseState.isLoading || closeRequest.isLoading;
 
     const onCloseModal = () => setShowModal(false);
 
-
     return <Box fill gap="small">
         <Box direction="row" align="center" gap="medium">
             <Heading level="3" size="medium" margin="none">
-                {`Estado: ${getRequest()?.estado? getRequest()?.estado: "---"}`}
+                {`Estado: ${request?.estado? request.estado: "---"}`}
             </Heading>
-            {getRequest()?.estado === "ABIERTO" &&
+            {request?.estado === "ABIERTO" &&
                 <WithConfirmationButton
                     dropButtonProps={{
                         disabled: loading,
@@ -32,7 +31,6 @@ const RequestPage = ({dni}: { dni?: number }) => {
                         dropContent: <></>
                     }}
                     onConfirm ={() => {
-                        const request = getRequest();
                         if (dni && request?.id) {
                             const data = {dni, id: request.id};
                             closeRequest.mutate(data);
@@ -43,9 +41,9 @@ const RequestPage = ({dni}: { dni?: number }) => {
             {loading && <Spinner size="medium"/>}
         </Box>
         <RequestTable
-            content={getRequest()?.solicitudes}
+            editable={request?.estado === "ABIERTO"}
+            content={request?.solicitudes}
             onChangeCourseState={(state, courseId) => {
-                const request = getRequest();
                 if (request?.id && dni) {
                     updateCourseState.mutate({id: request?.id, dni, state, courseId})
                 }
