@@ -7,7 +7,7 @@ import {REQUEST_ROUTE} from "../utils/routes";
 import {useNavigate} from "react-router-dom";
 import {useRequest} from "../components/layouts/PrivateStudentLayout";
 import {useGlobalNotificator} from "../state/notificator";
-import {studentsKeys} from "../utils/query-keys";
+import {studentsKeys, subjectsKeys} from "../utils/query-keys";
 import {useAuth} from "../state/auth";
 import {StudentDTO} from "./dtos/studentDTO";
 
@@ -17,6 +17,7 @@ export type RequestFormType = [Set<number>, Set<number>];
 type UpdateCourseDTO = {
     dni: number,
     id: number,
+    courseNumber?: number,
     state: CourseState,
     courseId: number
 }
@@ -180,11 +181,11 @@ export const useAddCourseToRequest = (dni: number | undefined) => {
 }
 
 
-export const useUpdateCourseState2 = () => {
+export const useUpdateCourseState2 = (code?: string) => {
     const queryClient = useQueryClient();
     return useMutation(patchCourseState, {
-        onSuccess: () => {
-            return queryClient.invalidateQueries(["requests", "subject"]);
+        onSuccess: (_, variables) => {
+            return queryClient.invalidateQueries(subjectsKeys.allCourseRequests(code, variables.courseNumber));
         }
     });
 }
@@ -199,8 +200,8 @@ export const useRejectAllCourseRequesters = () => {
     const queryClient = useQueryClient();
 
     return useMutation(patchRejectAllCourseRequesters, {
-        onSuccess: () => {
-            return queryClient.invalidateQueries(["requests", "subject"]);
+        onSuccess: (data, variables) => {
+            return queryClient.invalidateQueries(subjectsKeys.courses(variables.code));
         }
     });
 }

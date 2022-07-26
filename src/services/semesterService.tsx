@@ -43,8 +43,7 @@ export const useSemesterQuery = (year: number, semester: string, setTerm: (term:
             onSuccess: (data) => {
                 setTerm([data.inicioInscripciones + ".000Z",
                     data.finInscripciones + ".000Z"]);
-            },
-            staleTime: Infinity
+            }
         }
     )
 }

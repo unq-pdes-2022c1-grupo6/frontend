@@ -18,11 +18,13 @@ export const enrollmentKeys = {
 
 export const subjectsKeys = {
     allCourses: ["courses", "list"] as const,
-    courses: (code: string) => [...subjectsKeys.allCourses, "subject", code] as const,
+    courses: (code: string = "") => [...subjectsKeys.allCourses, "subject", code] as const,
     coursesOffered: (search: string) => [...subjectsKeys.allCourses, search] as const,
 
+    allCourseRequests: (code: string = "", courseNumber: number = 0) =>
+        [...requestsKeys.all, "subjects", "detail", code, "courses", "list", courseNumber] as const,
     courseRequests: (code: string, courseNumber: number, search: string) =>
-        [...requestsKeys.all, "subjects", "detail", code, "courses", "list", courseNumber, search] as const,
+        [...subjectsKeys.allCourseRequests(code, courseNumber), search] as const,
 
     allRequests: [...requestsKeys.all, "subjects", "list"] as const,
     requests: (search: string) => [...subjectsKeys.allRequests, search] as const,
