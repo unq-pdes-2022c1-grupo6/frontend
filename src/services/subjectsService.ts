@@ -17,10 +17,7 @@ const getStudentSubjects = (): Promise<SubjectDTO[]> => {
 export const useStudentSubjectsQuery = () => {
     const auth = useAuth();
     return useQuery(studentsKeys.subjects(auth?.user), getStudentSubjects,
-        {
-            initialData: [],
-            staleTime: Infinity
-        });
+        { initialData: [], cacheTime: 600000 });
 };
 
 const getRequestedSubjects = (nombre: string): Promise<RequestedSubjectDTO[]> => {
