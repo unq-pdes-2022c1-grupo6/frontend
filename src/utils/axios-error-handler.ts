@@ -1,14 +1,12 @@
 import {AxiosResponse} from "axios";
 import {StatusType} from "grommet";
-import {NavigateFunction} from "react-router-dom";
-import {LOGIN_ROUTE} from "./routes";
 import {isRequestNotFound} from "../services/requestService";
 import {isSemesterNotFound} from "../services/semesterService";
 
 
 type ErrorHandlerFn = (response: AxiosResponse,
                        setNotification: ((message: string, status?: StatusType | undefined) => void) | undefined,
-                       navigate: NavigateFunction) => void
+                       logout: (() => void) | undefined) => void
 
 
 export const handle400Errors: ErrorHandlerFn = ({data, status}, setNotification) => {
@@ -24,16 +22,16 @@ export const handle400Errors: ErrorHandlerFn = ({data, status}, setNotification)
     }
 }
 
-export const handle401or403Errors: ErrorHandlerFn = ({status}, setNotification, navigate) => {
+export const handle401or403Errors: ErrorHandlerFn = ({status}, setNotification, logout) => {
     if (status === 401) {
         setNotification && setNotification(`401 Unauthorized: Es necesario autenticar para
          obtener la respuesta solicitada`, "critical");
-        navigate(LOGIN_ROUTE)
+        logout && logout()
     }
     if (status === 403) {
         setNotification && setNotification(`403 Forbidden: El cliente no posee los permisos necesarios para cierto contenido,
          por lo que el servidor está rechazando otorgar una respuesta apropiada.`, "critical")
-        navigate(LOGIN_ROUTE)
+        logout && logout()
     }
 }
 

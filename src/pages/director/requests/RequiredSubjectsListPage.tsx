@@ -1,4 +1,4 @@
-import {useSemesterSubjectsQuery} from "../../../services/subjectsService";
+import {useRequestedSubjectsQuery} from "../../../services/subjectsService";
 import {Box, DataTable, Page, PageContent, Spinner} from "grommet";
 import {useNavigate} from "react-router-dom";
 import {useState} from "react";
@@ -8,7 +8,7 @@ import kebabCase from "lodash/kebabCase";
 const RequiredSubjectsListPage = () => {
     const navigate = useNavigate();
     const [search, setSearch] = useState("");
-    const semesterSubjectsQuery = useSemesterSubjectsQuery(search);
+    const semesterSubjectsQuery = useRequestedSubjectsQuery(search);
 
 
     return <Page kind="narrow" pad="large" align="center">

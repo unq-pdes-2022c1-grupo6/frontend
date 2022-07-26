@@ -1,39 +1,27 @@
-import React from "react";
+import React, {useState} from "react";
 import {theme} from "./assets/theme";
 import {Box, Grommet} from 'grommet';
-import {Outlet, useNavigate} from "react-router-dom";
+import {Outlet} from "react-router-dom";
 import ResponsiveHeader from "./components/layouts/ResponsiveHeader";
-import {MutationCache, QueryCache, QueryClient, QueryClientProvider} from 'react-query'
+import {MutationCache, QueryCache, QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import {AxiosError} from "axios";
 import GlobalNotificator from "./components/GlobalNotificator";
-import {AuthProvider} from "./state/auth";
+import {AuthProvider, useAuth} from "./state/auth";
 import {useGlobalNotificator} from "./state/notificator";
 import {handle400Errors, handle401or403Errors, handleGlobally} from "./utils/axios-error-handler";
 import ErrorBoundary from "./state/ErrorBoundary";
 
 
-const createQueryClient = (onError: (error: unknown) => void) => {
-    return new QueryClient({
-        queryCache: new QueryCache({
-            onError: (error) => onError(error)
-        }),
-        mutationCache: new MutationCache({
-            onError: (error) => onError(error)
-        }),
-    })
-}
-
-
 const App = () => {
     const notificator = useGlobalNotificator();
-    const navigate = useNavigate();
+    const auth = useAuth();
 
     const onError = (error: unknown) => {
         if (error instanceof AxiosError) {
             if (error.response) {
                 if (handleGlobally(error)) {
-                    handle400Errors(error.response, notificator?.setNotification, navigate);
-                    handle401or403Errors(error.response, notificator?.setNotification, navigate);
+                    handle400Errors(error.response, notificator?.setNotification, auth?.logout);
+                    handle401or403Errors(error.response, notificator?.setNotification, auth?.logout);
                 }
             } else if (error.request) {
                 notificator?.setNotification("La petición fue hecha pero no se recibió respuesta",
@@ -45,6 +33,11 @@ const App = () => {
             }
         }
     }
+    const [queryClient] = useState(() => new QueryClient({
+        queryCache: new QueryCache({ onError: onError }),
+        mutationCache: new MutationCache({ onError: onError }),
+    }));
+
 
     return (
         <AuthProvider>
@@ -55,7 +48,7 @@ const App = () => {
                         notification={notificator?.notification}
                         onCloseNotification={notificator?.deleteNotification}
                     />
-                    <QueryClientProvider client={createQueryClient(onError)}>
+                    <QueryClientProvider client={queryClient}>
                         <Outlet/>
                     </QueryClientProvider>
                     <Box pad="small">

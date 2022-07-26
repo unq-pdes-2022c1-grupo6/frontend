@@ -1,9 +1,9 @@
 import {DataTable} from "grommet";
-import {SearchedStudentDTO} from "../../services/dtos/studentDTO";
+import {RequestingStudentDTO} from "../../services/dtos/studentDTO";
 import {OtherStatusText, QualityStatusText, RegularStatusText, RequestStatusText} from "../StatusText";
 
 type RequestingStudentsTableProps = {
-    content: SearchedStudentDTO[],
+    content: RequestingStudentDTO[],
     onClickRow: (dni: number) => void
 }
 

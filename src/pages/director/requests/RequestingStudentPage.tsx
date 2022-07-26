@@ -6,7 +6,6 @@ import {useState} from "react";
 import TakenSubjectsTable from "../../../components/student/TakenSubjectsTable";
 import RequestPage from "../../../components/request/RequestPage";
 import EnrolledCoursesTable from "../../../components/courses/EnrolledCoursesTable";
-import {getApprovedSubjects} from "../../../services/dtos/requestDTO";
 import RequestRecordsTable from "../../../components/request/RequestRecordsTable";
 
 
@@ -16,7 +15,7 @@ const RequestingStudentPage = () => {
     const parsedDni = params.dni? parseInt(params.dni): undefined;
     const studentQuery = useStudentQuery(parsedDni);
 
-    const getStudentInfo = () => {
+    const getStudentInfoProps = () => {
         let studentInfo = {};
         if (studentQuery.data) {
             const {dni, nombre, carrera} = studentQuery.data;
@@ -25,27 +24,16 @@ const RequestingStudentPage = () => {
         return studentInfo;
     }
 
-    const getRequestPageProps = () => {
-        let props = {};
-        if (studentQuery.data) {
-            const {resumenCursadas, formulario: {comisionesInscripto, comentarios, ...rest}} = studentQuery.data;
-            const excSubj1 = getApprovedSubjects(resumenCursadas);
-            const excSubj2 = comisionesInscripto.map(c => c.materia);
-            props = {excludingSubjects: [...excSubj1, ...excSubj2], ...rest}
-        }
-        return props;
-    }
 
     return <Page kind="wide" margin={{top: "medium"}} gap="medium">
         <PageContent>
-            <StudentInfo {...getStudentInfo()}/>
+            <StudentInfo {...getStudentInfoProps()}/>
         </PageContent>
         <PageContent>
             <Tabs activeIndex={tab} onActive={setTab} justify="start">
                 <Tab title="Solicitud">
                     <Box margin={{top: "medium"}}>
-                        <RequestPage
-                            {...getRequestPageProps()}/>
+                        <RequestPage dni={parsedDni}/>
                     </Box>
                 </Tab>
                 <Tab title="Comisiones Inscriptas en Guaraní">

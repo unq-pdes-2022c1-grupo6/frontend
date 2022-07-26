@@ -1,4 +1,4 @@
-import {useMutation, useQuery, useQueryClient} from "react-query";
+import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import axiosInstance from "../utils/axios-instance";
 import {CourseState, RequestCourseDTO, RequestDTO, RequestWithCommentsDTO} from "./dtos/requestDTO";
 import {AxiosError} from "axios";
@@ -7,13 +7,17 @@ import {REQUEST_ROUTE} from "../utils/routes";
 import {useNavigate} from "react-router-dom";
 import {useRequest} from "../components/layouts/PrivateStudentLayout";
 import {useGlobalNotificator} from "../state/notificator";
+import {studentsKeys, subjectsKeys} from "../utils/query-keys";
+import {useAuth} from "../state/auth";
+import {StudentDTO} from "./dtos/studentDTO";
 
 
 export type RequestFormType = [Set<number>, Set<number>];
 
 type UpdateCourseDTO = {
-    dniAlumno: number,
+    dni: number,
     id: number,
+    courseNumber?: number,
     state: CourseState,
     courseId: number
 }
@@ -26,10 +30,20 @@ const getRequest = (): Promise<RequestDTO> => {
 
 export const useRequestQuery = () => {
     const [, setRequest] = useRequest();
+    const queryClient = useQueryClient();
+    const auth = useAuth();
 
-    return useQuery(["request"],
-        () => getRequest(),
-        {onSuccess: (data) => setRequest(data), retry: 1}
+
+    return useQuery(studentsKeys.request(auth?.user), getRequest,
+        {
+            retry: 1,
+            onSuccess: (data) => setRequest(data),
+            onError: (err) => {
+                if (isRequestNotFound(err)) {
+                    queryClient.setQueryData(studentsKeys.request(auth?.user), {} as RequestDTO);
+                    setRequest({} as RequestDTO)
+                }
+            }}
     )
 }
 
@@ -46,12 +60,13 @@ export const useCreateUpdateRequest = (
 ) => {
     const queryClient = useQueryClient();
     const navigate = useNavigate();
+    const auth = useAuth();
     const [, setRequest] = useRequest();
     const notificator = useGlobalNotificator();
 
     return useMutation(axiosRequest, {
         onSuccess: (data) => {
-            queryClient.setQueryData(["request"], data);
+            queryClient.setQueryData(studentsKeys.request(auth?.user), data);
             setRequest(data);
             navigate("/" + REQUEST_ROUTE);
             notificator?.setNotification(successMessage);
@@ -82,52 +97,62 @@ const deleteRequest = (): Promise<void> => {
 }
 
 export const useDeleteRequest = () => {
+    const auth = useAuth();
     const queryClient = useQueryClient();
     const [, setRequest] = useRequest();
     const notificator = useGlobalNotificator();
 
     return useMutation(deleteRequest, {
         onSuccess: () => {
-            queryClient.removeQueries(["request"]);
-            queryClient.refetchQueries(["request"]);
-            setRequest(undefined);
+            setRequest({} as RequestDTO);
             notificator?.setNotification("Solicitud borrada correctamente!");
+            queryClient.setQueryData(studentsKeys.request(auth?.user), {} as RequestDTO);
         }
     })
 }
 
-const patchCourseState = ({dniAlumno, id, state, courseId}: UpdateCourseDTO): Promise<RequestCourseDTO> => {
+const patchCourseState = ({dni, id, state, courseId}: UpdateCourseDTO): Promise<RequestCourseDTO> => {
     return axiosInstance
-        .patch(`/alumnos/${dniAlumno}/solicitudes/${courseId}?formularioId=${id}&estado=${state}`)
+        .patch(`/alumnos/${dni}/solicitudes/${courseId}?formularioId=${id}&estado=${state}`)
         .then((response) => response.data)
 }
 
-export const useUpdateCourseState = (dni: number | undefined, updateCourse: (data: RequestCourseDTO) => void) => {
+export const useUpdateCourseState = (dni: number | undefined) => {
     const queryClient = useQueryClient();
 
     return useMutation(patchCourseState, {
         onSuccess: (data) => {
-            updateCourse(data);
-            queryClient.invalidateQueries(["requestingStudents"]);
-            return queryClient.invalidateQueries(["student", dni]);
+            queryClient.setQueryData<StudentDTO>(studentsKeys.detail(dni + ""),
+                (prevState) => {
+                    if (prevState) {
+                        prevState.formulario.solicitudes = prevState.formulario.solicitudes.map(
+                            (s) => s.id === data.id? data: s);
+                    }
+                    return prevState;
+            });
         }
     })
 }
 
-const patchCloseRequest = ({dniAlumno, id}: { dniAlumno: number, id: number }): Promise<RequestWithCommentsDTO> => {
+const patchCloseRequest = ({dni, id}: { dni: number, id: number }): Promise<RequestWithCommentsDTO> => {
     return axiosInstance
-        .patch(`/formulario/${id}/cerrar?dni=${dniAlumno}`)
+        .patch(`/formulario/${id}/cerrar?dni=${dni}`)
         .then((response) => response.data)
 }
 
-export const useCloseRequest = (dni: number | undefined, close: SetRequestFn) => {
+export const useCloseRequest = (dni: number | undefined) => {
     const queryClient = useQueryClient();
+    const notificator = useGlobalNotificator();
 
     return useMutation(patchCloseRequest, {
         onSuccess: (data) => {
-            close(data.solicitudes, data.estado);
-            queryClient.invalidateQueries(["requestingStudents"]);
-            return queryClient.invalidateQueries(["student", dni]);
+            queryClient.setQueryData<StudentDTO>(studentsKeys.detail(dni + ""),
+                (prevState) => {
+                    if (prevState) prevState.formulario = data;
+                    return prevState
+                }
+            );
+            notificator?.setNotification("Solicitud cerrada, no se pueden hacer más modificaciones", "warning");
         }
     })
 }
@@ -138,27 +163,29 @@ const patchNewCourse = ({dni, id}: { dni: number, id: number }): Promise<Request
         .then((response) => response.data)
 }
 
-export const useAddCourseToRequest = (dni: number | undefined, onAddCourse: SetRequestFn) => {
+export const useAddCourseToRequest = (dni: number | undefined) => {
     const queryClient = useQueryClient();
     const notificator = useGlobalNotificator();
 
     return useMutation(patchNewCourse, {
         onSuccess: (data) => {
-            queryClient.invalidateQueries(["requestingStudents"]);
-            return queryClient.invalidateQueries(["student", dni]).then(() => {
-                notificator?.setNotification("Comisión cambiada correctamente!");
-                onAddCourse(data.solicitudes);
-            });
+            queryClient.setQueryData<StudentDTO>(studentsKeys.detail(dni + ""),
+                (prevState) => {
+                    if (prevState) prevState.formulario = data;
+                    return prevState
+                }
+            );
+            notificator?.setNotification("Comisión agregada correctamente!");
         }
     })
 }
 
 
-export const useUpdateCourseState2 = () => {
+export const useUpdateCourseState2 = (code?: string) => {
     const queryClient = useQueryClient();
     return useMutation(patchCourseState, {
-        onSuccess: () => {
-            return queryClient.invalidateQueries(["requests", "subject"]);
+        onSuccess: (_, variables) => {
+            return queryClient.invalidateQueries(subjectsKeys.allCourseRequests(code, variables.courseNumber));
         }
     });
 }
@@ -173,8 +200,8 @@ export const useRejectAllCourseRequesters = () => {
     const queryClient = useQueryClient();
 
     return useMutation(patchRejectAllCourseRequesters, {
-        onSuccess: () => {
-            return queryClient.invalidateQueries(["requests", "subject"]);
+        onSuccess: (data, variables) => {
+            return queryClient.invalidateQueries(subjectsKeys.courses(variables.code));
         }
     });
 }

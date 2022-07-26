@@ -4,7 +4,7 @@ import Papa, {ParseResult} from "papaparse";
 import {useMemo, useState} from "react";
 import ImportErrorsTable from "./ImportErrorsTable";
 import {ConvertedRowsInfoType, DTORowType, ParsedRowType} from "../../utils/csv/Mapping";
-import {MutateOptions} from "react-query";
+import {MutateOptions} from "@tanstack/react-query";
 import {ErrorTypeI, notValidColumns, RowErrorTypeI} from "../../utils/csv/Validator";
 import {AxiosError} from "axios";
 import {isConflictArray} from "../../services/dtos/subjectDTO";

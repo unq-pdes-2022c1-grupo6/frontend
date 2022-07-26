@@ -13,7 +13,7 @@ type CourseRequestersTableProps = {
     subject: string,
     course: number,
     totalQuota: number,
-    onChangeCourse: (courseId: number, id: number, state: CourseState, dniAlumno: number) => void
+    onChangeCourse: (courseId: number, id: number, courseNumber: number, state: CourseState, dniAlumno: number) => void
 }
 
 
@@ -30,7 +30,7 @@ const CourseRequestersTable = ({subject, course, onChangeCourse, totalQuota}: Co
                 onChange={(value) => setFilter(value)}
                 onCancel={() => setFilter("Todos")}/>
             <Text>
-                {`${totalQuota - countApprovedRequesters(courseRequestersQuery.data)} Sobrecupo/s Disponibles de ${totalQuota} Totales`}
+                {`${totalQuota - countApprovedRequesters(courseRequestersQuery.data)}/ ${totalQuota} Sobrecupo/s Totales`}
             </Text>
             {courseRequestersQuery.isLoading && <Spinner size="medium"/>}
         </Box>
@@ -46,14 +46,13 @@ const CourseRequestersTable = ({subject, course, onChangeCourse, totalQuota}: Co
                                        label={dni}
                         />}},
                     {property: "nombreApellido", size: "small", header: "Nombre Apellido"},
-                    {property: "coeficiente", header: "Coeficiente", size: "small", align: "end"},
                     {property: "cantidadDeAprobadas", header: "Solicitudes Aprobadas", align: "end"},
                     {property: "estado", header: "Estado", align: "center",
                         render: ({estado}) => <CourseStatusText state={estado}/>},
                     {property: "", header: "Acciones", size: "medium", render: (datum) => {
                             return <CourseActionButtons
                                 onChangeState={(state) => {
-                                    onChangeCourse(datum.idSolicitud, datum.idFormulario, state, datum.dni)
+                                    onChangeCourse(datum.idSolicitud, datum.idFormulario, datum.numeroComision, state, datum.dni)
                                     }}
                                 courseState={datum.estado}
                             />

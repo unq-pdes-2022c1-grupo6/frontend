@@ -1,81 +1,58 @@
-import {RequestCourseDTO} from "../../services/dtos/requestDTO";
 import RequestTable from "./RequestTable";
 import {useCloseRequest, useUpdateCourseState} from "../../services/requestService";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {Box, Button, Heading, Layer, Spinner} from "grommet";
 import AddCourseForm from "../courses/AddCourseForm";
 import WithConfirmationButton from "../WithConfirmationButton";
+import {useStudentQuery} from "../../services/studentService";
+import {getExcludingCourses} from "../../services/dtos/studentDTO";
 
 
-type RequestPageProps = {
-    id?: number,
-    dniAlumno?: number,
-    solicitudes?: RequestCourseDTO[],
-    estado?: "CERRADO" | "ABIERTO",
-    excludingSubjects?: string[]
-}
-
-const RequestPage = ({id, dniAlumno, solicitudes = [], estado, excludingSubjects = []}: RequestPageProps) => {
+const RequestPage = ({dni}: { dni?: number }) => {
     const [showModal, setShowModal] = useState(false);
-    const [data, setData] = useState<RequestCourseDTO[]>([]);
-    const [state, setState] = useState<"CERRADO" | "ABIERTO" | undefined>();
-    const replaceDataItem = (newCourse: RequestCourseDTO) => {
-        setData((prevState) => {
-            return prevState.map(s => s.id === newCourse.id ? newCourse : s)
-        })
-    };
-    const setRequest = (newData: RequestCourseDTO[], newState: "CERRADO" | "ABIERTO" = "ABIERTO") => {
-        setData(newData);
-        setState(newState);
-    }
-    const updateCourseState = useUpdateCourseState(dniAlumno, replaceDataItem);
-    const closeRequest = useCloseRequest(dniAlumno, setRequest);
+    const studentQuery = useStudentQuery(dni);
+    const request = studentQuery.data?.formulario;
+    const updateCourseState = useUpdateCourseState(dni);
+    const closeRequest = useCloseRequest(dni);
     const loading = updateCourseState.isLoading || closeRequest.isLoading;
-
-    useEffect(() => {
-        setData(solicitudes);
-        setState(estado);
-    }, [solicitudes, estado])
 
     const onCloseModal = () => setShowModal(false);
 
-    const getExcluding = (): (string | number)[]  => {
-        const requestedCourses = data.map(value => value.comision.id);
-        return [...excludingSubjects, ...requestedCourses]
-    }
-
     return <Box fill gap="small">
         <Box direction="row" align="center" gap="medium">
-            {state && <Heading level="3" size="medium" margin="none">{`Estado:${state}`}</Heading>}
-            {state === "ABIERTO" &&
+            <Heading level="3" size="medium" margin="none">
+                {`Estado: ${request?.estado? request.estado: "---"}`}
+            </Heading>
+            {request?.estado === "ABIERTO" &&
                 <WithConfirmationButton
+                    loading={loading}
                     dropButtonProps={{
-                        disabled: loading,
                         label: "Cerrar",
+                        dropAlign:{top:"bottom"},
                         dropContent: <></>
                     }}
                     onConfirm ={() => {
-                        if (dniAlumno && id) {
-                            closeRequest.mutate({dniAlumno, id});
+                        if (dni && request?.id) {
+                            const data = {dni, id: request.id};
+                            closeRequest.mutate(data);
                         }
                     }}
                 />}
-            <Button label="Agregar Comisión" onClick={() => {setShowModal(true)}}/>
+            {request?.estado === "ABIERTO" &&
+            <Button label="Agregar Comisión" onClick={() => {setShowModal(true)}}/>}
             {loading && <Spinner size="medium"/>}
         </Box>
         <RequestTable
-            content={data}
+            editable={request?.estado === "ABIERTO"}
+            content={request?.solicitudes}
             onChangeCourseState={(state, courseId) => {
-                if (id && dniAlumno) {
-                    updateCourseState.mutate({id, dniAlumno, state, courseId})
+                if (request?.id && dni) {
+                    updateCourseState.mutate({id: request?.id, dni, state, courseId})
                 }
             }}/>
         {showModal && <Layer position="center" onClickOutside={onCloseModal} onEsc={onCloseModal}>
-            <AddCourseForm dni={dniAlumno} excluding={getExcluding()}
-                           onAddCourse={(newData) => {
-                               setRequest(newData);
-                               onCloseModal();
-                           }}/>
+            <AddCourseForm excluding={studentQuery.data? getExcludingCourses(studentQuery.data) : []}
+                           dni={dni} onCloseModal={onCloseModal}/>
         </Layer>}
     </Box>
 

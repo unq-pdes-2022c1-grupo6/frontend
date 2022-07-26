@@ -4,7 +4,6 @@ import {getCurrentSemester, formatSemester} from "../../model/semester";
 import {useCloseAllRequest, useSemesterQuery, useUpdateSemesterQuery} from "../../services/semesterService";
 import TermForm from "../../components/TermForm";
 import {useState} from "react";
-import LoadingButton from "../../components/LoadingButton";
 import WithConfirmationButton from "../../components/WithConfirmationButton";
 
 
@@ -27,26 +26,25 @@ const DirectorHomePage = () => {
                     Para terminarlo, clickee el botón Cerrar todas las solicitudes, que cambiará el estado de todas las solicitudes a CERRADO.
                 </Paragraph>}/>
         </PageContent>
-        <PageContent direction="row-responsive" justify="between" align="center">
+        <PageContent direction="row-responsive" justify="between" gap="large" align="center">
             <Box width="medium">
                 <TermForm
                     term={term}
                     onSubmit={(newTerm) => {
-                        updateSemester.mutate(newTerm, {onSuccess: () => {
-                                setTerm(newTerm);
-                            }});
+                        updateSemester.mutate(newTerm, {
+                            onSuccess: () => setTerm(newTerm)
+                        });
                     }}
                     loading={semesterQuery.isLoading || updateSemester.isLoading}/>
             </Box>
-            {closeAllRequest.isLoading?
-                <LoadingButton loading={closeAllRequest.isLoading}/>:
-                <WithConfirmationButton
-                    dropButtonProps={{
-                        label: "Cerrar todas las solicitudes",
-                        dropProps: {align: {top: "bottom"}},
-                        dropContent: <></>
-                    }}
-                    onConfirm={closeAllRequest.mutate}/>}
+            <WithConfirmationButton
+                loading={closeAllRequest.isLoading}
+                dropButtonProps={{
+                    label: "Cerrar todas las solicitudes",
+                    dropProps: {align: {top: "bottom"}},
+                    dropContent: <></>
+                }}
+                onConfirm={closeAllRequest.mutate}/>
         </PageContent>
     </Page>
 

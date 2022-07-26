@@ -1,15 +1,16 @@
 import {useEffect, useState} from "react";
-import {Box, Button, Stack, TextInput} from "grommet";
+import {Box, Button, Stack, TextInput, TextInputProps} from "grommet";
 import {Close, Search} from "grommet-icons";
 
 type RequestsSearchBarPropTypes = {
     placeholder: string,
     searchTerm: string | undefined,
-    onSearch: (searchTerm: string) => void;
-    onCancel: () => void
+    inputProps?: TextInputProps,
+    onSearch: (searchTerm: string) => void,
+    onCancel: () => void,
 }
 
-const RequestsSearchBar = ({placeholder, searchTerm = "", onSearch: onSearch0, onCancel: onCancel0}:
+const RequestsSearchBar = ({placeholder, searchTerm = "", inputProps = {}, onSearch: onSearch0, onCancel: onCancel0}:
                                RequestsSearchBarPropTypes) => {
     const [value, setValue] = useState("");
 
@@ -31,6 +32,7 @@ const RequestsSearchBar = ({placeholder, searchTerm = "", onSearch: onSearch0, o
     return <Box width="medium">
         <Stack anchor="right">
             <TextInput
+                {...inputProps}
                 placeholder={placeholder}
                 value={value}
                 onChange={(event) => setValue(event.target.value)}/>

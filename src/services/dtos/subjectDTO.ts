@@ -10,7 +10,6 @@ export interface SubjectDTO {
     codigo: number,
     nombre: string,
     comisiones: SubjectCourseDTO[]
-
 }
 
 export interface SubjectCourseDTO {
@@ -28,7 +27,7 @@ export interface TakenSubjectDTO {
     cantidadDeVecesCursada: number
 }
 
-export interface SemesterSubjectDTO {
+export interface RequestedSubjectDTO {
     codigo: string,
     nombre: string,
     cantidadSolicitudes: number,
