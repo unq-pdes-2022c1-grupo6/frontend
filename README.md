@@ -1,11 +1,10 @@
 # Sistema para la asignación de cupos - Frontend
-
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://unque-front-grupo6.herokuapp.com/)
+![UNQUE](https://github.com/unq-pdes-2022c1-grupo6/frontend/actions/workflows/docker-image.yml/badge.svg)
 ![code grade](https://api.codiga.io/project/32833/status/svg)
 ![code quality score](https://api.codiga.io/project/32833/score/svg)
 
 
-Repositorio del proyecto de la materia Práctica del Desarrollo de Software, Universidad Nacional de Quilmes para el primer cuatrimestre de 2022.
+Repositorio del proyecto de la materia Prácticas del Desarrollo de Software de la Universidad Nacional de Quilmes para el primer cuatrimestre de 2022.
 
 ## Integrantes
 [Lisa Romero](https://github.com/lisar01)
