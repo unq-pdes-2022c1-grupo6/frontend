@@ -5,11 +5,11 @@ import {Outlet} from "react-router-dom";
 import ResponsiveHeader from "./components/layouts/ResponsiveHeader";
 import {MutationCache, QueryCache, QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import {AxiosError} from "axios";
-import GlobalNotificator from "./components/GlobalNotificator";
 import {AuthProvider, useAuth} from "./state/auth";
 import {useGlobalNotificator} from "./state/notificator";
 import {handle400Errors, handle401or403Errors, handleGlobally} from "./utils/axios-error-handler";
 import ErrorBoundary from "./state/ErrorBoundary";
+import GlobalNotificator from "./components/GlobalNotificator";
 
 
 const App = () => {
@@ -44,10 +44,8 @@ const App = () => {
             <ErrorBoundary>
                 <Grommet theme={theme} full>
                     <ResponsiveHeader/>
-                    <GlobalNotificator
-                        notification={notificator?.notification}
-                        onCloseNotification={notificator?.deleteNotification}
-                    />
+                    <GlobalNotificator {...notificator?.props}
+                                       onClose={notificator?.deleteNotification}/>
                     <QueryClientProvider client={queryClient}>
                         <Outlet/>
                     </QueryClientProvider>

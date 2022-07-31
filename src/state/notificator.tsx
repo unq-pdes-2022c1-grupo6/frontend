@@ -3,7 +3,7 @@ import {NotificationProps, StatusType} from "grommet";
 
 
 export interface GlobalNotificatorType {
-    notification: NotificationProps,
+    props: NotificationProps,
     setNotification: (message: string, status?: StatusType) => void,
     deleteNotification: () => void
 }
@@ -13,15 +13,15 @@ const GlobalNotificatorContext = createContext<GlobalNotificatorType | null>(nul
 
 
 const GlobalNotificatorProvider = ({children}: { children: ReactNode }) => {
-    const [notification, setNotif] = useState<NotificationProps>({});
+    const [props, setProps] = useState<NotificationProps>({});
 
     const setNotification = (message: string, status: StatusType = "normal") => {
-        setNotif({message, status});
+        setProps({message, status});
     }
 
-    const deleteNotification = () => setNotif({});
+    const deleteNotification = () => setProps({});
 
-    return <GlobalNotificatorContext.Provider value={{notification, setNotification, deleteNotification}}>
+    return <GlobalNotificatorContext.Provider value={{props, setNotification, deleteNotification}}>
         {children}
     </GlobalNotificatorContext.Provider>
 }
