@@ -10,14 +10,16 @@ export const theme: ThemeType = deepMerge(grommet, {
         font: {
             family: 'Roboto',
             size: '16px',
-            height: '20px',
+            height: '18px',
         },
     },
     notification: {
         toast: {
             time: 10000,
+            direction: 'row',
             container: {
                 width: 'xlarge',
+                pad: "small",
                 background: "light-2"
             }
         },

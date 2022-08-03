@@ -44,7 +44,7 @@ export interface HourDTO {
 }
 
 export interface RequestedCourse extends CourseDTO {
-    modalidad: string,
+    modalidad: "PRESENCIAL" | "VIRTUAL_SINCRONICA" | "VIRTUAL_ASINCRONICA" | "SEMIPRESENCIAL",
     sobrecuposTotales: number,
     sobrecuposDisponibles: number,
 }

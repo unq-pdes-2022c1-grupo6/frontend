@@ -213,27 +213,19 @@ export const useUpdateCourseRequest = (subject: string, course: number, filter: 
     })
 }
 
-export const useUpdateCourseState2 = (code?: string) => {
-    const queryClient = useQueryClient();
-    return useMutation(patchCourseState, {
-        onSuccess: (_, variables) => {
-            return queryClient.invalidateQueries(subjectsKeys.allCourseRequests(code, variables.courseNumber));
-        }
-    });
-}
 
-const patchRejectAllCourseRequesters = ({code, course}: {code: string, course: string}): Promise<void> => {
+const patchRejectCourseRequesters = ({code, course}: {code: string, course: string}): Promise<void> => {
     const query = course === "Todas"? "": `?numero=${course}`;
     return axiosInstance.patch(`/materias/${code}/solicitudes/rechazar${query}`)
         .then((response) => response.data)
 }
 
-export const useRejectAllCourseRequesters = () => {
+export const useRejectCourseRequesters = () => {
     const queryClient = useQueryClient();
 
-    return useMutation(patchRejectAllCourseRequesters, {
-        onSuccess: (data, variables) => {
-            return queryClient.invalidateQueries(subjectsKeys.courses(variables.code));
+    return useMutation(patchRejectCourseRequesters, {
+        onSuccess: (data, {code, course}) => {
+            return queryClient.invalidateQueries(subjectsKeys.allCourseRequests(code, +course));
         }
     });
 }
