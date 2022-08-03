@@ -1,6 +1,6 @@
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import axiosInstance from "../utils/axios-instance";
-import {CourseState, RequestCourseDTO, RequestDTO, RequestWithCommentsDTO} from "./dtos/requestDTO";
+import {CourseState, EnrolledCourse, RequestCourseDTO, RequestDTO, RequestWithCommentsDTO} from "./dtos/requestDTO";
 import {AxiosError} from "axios";
 import isEqual from "lodash/isEqual";
 import {REQUEST_ROUTE} from "../utils/routes";
@@ -9,7 +9,7 @@ import {useRequest} from "../components/layouts/PrivateStudentLayout";
 import {useGlobalNotificator} from "../state/notificator";
 import {studentsKeys, subjectsKeys} from "../utils/query-keys";
 import {useAuth} from "../state/auth";
-import {StudentDTO} from "./dtos/studentDTO";
+import {CourseRequesterDTO, newApproved, StudentDTO} from "./dtos/studentDTO";
 
 
 export type RequestFormType = [Set<number>, Set<number>];
@@ -180,6 +180,38 @@ export const useAddCourseToRequest = (dni: number | undefined) => {
     })
 }
 
+export const useUpdateCourseRequest = (subject: string, course: number, filter: string) => {
+    const queryClient = useQueryClient();
+
+    return useMutation(patchCourseState, {
+        onSuccess: (data, {courseNumber, dni}) => {
+             queryClient.setQueryData<CourseRequesterDTO[]>(
+                 subjectsKeys.courseRequests(subject, course, filter),
+                 (prevState) => {
+                     return prevState?
+                         prevState.map(c => {
+                          if (c.codigoMateria === subject &&
+                              c.numeroComision === course && c.dni === dni) {
+                              c.cantidadDeAprobadas = c.cantidadDeAprobadas + newApproved(c.estado, data.estado);
+                              c.estado = data.estado;
+                          }
+                          return c
+                     }): prevState
+                 });
+            queryClient.setQueryData<EnrolledCourse[]>(subjectsKeys.courses(subject),
+                (prevState) => {
+                return prevState?
+                    prevState.map(c => {
+                        let newCourse = {...c};
+                        if (c.numero === courseNumber) {
+                            newCourse.cuposDisponibles = data.comision.sobrecuposDisponibles;
+                        }
+                        return newCourse
+                    }): prevState
+                });
+        }
+    })
+}
 
 export const useUpdateCourseState2 = (code?: string) => {
     const queryClient = useQueryClient();

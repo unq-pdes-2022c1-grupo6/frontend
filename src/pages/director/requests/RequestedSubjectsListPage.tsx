@@ -5,7 +5,7 @@ import {useState} from "react";
 import RequestsSearchBar from "../../../components/request/RequestsSearchBar";
 import kebabCase from "lodash/kebabCase";
 
-const RequiredSubjectsListPage = () => {
+const RequestedSubjectsListPage = () => {
     const navigate = useNavigate();
     const [search, setSearch] = useState("");
     const semesterSubjectsQuery = useRequestedSubjectsQuery(search);
@@ -41,4 +41,4 @@ const RequiredSubjectsListPage = () => {
 
 };
 
-export default RequiredSubjectsListPage;
+export default RequestedSubjectsListPage;

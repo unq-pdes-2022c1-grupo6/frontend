@@ -29,11 +29,11 @@ import LoginDirectorPage from "./pages/director/LoginDirectorPage";
 import PrivateDirectorLayout from "./components/layouts/PrivateDirectorLayout";
 import DirectorHomePage from "./pages/director/DirectorHomePage";
 import ImportPage from "./pages/director/import/ImportPage";
-import RequiredSubjectsListPage from "./pages/director/requests/RequiredSubjectsListPage";
-import RequiredSubjectPage from "./pages/director/requests/RequiredSubjectPage";
+import RequestedSubjectsListPage from "./pages/director/requests/RequestedSubjectsListPage";
 import RequestingStudentsListPage from "./pages/director/requests/RequestingStudentsListPage";
 import RequestingStudentPage from "./pages/director/requests/RequestingStudentPage";
 import ParentLayout from "./components/layouts/ParentLayout";
+import RequestedSubjectPage from "./pages/director/requests/RequestedSubjectPage";
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
@@ -58,8 +58,8 @@ root.render(
                                 <Route path={HOME_ROUTE} element={<DirectorHomePage/>}/>
                                 <Route path={IMPORT_ROUTE} element={<ImportPage/>}/>
                                 <Route path={REQUIRED_SUBJECTS} element={<ParentLayout/>}>
-                                    <Route index element={<RequiredSubjectsListPage/>}/>
-                                    <Route path={REQUIRED_SUBJECT} element={<RequiredSubjectPage/>}/>
+                                    <Route index element={<RequestedSubjectsListPage/>}/>
+                                    <Route path={REQUIRED_SUBJECT} element={<RequestedSubjectPage/>}/>
                                 </Route>
                                 <Route path={REQUESTING_STUDENTS} element={<ParentLayout/>}>
                                     <Route index element={<RequestingStudentsListPage/>}/>

@@ -33,5 +33,8 @@ export const getSubjectCourses = (code: string | undefined): Promise<EnrolledCou
 
 export const useSubjectCoursesQuery = (code: string | undefined) => {
     return useQuery(subjectsKeys.courses(code),
-        () => getSubjectCourses(code),{ enabled: Boolean(code) })
+        () => getSubjectCourses(code),{
+        enabled: Boolean(code),
+        initialData: []
+    })
 }
