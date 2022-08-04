@@ -6,6 +6,7 @@ import {useDeleteRequest, useRequestQuery} from "../../services/requestService";
 import {CREATE_REQUEST_ROUTE, EDIT_REQUEST_ROUTE, REQUEST_ROUTE} from "../../utils/routes";
 import {useNavigate} from "react-router-dom";
 import isEqual from "lodash/isEqual";
+import WithConfirmationButton from "../../components/WithConfirmationButton";
 
 const StudentHomePage = () => {
     const currentSemesterQuery = useCurrentSemesterQuery();
@@ -64,8 +65,14 @@ const StudentHomePage = () => {
                     <Button label="Editar Solicitud"
                             onClick={() => navigate("/" + EDIT_REQUEST_ROUTE)} />}
                 {isRequestFound() && betweenPeriod &&
-                    <LoadingButton label="Borrar Solicitud" loading={deleteRequest.isLoading}
-                                   onClick={() => deleteRequest.mutate()} />}
+                    <WithConfirmationButton
+                        loading={deleteRequest.isLoading}
+                        dropButtonProps={{
+                            label: "Borrar Solicitud",
+                            dropAlign:{top:"bottom"},
+                            dropContent: <></>
+                        }}
+                        onConfirm={deleteRequest.mutate}/>}
             </Box>
         }
         return actions;

@@ -180,7 +180,7 @@ export const useAddCourseToRequest = (dni: number | undefined) => {
     })
 }
 
-export const useUpdateCourseRequest = (subject: string, course: number, filter: string) => {
+export const useUpdateCourseRequest = (subject: string, filter: string, course?: number) => {
     const queryClient = useQueryClient();
 
     return useMutation(patchCourseState, {
@@ -188,15 +188,22 @@ export const useUpdateCourseRequest = (subject: string, course: number, filter: 
              queryClient.setQueryData<CourseRequesterDTO[]>(
                  subjectsKeys.courseRequests(subject, course, filter),
                  (prevState) => {
-                     return prevState?
-                         prevState.map(c => {
-                          if (c.codigoMateria === subject &&
-                              c.numeroComision === course && c.dni === dni) {
-                              c.cantidadDeAprobadas = c.cantidadDeAprobadas + newApproved(c.estado, data.estado);
-                              c.estado = data.estado;
-                          }
-                          return c
-                     }): prevState
+                     let newState = prevState;
+                     if (prevState) {
+                         let newCant = 0;
+                         newState = prevState.map(c => {
+                             if (c.dni === dni && c.codigoMateria === subject && c.numeroComision === courseNumber) {
+                                 newCant = c.cantidadDeAprobadas + newApproved(c.estado, data.estado);
+                                 c.estado = data.estado;
+                             }
+                             return c
+                         });
+                         newState = newState.map(c => {
+                             if (c.dni === dni) c.cantidadDeAprobadas = newCant;
+                             return c
+                         })
+                     }
+                     return newState
                  });
             queryClient.setQueryData<EnrolledCourse[]>(subjectsKeys.courses(subject),
                 (prevState) => {
@@ -225,7 +232,8 @@ export const useRejectCourseRequesters = () => {
 
     return useMutation(patchRejectCourseRequesters, {
         onSuccess: (data, {code, course}) => {
-            return queryClient.invalidateQueries(subjectsKeys.allCourseRequests(code, +course));
+            const courseNumber = course === "Todas"? 0: +course;
+            return queryClient.invalidateQueries(subjectsKeys.allCourseRequests(code, courseNumber));
         }
     });
 }

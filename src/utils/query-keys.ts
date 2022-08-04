@@ -23,7 +23,7 @@ export const subjectsKeys = {
 
     allCourseRequests: (code: string = "", courseNumber: number = 0) =>
         [...requestsKeys.all, "subjects", "detail", code, "courses", "list", courseNumber] as const,
-    courseRequests: (code: string, courseNumber: number, search: string) =>
+    courseRequests: (code: string, courseNumber: number = 0, search: string) =>
         [...subjectsKeys.allCourseRequests(code, courseNumber), search] as const,
 
     allRequests: [...requestsKeys.all, "subjects", "list"] as const,

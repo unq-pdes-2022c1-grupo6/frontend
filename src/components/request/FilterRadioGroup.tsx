@@ -36,4 +36,4 @@ const FilterRadioGroup = (options: string[]) =>
 
 export const StatusRadioGroup = FilterRadioGroup(["Todas", "Todas Pendientes", "Alguna Pendiente", "Solo Aprobadas y Rechazadas"]);
 
-export const RequestersRadioGroup = FilterRadioGroup(["Todos", "Pendiente", "Aprobado y Rechazado"]);
+export const RequestersRadioGroup = FilterRadioGroup(["Todos", "Pendientes", "Aprobados o Rechazados"]);

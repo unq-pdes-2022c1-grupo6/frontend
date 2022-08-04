@@ -1,5 +1,5 @@
 import {Box, Button, Select} from "grommet";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 
 type SelectionCompProps = {
     placeholder: string,
@@ -10,11 +10,7 @@ type SelectionCompProps = {
 }
 
 const SelectionComp = ({placeholder, options = [], buttonLabel, onSubmit, disabled}: SelectionCompProps) => {
-    const [option, setOption] = useState("");
-
-    useEffect(() => {
-        setOption(options[0])
-    },[options])
+    const [option, setOption] = useState<string>();
 
     return <Box direction="row-responsive" align="center" gap="medium">
         <Select
@@ -24,7 +20,7 @@ const SelectionComp = ({placeholder, options = [], buttonLabel, onSubmit, disabl
             onChange={({ option }) => setOption(option)}
             clear={{label: "Limpiar Selección"}}
         />
-        <Button onClick={() => onSubmit(option)}
+        <Button onClick={() => option && onSubmit(option)}
                 label={buttonLabel}
                 disabled={!option || disabled}/>
     </Box>

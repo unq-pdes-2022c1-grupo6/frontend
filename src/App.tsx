@@ -34,6 +34,11 @@ const App = () => {
         }
     }
     const [queryClient] = useState(() => new QueryClient({
+        defaultOptions: {
+            queries: {
+                refetchOnWindowFocus: false,
+            },
+        },
         queryCache: new QueryCache({ onError: onError }),
         mutationCache: new MutationCache({ onError: onError }),
     }));

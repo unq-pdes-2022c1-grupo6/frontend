@@ -66,6 +66,12 @@ const RequestedSubjectPage = () => {
                             </Box>
                         </Tab>
                     })}
+                    {subjectCoursesQuery.data.length !== 1 &&
+                        <Tab title="Todas">
+                            <Box gap="small" pad="medium">
+                                <CourseRequestsTable subject={code}/>
+                            </Box>
+                        </Tab>}
                 </Tabs>}
         </PageContent>
     </Page>
