@@ -68,3 +68,14 @@ export const getExcludingCourses = ({resumenCursadas, formulario}: StudentDTO) =
     return [...approved, ...enrolled, ...requested];
 }
 
+// Aprobado Aprobado 0
+// Aprobado y Rechazodo o Pendiente -1
+//Rechazodo o Pendiente y Aprobado + 1
+export const newApproved = (oldStatus: CourseState, newStatus: CourseState) => {
+    let newValue = 0;
+    if (oldStatus !== CourseState.APROBADO && newStatus === CourseState.APROBADO) newValue++;
+    if (oldStatus === CourseState.APROBADO && newStatus !== CourseState.APROBADO) newValue--;
+    return newValue;
+}
+
+

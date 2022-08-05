@@ -10,7 +10,7 @@ export const ResponsiveHeader = () => {
     const location = useLocation();
 
     return (
-        <Header background="brand" pad="medium" sticky="scrollup">
+        <Header background="brand" pad="medium">
             <Box direction="row" align="center" gap="small">
                 <Heading level={3} margin="none">UNQUE</Heading>
                 {auth?.isLogged &&

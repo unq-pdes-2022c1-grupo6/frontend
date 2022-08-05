@@ -14,6 +14,7 @@ const ImportStudentsPage = () => {
             label="Alumnos"
             convertToDTOsFn={convertToStudentsDTO}
             requiredColumns={studentColumns}
+            optionalColumns={["Correo"]}
             onImport={createStudents.mutate}
             loading={createStudents.isLoading}
         />

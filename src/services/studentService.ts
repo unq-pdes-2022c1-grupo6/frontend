@@ -29,16 +29,16 @@ export const useSearchRequestingStudentsQuery = (search: StudentSearch) => {
     return useQuery(studentsKeys.requests(search), () => getRequestingStudents(search));
 }
 
-export const getCourseRequesters = (subject: string, numero: number, filter: string): Promise<CourseRequesterDTO[]> => {
-    const filterDTO = filter === "Todos" ? {} : {pendiente: "Pendiente" === filter};
+export const getCourseRequesters = (subject: string, filter: string, numero?: number): Promise<CourseRequesterDTO[]> => {
+    const filterDTO = filter === "Todos" ? {} : {pendiente: "Pendientes" === filter};
     const params = {numero, ...filterDTO};
     return axiosInstance.get(`/materias/${subject}/solicitantes`, {params})
         .then((response) => response.data);
 }
 
-export const useCourseRequestersQuery = (subject: string, course: number, filter: string) => {
+export const useCourseRequestersQuery = (subject: string, filter: string, course?: number) => {
     return useQuery(subjectsKeys.courseRequests(subject, course, filter),
-        () => getCourseRequesters(subject, course, filter));
+        () => getCourseRequesters(subject, filter, course));
 }
 
 const postStudents = ({rows}: { rows: DTORowType[] }): Promise<void> => {

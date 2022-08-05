@@ -15,7 +15,7 @@ export interface SubjectDTO {
 export interface SubjectCourseDTO {
     id: number,
     comision: number,
-    modalidad: "PRESENCIAL" | "VIRTUAL" | "SEMIPRESENCIAL",
+    modalidad: "PRESENCIAL" | "VIRTUAL_SINCRONICA" | "VIRTUAL_ASINCRONICA" | "SEMIPRESENCIAL",
     horarios: HourDTO[]
 }
 
@@ -33,6 +33,7 @@ export interface RequestedSubjectDTO {
     cantidadSolicitudes: number,
     cantidadSolicitudesPendientes: number
 }
+
 
 export const formatSubjectCourse = (comision: number, modalidad: string | undefined, horarios: HourDTO[]) => {
     const mod = modalidad ? `(${capitalize(modalidad)}) ` : "";

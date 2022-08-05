@@ -17,12 +17,12 @@ const statusMapping = [
     {mapping: "Aceptado", columns: ["Aceptado"]}
 ]
 
-const toCorreo = (value: unknown) => value === "Romero"? process.env.REACT_APP_EMAIL: undefined;
+const toOptionalCorreo = (value: unknown) => value === ""? undefined: value as string;
 
 const studentMapping = new MappingBuilder()
     .addNumber("Documento", "dni")
     .addString("Nombre", "nombre")
-    .add("Apellido", "correo", toCorreo)
+    .add("Correo", "correo", toOptionalCorreo)
     .addString("Apellido", "apellido")
     .addString("Propuesta", "propuesta", betweenTwo("P", "W"))
     .addNumber("Plan", "plan")

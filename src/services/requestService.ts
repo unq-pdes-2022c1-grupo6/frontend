@@ -1,6 +1,6 @@
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import axiosInstance from "../utils/axios-instance";
-import {CourseState, RequestCourseDTO, RequestDTO, RequestWithCommentsDTO} from "./dtos/requestDTO";
+import {CourseState, EnrolledCourse, RequestCourseDTO, RequestDTO, RequestWithCommentsDTO} from "./dtos/requestDTO";
 import {AxiosError} from "axios";
 import isEqual from "lodash/isEqual";
 import {REQUEST_ROUTE} from "../utils/routes";
@@ -9,7 +9,7 @@ import {useRequest} from "../components/layouts/PrivateStudentLayout";
 import {useGlobalNotificator} from "../state/notificator";
 import {studentsKeys, subjectsKeys} from "../utils/query-keys";
 import {useAuth} from "../state/auth";
-import {StudentDTO} from "./dtos/studentDTO";
+import {CourseRequesterDTO, newApproved, StudentDTO} from "./dtos/studentDTO";
 
 
 export type RequestFormType = [Set<number>, Set<number>];
@@ -180,28 +180,60 @@ export const useAddCourseToRequest = (dni: number | undefined) => {
     })
 }
 
-
-export const useUpdateCourseState2 = (code?: string) => {
+export const useUpdateCourseRequest = (subject: string, filter: string, course?: number) => {
     const queryClient = useQueryClient();
+
     return useMutation(patchCourseState, {
-        onSuccess: (_, variables) => {
-            return queryClient.invalidateQueries(subjectsKeys.allCourseRequests(code, variables.courseNumber));
+        onSuccess: (data, {courseNumber, dni}) => {
+             queryClient.setQueryData<CourseRequesterDTO[]>(
+                 subjectsKeys.courseRequests(subject, course, filter),
+                 (prevState) => {
+                     let newState = prevState;
+                     if (prevState) {
+                         let newCant = 0;
+                         newState = prevState.map(c => {
+                             if (c.dni === dni && c.codigoMateria === subject && c.numeroComision === courseNumber) {
+                                 newCant = c.cantidadDeAprobadas + newApproved(c.estado, data.estado);
+                                 c.estado = data.estado;
+                             }
+                             return c
+                         });
+                         newState = newState.map(c => {
+                             if (c.dni === dni) c.cantidadDeAprobadas = newCant;
+                             return c
+                         })
+                     }
+                     return newState
+                 });
+            queryClient.setQueryData<EnrolledCourse[]>(subjectsKeys.courses(subject),
+                (prevState) => {
+                return prevState?
+                    prevState.map(c => {
+                        const newCourse = {...c};
+                        if (c.numero === courseNumber) {
+                            newCourse.cuposDisponibles = data.comision.sobrecuposDisponibles;
+                        }
+                        return newCourse
+                    }): prevState
+                });
         }
-    });
+    })
 }
 
-const patchRejectAllCourseRequesters = ({code, course}: {code: string, course: string}): Promise<void> => {
+
+const patchRejectCourseRequesters = ({code, course}: {code: string, course: string}): Promise<void> => {
     const query = course === "Todas"? "": `?numero=${course}`;
     return axiosInstance.patch(`/materias/${code}/solicitudes/rechazar${query}`)
         .then((response) => response.data)
 }
 
-export const useRejectAllCourseRequesters = () => {
+export const useRejectCourseRequesters = () => {
     const queryClient = useQueryClient();
 
-    return useMutation(patchRejectAllCourseRequesters, {
-        onSuccess: (data, variables) => {
-            return queryClient.invalidateQueries(subjectsKeys.courses(variables.code));
+    return useMutation(patchRejectCourseRequesters, {
+        onSuccess: (data, {code, course}) => {
+            const courseNumber = course === "Todas"? 0: +course;
+            return queryClient.invalidateQueries(subjectsKeys.allCourseRequests(code, courseNumber));
         }
     });
 }
