@@ -1,8 +1,9 @@
-import {useQuery} from "@tanstack/react-query";
+import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import axiosInstance from "../utils/axios-instance";
 import {EnrolledCourse} from "./dtos/requestDTO";
 import {getCurrentSemester} from "../model/semester";
 import {subjectsKeys} from "../utils/query-keys";
+import {useGlobalNotificator} from "../state/notificator";
 
 
 const getOfferedCourses = (anio: number, semestre: string, nombre: string): Promise<EnrolledCourse[]> => {
@@ -36,5 +37,34 @@ export const useSubjectCoursesQuery = (code: string | undefined) => {
         () => getSubjectCourses(code),{
         enabled: Boolean(code),
         initialData: []
+    })
+}
+
+export const patchCourseQuota = ({newQuota, id}: {newQuota: number, id: number}): Promise<EnrolledCourse> => {
+    const body = {cantidadSobrecupos: newQuota, idComision: id};
+    return axiosInstance.patch("/comisiones/cupos", body).then((response) => response.data)
+}
+
+
+export const useUpdateCourseQuota = (code: string | undefined) => {
+    const queryClient = useQueryClient();
+    const notificator = useGlobalNotificator();
+
+    return useMutation(patchCourseQuota, {
+        onSuccess: (data, {id}) => {
+            queryClient.setQueryData<EnrolledCourse[]>(subjectsKeys.courses(code),
+                (prevState) => {
+                    return prevState?
+                        prevState.map(c => {
+                            let newCourse = {...c};
+                            if (c.id === id) {
+                                newCourse.sobreCuposTotales = data.sobreCuposTotales;
+                                newCourse.cuposDisponibles = data.cuposDisponibles;
+                            }
+                            return newCourse
+                        }): prevState
+                });
+            notificator?.setNotification("Sobrecupo total actualizado correctamente!");
+        }
     })
 }

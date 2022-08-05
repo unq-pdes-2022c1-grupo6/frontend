@@ -1,7 +1,7 @@
 import {useState} from "react";
 import {Navigate, useParams} from "react-router-dom";
 import last from "lodash/last";
-import {useSubjectCoursesQuery} from "../../../services/courseService";
+import {useSubjectCoursesQuery, useUpdateCourseQuota} from "../../../services/courseService";
 import {DIRECTOR_ROUTE, REQUIRED_SUBJECTS} from "../../../utils/routes";
 import {Page, PageContent, Tab, Tabs, Box, Text, Heading} from "grommet";
 import {formatSubjectCourse} from "../../../services/dtos/subjectDTO";
@@ -11,6 +11,7 @@ import capitalize from "lodash/capitalize";
 import startCase from "lodash/startCase";
 import {useRejectCourseRequesters} from "../../../services/requestService";
 import SelectionComp from "../../../components/SelectionComp";
+import CourseQuotaInput from "../../../components/courses/CourseQuotaInput";
 
 
 const RequestedSubjectPage = () => {
@@ -18,6 +19,7 @@ const RequestedSubjectPage = () => {
     const code = params.materia && last(params.materia.split("-"));
     const subjectCoursesQuery = useSubjectCoursesQuery(code);
     const rejectCourseRequesters = useRejectCourseRequesters();
+    const updateCourseQuota = useUpdateCourseQuota(code);
     const [activeTab, setActiveTab] = useState(0);
 
     if (!code) {
@@ -33,7 +35,7 @@ const RequestedSubjectPage = () => {
         let options: string[] = [];
         if (subjectCoursesQuery.data) {
             options = subjectCoursesQuery.data.map(c => c.numero.toString());
-            if (options.length !== 1) options.push("Todas");
+            if (options.length > 1) options.push("Todas");
         }
         return options;
     }
@@ -53,20 +55,27 @@ const RequestedSubjectPage = () => {
             </Box>
         </PageContent>
         <PageContent>
-            {subjectCoursesQuery.data.length !== 0 &&
+            {subjectCoursesQuery.data.length > 0 &&
                 <Tabs alignControls="start"
                   justify="start"
                   activeIndex={activeTab}
                   onActive={setActiveTab}>
                     {subjectCoursesQuery.data.map((c, index) => {
                         return <Tab title={getTabTitle(c)} key={index}>
-                            <Box gap="small" pad="medium">
-                                <Text>{formatSubjectCourse(c.numero, undefined, c.horarios)}</Text>
+                            <Box gap="small" pad={{horizontal: "medium", vertical: "small"}}>
+                                <Box direction="row-responsive" align="center" gap="small">
+                                    <Text>{formatSubjectCourse(c.numero, undefined, c.horarios)}</Text>
+                                    <CourseQuotaInput
+                                        minQuota={c.sobreCuposTotales - c.cuposDisponibles}
+                                        loading={updateCourseQuota.isLoading}
+                                        onSubmit={(newQuota) =>
+                                            updateCourseQuota.mutate({id: c.id, newQuota})}/>
+                                </Box>
                                 <CourseRequestsTable subject={code} course={c.numero}/>
                             </Box>
                         </Tab>
                     })}
-                    {subjectCoursesQuery.data.length !== 1 &&
+                    {subjectCoursesQuery.data.length > 1 &&
                         <Tab title="Todas">
                             <Box gap="small" pad="medium">
                                 <CourseRequestsTable subject={code}/>
