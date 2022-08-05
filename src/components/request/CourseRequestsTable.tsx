@@ -23,7 +23,7 @@ const CourseRequestsTable = ({subject, course}: CourseRequestsTableProps) => {
 
 
     const columns = useMemo(() => {
-        let allColumns: ColumnConfig<CourseRequesterDTO>[]  = [
+        const allColumns: ColumnConfig<CourseRequesterDTO>[]  = [
             {property: "dni", header: "DNI", size: "xsmall", render: ({dni}) => {
                     const studentRoute = "/" + DIRECTOR_ROUTE + "/" + REQUESTING_STUDENTS + "/" + dni;
                     return <Anchor onClick={() => navigate(studentRoute)}

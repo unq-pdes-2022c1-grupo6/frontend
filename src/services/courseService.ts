@@ -56,7 +56,7 @@ export const useUpdateCourseQuota = (code: string | undefined) => {
                 (prevState) => {
                     return prevState?
                         prevState.map(c => {
-                            let newCourse = {...c};
+                            const newCourse = {...c};
                             if (c.id === id) {
                                 newCourse.sobreCuposTotales = data.sobreCuposTotales;
                                 newCourse.cuposDisponibles = data.cuposDisponibles;

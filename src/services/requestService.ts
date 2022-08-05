@@ -209,7 +209,7 @@ export const useUpdateCourseRequest = (subject: string, filter: string, course?:
                 (prevState) => {
                 return prevState?
                     prevState.map(c => {
-                        let newCourse = {...c};
+                        const newCourse = {...c};
                         if (c.numero === courseNumber) {
                             newCourse.cuposDisponibles = data.comision.sobrecuposDisponibles;
                         }
