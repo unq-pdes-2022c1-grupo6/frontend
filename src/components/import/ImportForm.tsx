@@ -113,7 +113,7 @@ const ImportForm = ({label, convertToDTOsFn, requiredColumns, optionalColumns = 
     }, [parsing, loading])
 
     const helpLabel = `Columnas requeridas: ${join(requiredColumns, ", ")}
-     ${optionalColumns?.length > 0?", Columnas opcionales: ": ""}${join(optionalColumns, ", ")}`
+     ${optionalColumns?.length > 0?"; Columnas opcionales: ": ""}${join(optionalColumns, ", ")}`
 
     return <Box>
         <CsvInput
@@ -129,7 +129,7 @@ const ImportForm = ({label, convertToDTOsFn, requiredColumns, optionalColumns = 
                 </Text>
                 {(rowErrors.length !== 0 || generalErrors.length !== 0) &&
                     <Button plain hoverIndicator
-                            label="Ver Errores"
+                            label="Ver Avisos"
                             onClick={() => setShowErrorsModal(true)}/>}
                 {rowErrors.length !== 0 &&
                     <Button plain hoverIndicator
