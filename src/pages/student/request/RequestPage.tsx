@@ -1,9 +1,8 @@
-import {Heading, Page, PageContent, Text} from "grommet";
+import {DataTable, Heading, Page, PageContent} from "grommet";
 import {formatSubjectCourse} from "../../../services/dtos/subjectDTO";
 import {CourseStatusText} from "../../../components/StatusText";
-import {CourseState, RequestCourseDTO} from "../../../services/dtos/requestDTO";
+import {CourseState} from "../../../services/dtos/requestDTO";
 import sortBy from "lodash/sortBy";
-import GenericTable from "../../../components/GenericTable";
 import {useRequest} from "../../../components/layouts/PrivateStudentLayout";
 import {Navigate} from "react-router-dom";
 import {HOME_ROUTE} from "../../../utils/routes";
@@ -27,14 +26,14 @@ const RequestPage = () => {
             <Heading level={3} size="medium">
                 {`Solicitud Estado: ${request.estado}`}
             </Heading>
-            <GenericTable<RequestCourseDTO>
+            <DataTable
+                sortable
                 data={requestedCourses}
                 columns={[
-                    {label: 'Materia', format: (c) => <Text>{c.comision.materia}</Text>},
-                    {label: 'Comisión', format: (c) => <Text>
-                            {formatSubjectCourse(c.comision.numero, c.comision.modalidad, c.comision.horarios)}
-                    </Text>},
-                    {label: 'Estado', format: (c) => {
+                    {header: 'Materia',  property: "comision.materia"},
+                    {header: 'Comisión', property: "comision.numero",
+                        render: (c) => formatSubjectCourse(c.comision.numero, c.comision.modalidad, c.comision.horarios)},
+                    {header: 'Estado', property:"estado", render: (c) => {
                         return <CourseStatusText state={request.estado === "ABIERTO"? CourseState.PENDIENTE: c.estado}/>
                     }},
                 ]}
