@@ -2,9 +2,11 @@ import {useCurrentSemesterQuery} from "../../services/semesterService";
 import {Text, Box, Page, PageContent, Spinner, Button} from "grommet";
 import {PageHeader} from "grommet/components";
 import LoadingButton from "../../components/LoadingButton";
-import {isRequestNotFound, useDeleteRequest, useRequestQuery} from "../../services/requestService";
+import {useDeleteRequest, useRequestQuery} from "../../services/requestService";
 import {CREATE_REQUEST_ROUTE, EDIT_REQUEST_ROUTE, REQUEST_ROUTE} from "../../utils/routes";
 import {useNavigate} from "react-router-dom";
+import isEqual from "lodash/isEqual";
+import WithConfirmationButton from "../../components/WithConfirmationButton";
 
 const StudentHomePage = () => {
     const currentSemesterQuery = useCurrentSemesterQuery();
@@ -42,6 +44,10 @@ const StudentHomePage = () => {
         return subtitle;
     }
 
+    const isRequestNotFound = () => isEqual(requestQuery.data, {});
+
+    const isRequestFound = () => requestQuery.data && !isRequestNotFound();
+
     const getActions = () => {
         let actions; const betweenPeriod = currentSemesterQuery.data?.isBetweenPeriod();
         if (requestQuery.isLoading) {
@@ -49,18 +55,24 @@ const StudentHomePage = () => {
         }
         else {
             actions = <Box direction="row" gap="small" align="center">
-                {betweenPeriod && isRequestNotFound(requestQuery.error) &&
+                {betweenPeriod && isRequestNotFound() &&
                     <Button label="Crear Solicitud" primary
                             onClick={() => navigate("/" + CREATE_REQUEST_ROUTE)}/>}
-                {requestQuery.data &&
+                {isRequestFound() &&
                     <Button label="Ver Solicitud" primary
                             onClick={() => navigate("/" + REQUEST_ROUTE)} />}
-                {requestQuery.data && betweenPeriod &&
+                {isRequestFound() && betweenPeriod &&
                     <Button label="Editar Solicitud"
                             onClick={() => navigate("/" + EDIT_REQUEST_ROUTE)} />}
-                {requestQuery.data && betweenPeriod &&
-                    <LoadingButton label="Borrar Solicitud" loading={deleteRequest.isLoading}
-                                   onClick={() => deleteRequest.mutate()} />}
+                {isRequestFound() && betweenPeriod &&
+                    <WithConfirmationButton
+                        loading={deleteRequest.isLoading}
+                        dropButtonProps={{
+                            label: "Borrar Solicitud",
+                            dropAlign:{top:"bottom"},
+                            dropContent: <></>
+                        }}
+                        onConfirm={deleteRequest.mutate}/>}
             </Box>
         }
         return actions;

@@ -1,5 +1,5 @@
 import axiosInstance from "../utils/axios-instance";
-import {useMutation} from "react-query";
+import {useMutation} from "@tanstack/react-query";
 import {AxiosResponseHeaders} from "axios";
 import {useNavigate} from "react-router-dom";
 import {CONFIRM_ROUTE, HOME_ROUTE, LOGIN_ROUTE} from "../utils/routes";

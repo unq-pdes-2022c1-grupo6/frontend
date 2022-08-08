@@ -27,6 +27,7 @@ const ImportSubjectsPage = () => {
             label="Comisiones"
             convertToDTOsFn={convertToCoursesDTO}
             requiredColumns={courseColumns}
+            optionalColumns={["Sobrecupos Totales"]}
             onImport={createCourses.mutate}
             loading={createCourses.isLoading}
         />

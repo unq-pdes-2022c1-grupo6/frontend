@@ -1,5 +1,4 @@
 import {RequestFormType} from "../requestService";
-import {TakenSubjectDTO} from "./subjectDTO";
 
 export interface RequestDTO {
     id: number,
@@ -45,16 +44,29 @@ export interface HourDTO {
 }
 
 export interface RequestedCourse extends CourseDTO {
-    modalidad: string,
+    modalidad: "PRESENCIAL" | "VIRTUAL_SINCRONICA" | "VIRTUAL_ASINCRONICA" | "SEMIPRESENCIAL",
     sobrecuposTotales: number,
     sobrecuposDisponibles: number,
 }
 
 export interface EnrolledCourse extends CourseDTO {
-    locacion: string,
+    locacion: "Bernal" | "Berazategui" | "General_Belgrano",
     cuposTotales: number,
     sobreCuposTotales: number,
     cuposDisponibles: number,
+}
+
+export const formatLocation = (location: string) => {
+    let formatted = "";
+    switch (location) {
+        case "Berazategui":
+            formatted = "Berazategui ";
+            break;
+        case "General_Belgrano":
+            formatted = "General Belgrano ";
+            break;
+    }
+    return formatted
 }
 
 export const getSelections = (requestDTO: RequestDTO): RequestFormType => {
@@ -63,6 +75,3 @@ export const getSelections = (requestDTO: RequestDTO): RequestFormType => {
     return [new Set(selectionsG), new Set(selectionsS)]
 }
 
-export const getApprovedSubjects = (subjects: TakenSubjectDTO[]) => {
-    return subjects.flatMap((s) => s.estado === "APROBADO"? [s.nombreMateria]: [])
-}

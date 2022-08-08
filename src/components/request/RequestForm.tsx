@@ -15,7 +15,6 @@ import {formatSubjectCourse, SubjectDTO} from "../../services/dtos/subjectDTO";
 import {RequestFormType} from "../../services/requestService";
 import LoadingButton from "../LoadingButton";
 import FormErrorMessage from "../FormErrorMessage";
-import uniqBy from "lodash/uniqBy";
 
 type RequestFormProps = {
     selections: RequestFormType;
@@ -66,6 +65,9 @@ const RequestForm = ({selections, options = [], loading, onSubmit, onCancel}: Re
         if (selectionsS.size > 10) {
             message = "Maximo 10 comisiones a solicitar";
         }
+        if (selectionsG.size > 5) {
+            message = "Maximo 5 comisiones inscriptas por el Guaraní";
+        }
         message === ""? onSubmit(requestForm): setError(message);
     }
 
@@ -86,7 +88,7 @@ const RequestForm = ({selections, options = [], loading, onSubmit, onCancel}: Re
                     {options.map((m) => {
                         return <AccordionPanel label={`${m.nombre} (${m.codigo})`} key={m.codigo}>
                             <Box height="small" gap="medium" overflow="auto" pad={{vertical: "small"}}>
-                                {uniqBy(m.comisiones, "comision").map(c => {
+                                {m.comisiones.map(c => {
                                     return <Box direction="row" align="center" margin={{vertical: "small"}}
                                                 gap="medium" key={c.id}>
                                         <CheckBoxGroup

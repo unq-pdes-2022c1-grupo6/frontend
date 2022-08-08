@@ -1,9 +1,10 @@
-import {useMutation, useQuery, useQueryClient} from "react-query";
+import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import axiosInstance from "../utils/axios-instance";
 import {Semester} from "../model/semester";
 import {useGlobalNotificator} from "../state/notificator";
 import {AxiosError} from "axios";
 import isEqual from "lodash/isEqual";
+import {enrollmentKeys, requestsKeys} from "../utils/query-keys";
 
 export interface SemesterDTO {
     id: number,
@@ -18,8 +19,7 @@ const getCurrentSemester = (): Promise<SemesterDTO> => {
 }
 
 export const useCurrentSemesterQuery = () => {
-    return useQuery(["currentSemester"],
-        () => getCurrentSemester(), {
+    return useQuery(enrollmentKeys.current, getCurrentSemester, {
             select: (data) => new Semester(data)
         })
 }
@@ -38,11 +38,11 @@ const getSemester = (anio: number, semestre: string): Promise<SemesterDTO> => {
 }
 
 export const useSemesterQuery = (year: number, semester: string, setTerm: (term: string[]) => void) => {
-    return useQuery(["enrollment", year, semester],
-        () => getSemester(year, semester),
+    return useQuery(enrollmentKeys.other(year, semester), () => getSemester(year, semester),
         {
             onSuccess: (data) => {
-                setTerm([data.inicioInscripciones + ".000Z", data.finInscripciones + ".000Z"]);
+                setTerm([data.inicioInscripciones + ".000Z",
+                    data.finInscripciones + ".000Z"]);
             }
         }
     )
@@ -50,8 +50,8 @@ export const useSemesterQuery = (year: number, semester: string, setTerm: (term:
 
 const postSemester = ([start, end]: string[]): Promise<void> => {
     const body = {
-        inicioInscripciones: start.replace('.000Z', ''),
-        finInscripciones: end.replace('.000Z', '')
+        inicioInscripciones: start.replace(".000Z", ""),
+        finInscripciones: end.replace(".000Z", "")
     };
     return axiosInstance.post('/comisiones/oferta', body)
         .then((response) => response.data)
@@ -63,8 +63,8 @@ export const useUpdateSemesterQuery = (year: number, semester: string) => {
 
     return useMutation(postSemester, {
         onSuccess: () => {
-            queryClient.invalidateQueries(["enrollment", year, semester]);
             notificator?.setNotification("Plazo fijado exitosamente!");
+            return queryClient.invalidateQueries(enrollmentKeys.other(year, semester));
         }
     });
 }
@@ -80,8 +80,7 @@ export const useCloseAllRequest = () => {
 
     return useMutation(patchCloseAllRequest, {
         onSuccess: () => {
-            queryClient.invalidateQueries(["subjects"]);
-            queryClient.invalidateQueries(["requestingStudents"]);
             notificator?.setNotification("Se terminó la inscripción correctamente!");
+            return queryClient.invalidateQueries(requestsKeys.all)
         }})
 }

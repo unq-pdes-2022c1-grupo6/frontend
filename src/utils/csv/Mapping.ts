@@ -63,11 +63,11 @@ const convertRowToDTO = (mappings: MappingI[], row: ParsedRowType, rowNumber: nu
                      {column, mapping, convertFn, validator}) => {
         const value = convertFn(row[column] || "");
         const isValid = validator.isValid(value);
-        const newErrors = isValid ? acc.errors : acc.errors.concat(validator.getMessage(column, value));
 
-        return newErrors.length === 0 ?
-            {dto: {...acc.dto, [mapping]: value}, errors: acc.errors} :
-            {dto: acc.dto, errors: newErrors}
+        if (!isValid) acc.errors.push(validator.getMessage(column, value));
+        if (acc.errors.length === 0) acc.dto[mapping] = value;
+
+        return acc
 
     }, {dto: {fila: rowNumber+2}, errors: []})
 }
@@ -79,9 +79,11 @@ export type ConvertedRowsInfoType = {dtos: DTORowType[], errors: RowErrorTypeI[]
 export const convertRowsToDTO = (mappings: MappingI[]) => (rows: ParsedRowType[]) => {
     return rows.reduce((acc: ConvertedRowsInfoType, row, index) => {
         const {dto, errors} = convertRowToDTO(mappings, row, index);
-        return errors.length === 0?
-            {dtos: acc.dtos.concat(dto), errors: acc.errors} :
-            {dtos: acc.dtos, errors: acc.errors.concat({fila: dto.fila, type: "PARSEO", messages: errors})}
+        errors.length === 0?
+            acc.dtos.push(dto):
+            acc.errors.push({fila: dto.fila, type: "PARSEO", messages: errors})
+
+        return acc
     }, {dtos: [], errors: []})
 }
 

@@ -4,7 +4,7 @@ import Papa, {ParseResult} from "papaparse";
 import {useMemo, useState} from "react";
 import ImportErrorsTable from "./ImportErrorsTable";
 import {ConvertedRowsInfoType, DTORowType, ParsedRowType} from "../../utils/csv/Mapping";
-import {MutateOptions} from "react-query";
+import {MutateOptions} from "@tanstack/react-query";
 import {ErrorTypeI, notValidColumns, RowErrorTypeI} from "../../utils/csv/Validator";
 import {AxiosError} from "axios";
 import {isConflictArray} from "../../services/dtos/subjectDTO";
@@ -15,13 +15,14 @@ type ImportFormProps = {
     label: string,
     convertToDTOsFn: (rows: ParsedRowType[]) => ConvertedRowsInfoType,
     requiredColumns: string[],
+    optionalColumns?: string[],
     onImport: (variables: { rows: DTORowType[] },
                options?: (MutateOptions<void, unknown, { rows: DTORowType[] }, unknown> | undefined)) => void,
     loading: boolean
 }
 
 
-const ImportForm = ({label, convertToDTOsFn, requiredColumns, onImport, loading}: ImportFormProps) => {
+const ImportForm = ({label, convertToDTOsFn, requiredColumns, optionalColumns = [], onImport, loading}: ImportFormProps) => {
     const [parsing, setParsing] = useState(false);
     const [data, setData] = useState<ParsedRowType[]>([]);
     const [rowErrors, setRowErrors] = useState<RowErrorTypeI[]>([]);
@@ -111,12 +112,15 @@ const ImportForm = ({label, convertToDTOsFn, requiredColumns, onImport, loading}
         return "Cargando";
     }, [parsing, loading])
 
+    const helpLabel = `Columnas requeridas: ${join(requiredColumns, ", ")}
+     ${optionalColumns?.length > 0?"; Columnas opcionales: ": ""}${join(optionalColumns, ", ")}`
+
     return <Box>
         <CsvInput
             label={label}
             loading={loading || parsing}
             loadingLabel={loadingLabel}
-            helpLabel={`Columnas necesarias: ${join(requiredColumns, ", ")}`}
+            helpLabel={helpLabel}
             onSubmit={onSubmit}/>
         {importFinished &&
             <Box direction="row-responsive" gap="small">
@@ -125,7 +129,7 @@ const ImportForm = ({label, convertToDTOsFn, requiredColumns, onImport, loading}
                 </Text>
                 {(rowErrors.length !== 0 || generalErrors.length !== 0) &&
                     <Button plain hoverIndicator
-                            label="Ver Errores"
+                            label="Ver Avisos"
                             onClick={() => setShowErrorsModal(true)}/>}
                 {rowErrors.length !== 0 &&
                     <Button plain hoverIndicator
